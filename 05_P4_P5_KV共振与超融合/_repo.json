@@ -1,0 +1,5 @@
+{
+  "name": "SemanticEcho-AnchorEcho",
+  "description": "P4 锚点回响（Anchor Echo）：嵌入空间情感引导 —— token-embedding 稠密打分表情感引导，HeartBench +21.7% / TuringBench 人似度 +200%，三级接口降级，五基准评测",
+  "private": false
+}

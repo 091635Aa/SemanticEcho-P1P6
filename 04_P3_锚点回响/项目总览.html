@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>语义回响 · 第四代 锚点回响 Anchor Echo</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #0f1023 0%, #16213e 55%, #1a1a2e 100%);
+    min-height: 100vh;
+    color: #eee;
+    padding: 20px 0 40px;
+  }
+  .container { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+  .header { text-align: center; padding: 30px 10px 10px; }
+  .header .family {
+    font-size: 0.95em; color: #7f8fa6; letter-spacing: 2px; margin-bottom: 8px;
+  }
+  .header h1 {
+    font-size: 2.4em;
+    background: linear-gradient(90deg, #6ec6ff, #7c6cff, #f39c12);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+  .header .subtitle { color: #aab; font-size: 1.05em; line-height: 1.7; max-width: 860px; margin: 0 auto; }
+  .badge {
+    display: inline-block;
+    padding: 6px 16px;
+    background: rgba(124, 108, 255, 0.15);
+    border: 1px solid #7c6cff;
+    border-radius: 20px;
+    color: #b3a8ff;
+    margin: 12px 4px 0;
+    font-size: 0.9em;
+  }
+  .badge.green { background: rgba(46, 204, 113, 0.15); border-color: #2ecc71; color: #2ecc71; }
+  .card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 14px;
+    padding: 26px 28px;
+    margin: 22px 0;
+  }
+  .card h2 {
+    color: #f39c12; font-size: 1.35em; margin-bottom: 18px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .card h3 { color: #6ec6ff; margin: 18px 0 10px; }
+  table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.94em; }
+  th, td { padding: 9px 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.09); }
+  th { color: #f39c12; font-weight: 600; white-space: nowrap; }
+  td { line-height: 1.5; }
+  .win { color: #2ecc71; font-weight: bold; }
+  .lose { color: #e94560; }
+  .edge { color: #f39c12; }
+  .neutral { color: #3498db; }
+  .mono { font-family: 'Courier New', Consolas, monospace; }
+  .arch {
+    font-family: 'Courier New', Consolas, monospace;
+    background: rgba(0,0,0,0.35);
+    border-radius: 10px;
+    padding: 18px;
+    font-size: 0.85em;
+    line-height: 1.65;
+    overflow-x: auto;
+    white-space: pre;
+    color: #cfd8e3;
+  }
+  .timeline { display: flex; flex-direction: column; gap: 0; }
+  .tl-item { display: flex; gap: 16px; position: relative; padding-bottom: 18px; }
+  .tl-item::before {
+    content: ''; position: absolute; left: 17px; top: 34px; bottom: -2px; width: 2px;
+    background: rgba(255,255,255,0.12);
+  }
+  .tl-item:last-child::before { display: none; }
+  .tl-dot {
+    width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: bold; font-size: 0.85em; color: #fff;
+  }
+  .tl-dot.p1 { background: linear-gradient(135deg,#e94560,#c0392b); }
+  .tl-dot.p2 { background: linear-gradient(135deg,#3498db,#2980b9); }
+  .tl-dot.p3 { background: linear-gradient(135deg,#2ecc71,#27ae60); }
+  .tl-dot.p4 { background: linear-gradient(135deg,#7c6cff,#5a4bd4); }
+  .tl-body { flex: 1; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px 16px; }
+  .tl-body h4 { font-size: 1.02em; margin-bottom: 5px; }
+  .tl-body .meta { color: #7f8fa6; font-size: 0.85em; margin-bottom: 6px; }
+  .tl-body p { color: #bcc; font-size: 0.92em; line-height: 1.65; }
+  .tl-body .hl { color: #f39c12; font-weight: 600; }
+  .file-index { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 10px; }
+  .file-item {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px; padding: 9px 12px; font-size: 0.9em;
+  }
+  .file-item .fname { color: #6ec6ff; font-weight: 600; font-family: Consolas, monospace; }
+  .file-item .fdesc { color: #99a; font-size: 0.85em; margin-top: 3px; }
+  .formula {
+    background: rgba(0,0,0,0.3); border-radius: 10px; padding: 16px 18px;
+    font-family: 'Courier New', Consolas, monospace; color: #6ec6ff;
+    font-size: 0.92em; line-height: 1.9; margin: 10px 0;
+  }
+  .tag { display: inline-block; padding: 3px 10px; border-radius: 10px; font-size: 0.8em; margin: 2px; }
+  .tag-green { background: rgba(46,204,113,0.2); color: #2ecc71; }
+  .tag-orange { background: rgba(243,156,18,0.2); color: #f39c12; }
+  .tag-red { background: rgba(233,69,96,0.2); color: #e94560; }
+  .tag-blue { background: rgba(52,152,219,0.2); color: #3498db; }
+  .tag-purple { background: rgba(124,108,255,0.2); color: #b3a8ff; }
+  .footer { text-align: center; padding: 24px; color: #667; font-size: 0.9em; }
+  .footer .cta { margin-top: 10px; color: #7c6cff; font-weight: bold; }
+  .note { color: #8899aa; font-size: 0.86em; line-height: 1.7; margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="family">SemanticEcho 语义回响家族 · 四代递进</div>
+    <h1>语义回响 · 第四代 锚点回响 Anchor Echo</h1>
+    <div class="subtitle">
+      用模型自身的 token-embedding 权重作为<strong>只读映射接口</strong>，把「K 维情感锚点质心」的稠密余弦打分做成低秩 logits 偏置，
+      按会话目标情感权重 <span class="mono">v_target</span> 极性定向注入——<strong>不写权重 · 不挂钩子 · 全词表覆盖 · 可降级到闭源 API</strong>。
+    </div>
+    <div>
+      <span class="badge">⚡ 推理期情感增强</span>
+      <span class="badge green">🧠 嵌入空间稠密引导</span>
+      <span class="badge">🔗 与 P1/P2/P3 正交可叠加</span>
+    </div>
+  </div>
+
+  <!-- ① P1-P4 家族演进时间线 -->
+  <div class="card">
+    <h2>📈 P1–P4 家族演进时间线</h2>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot p1">P1</div>
+        <div class="tl-body">
+          <h4>语义回响 Semantic Echo</h4>
+          <div class="meta">表示空间（hidden_state 回响注入）· 随机投影 · forward hook</div>
+          <p>回收生成中被丢弃 token 的 hidden_state 进回响池，以 λ 强度注回生成。语义熵 +40~45%；四层全开图灵测试 human_likeness 0.63→0.23（身份泄漏）。<span class="hl">代价：投影矩阵 hidden×V 约 933MB，随机方向不可解释，强依赖本地 hook。</span></p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot p2">P2</div>
+        <div class="tl-body">
+          <h4>通用兼容层 V2</h4>
+          <div class="meta">配置空间（λ/γ/τ 自动适配）· 扫描表五元组 · 公式兜底</div>
+          <p>模型无关化：`λ = 基础值(hidden_dim) × 架构族因子 × 量化因子`，扫描表 + 公式兜底 + 在线坍缩检测，未注册模型保守参数。回答了"每个模型用多大强度"。</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot p3">P3</div>
+        <div class="tl-body">
+          <h4>情感潮汐解码 ETD</h4>
+          <div class="meta">概率空间（logits 乘性重加权 + AI 腔三通道抑制）· 感知/决策/表达三层</div>
+          <p>VAD 三维情感感知 → 潮汐决策 → 采样时把概率质量涌向情绪方向。混合 v8+人设 LLM-Judge <span class="hl">+48%</span>（0.35→0.5167）。<span class="hl">局限：词表稀疏（≈千级 token），OOV 网络流行语无法引导。</span></p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot p4">P4</div>
+        <div class="tl-body">
+          <h4>锚点回响 Anchor Echo <span class="tag tag-purple">本方案</span></h4>
+          <div class="meta">嵌入空间（token-embedding 权重只读映射）· K=6 情感锚点质心 · 稠密余弦打分表 1.8MB</div>
+          <p>全词表稠密但低秩（S ∈ R^{V×K}），tanh 有界极性定向注入；三级接口降级（embedding→logprobs→提示）。<span class="hl">HeartBench +21.7% · TuringBench human_likeness +200% · LLM-Judge+人设 +56.25% · 多模型 3/3 可用 · 与 P1/P2/P3 正交可叠加。</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ② 三层架构 -->
+  <div class="card">
+    <h2>🏗️ 三层架构（感知 / 目标 / 表达）</h2>
+    <div class="arch">用户消息 ─→ 潮汐感知器.测量() ─→ 潮汐决策器.计算目标() ─→ V_target / α
+     │                                                       │
+     │── 思考链注入器（可选）──────────────────────────────────→ 目标决策器: v_target, β
+     │── 显式情感指令（可选）──────────────────────────────────→│
+     └────────────────────────────────────────────────────────┘
+                                                          ↓
+     模型前向(logits) ── ① 回响注入器 ── ② 潮汐解码器._情感引导
+                      ── ③ 锚点解码器.注入偏置 ── 采样 → 句状态/密度/兜底 → 输出
+
+     ┌──────────────────────────────────────────────────────────────┐
+     │ 目标层  目标决策器.py ：VAD→锚点映射 · 共情公式 · 多源融合      │
+     │         角色感知(0.7·角色+0.3·用户) · 自动适配 β               │
+     ├──────────────────────────────────────────────────────────────┤
+     │ 表达层  锚点库.py     ：6 维锚点质心 E(每维50词) · 打分表 S     │
+     │         锚点解码器.py ：logits[w] += β·tanh(S[w]·v_target/T)   │
+     │         混合锚点器.py ：锚点 × 回响 × 潮汐 三通道正交叠加       │
+     └──────────────────────────────────────────────────────────────┘
+     （感知层复用 P3 潮汐感知器；目标层复用 P3 潮汐决策器）</div>
+    <div class="formula">
+核心公式<br>
+打分表   S[w,k] = cos(W_e[w], e_k)，E 每行 L2 归一化　　　　（锚点库）<br>
+目标     v_target = w_潮汐·v_潮汐 + w_思考链·v_思考链 + w_指令·v_指令 → L2 归一化（目标决策器）<br>
+注入     logits[w] += β · tanh( S[w]·v_target / T_anchor )　　　（锚点解码器，有界防坍缩）<br>
+自动适配 β = 扫描表或公式 × 架构族因子_锚点 × 量化因子（4bit=0.75）<br>
+退化兜底 重复率&gt;0.6 或 熵&lt;0.6 → β×0.5；连续 3 次 → β=0（锚点通道静默）
+    </div>
+    <h3>混合锚点器 · 三通道正交叠加（均作用于 logits 加法，可独立开关）</h3>
+    <table>
+      <tr><th>通道</th><th>注入项</th><th>默认</th><th>操作空间</th><th>说明</th></tr>
+      <tr><td><span class="tag tag-purple">A 锚点</span></td><td class="mono">β·tanh(S@v_target/T)</td><td>β=0.8, T=0.3</td><td>嵌入空间低秩稠密</td><td>核心通道，K=6 打分表 1.8MB fp16</td></tr>
+      <tr><td><span class="tag tag-blue">B 回响</span></td><td class="mono">λ·(池质心@投影矩阵)</td><td>λ=0.08</td><td>表示空间情感底色</td><td>复用 P1 回响注入器（GPU 投影）</td></tr>
+      <tr><td><span class="tag tag-green">C 潮汐</span></td><td class="mono">α·引导倍率·极性词表偏置</td><td>倍率=6~12</td><td>概率空间方向密度</td><td>复用 P3 极性词表逻辑</td></tr>
+    </table>
+    <p class="note">全开（β=0.8 + λ=0.08 + 倍率=6）无坍缩：熵 1.42→1.67（+17%）、回复长度 135→54 字对齐真人、无空回复；本地 7B / DeepSeek pro 双裁判下全开均优于裸（相对 +55.6% / +100%）。</p>
+  </div>
+
+  <!-- ③ 五基准结果 -->
+  <div class="card">
+    <h2>🎯 五基准评测结果（Qwen2.5-1.5B fp16，裸 vs P4 锚点，同种子 42）</h2>
+    <table>
+      <tr><th>基准</th><th>指标</th><th>裸</th><th>P4 锚点</th><th>Δ / 相对</th><th>判定</th></tr>
+      <tr><td rowspan="2"><strong>HeartBench</strong>（20 题官方 rubric）</td><td>overall</td><td>35.90</td><td class="win">43.69</td><td class="win">+21.7%</td><td>✅ 显著提升（P3 潮汐同基准 -9.4%）</td></tr>
+      <tr><td>人格 / 情绪</td><td>40.95 / 46.38</td><td class="win">49.57 / 50.95</td><td class="win">+21.1% / +9.9%</td><td>✅</td></tr>
+      <tr><td rowspan="3"><strong>TuringBench</strong>（中文检测器 30 测试对）</td><td>human_likeness</td><td>0.2333</td><td class="win">0.7000</td><td class="win">+200.0%</td><td>✅ 大幅提升</td></tr>
+      <tr><td>detection_accuracy（AI 判 AI）</td><td>0.7667</td><td class="win">0.3000</td><td class="win">-60.9%</td><td>✅ 越低越像人</td></tr>
+      <tr><td>检测器留出准确率</td><td>0.883</td><td class="neutral">0.650</td><td>-0.233</td><td>与真人更难区分</td></tr>
+      <tr><td rowspan="2"><strong>LLM-Judge</strong>（30 样本/60 配对盲评）</td><td>win_rate（单模式纯净）</td><td>0.2667</td><td class="edge">0.3000</td><td class="edge">+12.49%</td><td>部分达成（未达 +25% 线）</td></tr>
+      <tr><td>win_rate（+P3 人设）</td><td>0.2667</td><td class="win">0.4167</td><td class="win">+56.25%</td><td>✅ 达成（相对裸+人设仍 +8.71%）</td></tr>
+      <tr><td rowspan="3"><strong>HEART-BENCH</strong>（英文 MCQ 决策 10 题）</td><td>共情分</td><td>0.76</td><td class="edge">0.72</td><td class="edge">-5.26%</td><td>△ 边缘持平（与 P3 潮汐 -4% 同档）</td></tr>
+      <tr><td>一致性</td><td>0.60</td><td class="win">0.65</td><td class="win">+8.3%</td><td>✅ 决策更稳定</td></tr>
+      <tr><td>有效决策率</td><td>1.0</td><td class="win">1.0</td><td>0</td><td>✅ 无坍缩无退化</td></tr>
+      <tr><td rowspan="3"><strong>EmoCharacter</strong>（10 角色×4 轮）</td><td>匹配 fidelity</td><td>0.8300</td><td class="edge">0.8075</td><td>-2.7%</td><td>✅ ≥裸-5%，无显著退化</td></tr>
+      <tr><td>一致性识别率</td><td>0.9000</td><td class="lose">0.7000</td><td class="lose">-22.2%</td><td>❌ 1.5B 天花板限制（固有开头模板+打乱集雷同）</td></tr>
+      <tr><td>中性下限 fidelity</td><td>0.70</td><td class="win">0.70</td><td>0</td><td>✅ 无角色情感污染</td></tr>
+    </table>
+    <h3>最优配置（Task5 参数扫描定标，3 种子均值）</h3>
+    <table>
+      <tr><th>指标</th><th>裸</th><th>最优锚点 (β=0.8, 稀疏阈值=0.0, T=0.3, K=6)</th><th>结论</th></tr>
+      <tr><td>语义熵</td><td>1.8455</td><td class="win">2.0291（109.9%）</td><td>✅ 熵不退化（≥裸×0.95）</td></tr>
+      <tr><td>2-gram 重复率</td><td>0.1336</td><td class="win">0.0787</td><td>✅ 无坍缩（不升反降）</td></tr>
+      <tr><td>情感命中率</td><td>0.0979</td><td class="win">0.1279（+0.03）</td><td>✅ 提升</td></tr>
+      <tr><td>过注入边界</td><td>—</td><td>β∈(2.0, 2.5] 附近</td><td>生产档位建议 β≤1.6</td></tr>
+    </table>
+  </div>
+
+  <!-- ④ 多模型对照 -->
+  <div class="card">
+    <h2>🌐 多模型泛化（LLM-Judge，30 条同样本，种子 42，β 自动适配）</h2>
+    <table>
+      <tr><th>模型</th><th>加载</th><th>自动适配 β</th><th>裸 win_rate</th><th>P4 win_rate</th><th>相对</th><th>无坍缩</th><th>判定</th></tr>
+      <tr><td>Qwen2.5-3B-Instruct</td><td>fp16</td><td>0.60（扫描表 2048）</td><td>0.2833</td><td>0.2667</td><td class="lose">-5.86%</td><td>✅ 熵1.21</td><td>60 配对差 1 胜，方差内负向</td></tr>
+      <tr><td>Qwen3-1.7B-Instruct</td><td>fp16</td><td>0.24（2048×族因子0.4）</td><td>0.4833</td><td class="win">0.5167</td><td class="win">+6.91%</td><td>✅ 熵0.76</td><td>✅ 提升为正</td></tr>
+      <tr><td>gemma-2-2b-it</td><td>bf16</td><td>0.3974（公式兜底×族因子0.8）</td><td>0.1167</td><td class="win">0.1500</td><td class="win">+28.53%</td><td>✅ 熵1.11，命中0.0834>0</td><td>✅ 保守兜底路径成立且增益最大</td></tr>
+    </table>
+    <p class="note">3/3 模型可用性通过（无坍缩、情感命中率均 ≥ 裸、在线兜底 0 次、无空回复）；LLM-Judge 泛化提升 2/3 为正。Qwen2.5-3B 负向为配对盲评 60 配对差 1 胜的随机方差内波动（降 β 复测 -17.65% 更差），不构成锚点通道失效。</p>
+  </div>
+
+  <!-- ⑤ 三裁判交叉验证 -->
+  <div class="card">
+    <h2>⚖️ 三裁判交叉验证（三正交叠加 · 控制变量：同回复/同配对/同提示词，只变裁判）</h2>
+    <table>
+      <tr><th>模式</th><th>本地 7B</th><th>deepseek-flash</th><th>deepseek-pro</th><th>平均熵</th><th>平均长度</th><th>空回复</th></tr>
+      <tr><td>裸</td><td>0.1500</td><td>0.0000</td><td>0.0167</td><td>1.4197</td><td>134.9</td><td>0</td></tr>
+      <tr><td>锚点（仅A）</td><td>0.2333</td><td>0.0000</td><td>0.0167</td><td>1.4804</td><td>48.4</td><td>0</td></tr>
+      <tr><td>回响（仅B）</td><td>0.1333</td><td>0.0000</td><td>0.0000</td><td>1.5368</td><td>149.4</td><td>0</td></tr>
+      <tr><td><strong>全开（A+B+C）</strong></td><td class="win">0.2333</td><td>0.0000</td><td class="win">0.0333</td><td class="win">1.6677</td><td>54.2</td><td>0</td></tr>
+    </table>
+    <p class="note">
+      双裁判方向一致：在有区分度的裁判下（本地 7B / pro），全开与锚点均优于裸（相对 +55.6% / +100%），非单一裁判偏差；flash 因对 1.5B AI 腔绝对否决而无区分度。
+      卡点：1.5B 原生 AI 腔未抑制（P4 纯净模式无 P3 人设/AI 腔抑制）→ 三正交叠加需与人设叠加方在 LLM-Judge 兑现增益（已验证 P4+人设 +56.25%）。
+    </p>
+    <h3>三级接口降级（闭源 API 可用性）</h3>
+    <table>
+      <tr><th>级别</th><th>接口</th><th>平均熵</th><th>情感命中(token)</th><th>情感命中(文本)</th><th>判定</th></tr>
+      <tr><td>① 本地 embedding 直读（主路径）</td><td class="mono">"本地"</td><td>1.4915</td><td>0.1406</td><td>0.0210</td><td rowspan="2">②≈① 无损退化：熵差 0.67%，输出逐字一致</td></tr>
+      <tr><td>② API logprobs 近似</td><td class="mono">"logprobs" top-100</td><td>1.4815</td><td>0.1406</td><td>0.0210</td></tr>
+      <tr><td>③ 锚点提示模式（纯黑盒）</td><td class="mono">"提示"</td><td>1.8244</td><td>0.0864</td><td class="win">0.0465</td><td>✅ 零内部访问、方向正确（&gt;裸 0.0349）</td></tr>
+    </table>
+  </div>
+
+  <!-- ⑥ 文件索引 -->
+  <div class="card">
+    <h2>📁 文件索引（h:\锚点回响（Anchor Echo）\）</h2>
+    <h3>核心模块（5 个）</h3>
+    <div class="file-index">
+      <div class="file-item"><div class="fname">锚点库.py</div><div class="fdesc">6 维情感锚点质心（每维 50 种子词，含流行语）、预计算打分表 S∈R^{V×K}、只读校验（sum/data_ptr 断言）</div></div>
+      <div class="file-item"><div class="fname">目标决策器.py</div><div class="fdesc">VAD→锚点映射、共情公式、多源融合、角色感知（0.7·角色+0.3·用户）、自动适配 β</div></div>
+      <div class="file-item"><div class="fname">锚点解码器.py</div><div class="fdesc">稠密打分注入（tanh 有界）、生成循环、在线退化兜底、密度控制、三级接口</div></div>
+      <div class="file-item"><div class="fname">混合锚点器.py</div><div class="fdesc">锚点 × 回响 × 潮汐 三通道正交叠加、独立开关、组合式持有三个表达器</div></div>
+      <div class="file-item"><div class="fname">接口降级.py</div><div class="fdesc">判定接口() 三级降级判定、构造提示词() 黑盒提示模板</div></div>
+    </div>
+    <h3>验证 / 运行 / 评测脚本</h3>
+    <div class="file-index">
+      <div class="file-item"><div class="fname">冒烟测试.py</div><div class="fdesc">全链路冒烟：加载→构建锚点→生成→健康度统计</div></div>
+      <div class="file-item"><div class="fname">验证_灵感.py</div><div class="fdesc">Task1 灵感验证（方向分离度 t=9.3~17.6、只读零修改）</div></div>
+      <div class="file-item"><div class="fname">验证_logprobs模式.py / 验证_提示模式.py</div><div class="fdesc">Task9 三级降级验证（等价性 / 零内部访问打点）</div></div>
+      <div class="file-item"><div class="fname">运行对照_单模型.py / 参数扫描.py</div><div class="fdesc">Task4 四档 β 对照 / Task5 参数网格扫描（3 种子）</div></div>
+      <div class="file-item"><div class="fname">运行四模式_锚点.py</div><div class="fdesc">Task8 四模式生成（裸/锚点/回响/全开）+ 缓存</div></div>
+      <div class="file-item"><div class="fname">评测_EmoCharacter_锚点.py</div><div class="fdesc">EmoCharacter 10 角色×4 轮（含角色感知锚点）</div></div>
+      <div class="file-item"><div class="fname">评测_LLM_Judge_锚点.py / _混合.py / _多模型.py</div><div class="fdesc">LLM-Judge 配对盲评（单模式 / 混合 / 多模型泛化）</div></div>
+      <div class="file-item"><div class="fname">评测_HEART_BENCH_锚点.py / _HeartBench_锚点.py / _TuringBench_锚点.py</div><div class="fdesc">五基准其余三项（两阶段分进程：生成→裁判）</div></div>
+      <div class="file-item"><div class="fname">评测_双裁判.py / 探测云裁判.py / 参数敏感性_倍率12.py</div><div class="fdesc">三裁判交叉验证 / DeepSeek 连通性与思考开关 / 倍率敏感性</div></div>
+    </div>
+    <h3>报告文档</h3>
+    <div class="file-index">
+      <div class="file-item"><div class="fname">P4_混合方案设计.md</div><div class="fdesc">方案设计定稿（空间对照/三层架构/混合/自动适配/降级/评测计划/风险）</div></div>
+      <div class="file-item"><div class="fname">灵感验证报告.md / 单模型对照报告.md / 参数扫描报告.md</div><div class="fdesc">Task1 / Task4 / Task5 阶段报告</div></div>
+      <div class="file-item"><div class="fname">评测报告_EmoCharacter_LLMJudge.md</div><div class="fdesc">Task6 阶段1（角色感知锚点、LLM-Judge +人设 +56.25%）</div></div>
+      <div class="file-item"><div class="fname">P4_评测报告.md</div><div class="fdesc">Task6.4 五基准综合评测 + 多模型泛化 + 三正交 + 接口降级（全量）</div></div>
+      <div class="file-item"><div class="fname">多模型泛化报告.md / 三正交叠加报告.md / 接口降级验证报告.md</div><div class="fdesc">Task7 / Task8 / Task9 阶段报告</div></div>
+      <div class="file-item"><div class="fname">论文_第四架构章节_锚点回响.md</div><div class="fdesc">可并入论文的第四架构章节</div></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div>SemanticEcho © 2026 · 语义回响家族第四代 · 锚点回响 Anchor Echo</div>
+    <div class="cta">🧠 嵌入空间 · 零修改 · 全词表 · 三级降级 · 四代正交</div>
+    <div style="margin-top:8px;">作者：邓斯键 · 联系：DYPUBG2025@QQ.COM</div>
+  </div>
+</div>
+</body>
+</html>

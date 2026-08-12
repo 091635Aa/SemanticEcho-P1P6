@@ -1,0 +1,59 @@
+SEMANTIC ECHO · P1–P6 SHOWREEL — 英文字幕稿（含时间轴）
+=========================================================
+文件用途：视频旁白/字幕翻译对照稿。每条含"时间段 + 英文原文"。
+翻译后请保持时间轴不变，替换文本即可。
+
+【翻译对照表】
+
+(1) 0.0s – 10.3s
+英文：What if a 1.5B model sounded more human than models 1000x bigger? No fine-tuning, no retraining. Just decoding-time magic.
+中文：？
+
+(2) 10.3s – 23.7s
+英文：Meet Semantic Echo. A family of decoding-time architectures that make AI emotionally expressive, without touching a single weight. P1 captures hidden states the model would throw away, and feeds them back as emotion. Entropy up 45 percent.
+中文：？
+
+(3) 23.7s – 32.3s
+英文：P1.5 auto-tunes injection strength for any model, any size, any quantization. Qwen, Phi, Gemma, DeepSeek. Plug in and go.
+中文：？
+
+(4) 32.3s – 42.4s
+英文：P2.5, Emotion Tidal Decoding, measures the emotional tide of the conversation and re-weights the sampling distribution. Blind judges: 91 percent more human.
+中文：？
+
+(5) 42.4s – 51.2s
+英文：P3, Anchor Echo, scores every token against emotional anchors, read-only. TuringBench human likeness? Plus 200 percent.
+中文：？
+
+(6) 51.2s – 59.5s
+英文：P4, KV Resonance, finds emotional tokens inside the attention cache and makes the model actually look at them. Near zero memory cost.
+中文：？
+
+(7) 59.5s – 67.6s
+英文：P5, the Ultra Fusion Decoder, fuses all four into one pipeline. Four architectures, one chain. No collapse.
+中文：？
+
+(8) 67.6s – 76.9s
+英文：The honest part: a small base model has a ceiling. Steering narrows the gap but can't break it. And these gains are about emotion, not general intelligence.
+中文：？
+
+(9) 76.9s – 85.5s
+英文：So build companions that feel, game characters that remember moods, private AI with a human touch on your own GPU. No cloud.
+中文：？
+
+(10) 85.5s – 95.1s
+英文：Everything is open source. Semantic Echo, ETD, Anchor Echo, KV Resonance, and the home hub, linked below. One small model, one big idea.
+中文：？
+
+=========================================================
+【屏幕字幕（画面底部动态字条，更简短）】
+1. What if a 1.5B model sounded more human than models 1000x bigger?
+2. Semantic Echo — decoding-time architectures. P1: recycle hidden states into emotion.
+3. P1.5 — Universal Compatibility. Any model. Any size. Plug in & go.
+4. P2.5 — Emotion Tidal Decoding. Re-weights sampling by the emotional tide.
+5. P3 — Anchor Echo. Read-only token scoring. TuringBench +200%.
+6. P4 — KV Resonance. Makes the model look at emotion. Near-zero memory.
+7. P5 — Ultra Fusion Decoder. All four, one chain. No collapse.
+8. Honest part: small bases have a ceiling. Emotion ≠ general intelligence.
+9. Companions that feel. Game characters that remember. Private AI on your GPU.
+10. Open source everywhere. Links below. One small model, one big idea.

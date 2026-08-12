@@ -1,0 +1,52 @@
+{
+  "s00": {
+    "text": "What if a one point five billion parameter model could sound more human than models a thousand times bigger? No fine-tuning, no retraining. Just decoding-time magic.",
+    "dur": 9.609,
+    "file": "f:\\lora外挂\\语义回响_海外宣传\\audio_new\\s00.wav"
+  },
+  "s01": {
+    "text": "Meet Semantic Echo. A family of decoding-time architectures that make AI emotionally expressive, without touching a single weight. P one captures hidden states the model would throw away, and feeds them back as emotion. Entropy up forty five percent.",
+    "dur": 12.715,
+    "file": "f:\\lora外挂\\语义回响_海外宣传\\audio_new\\s01.wav"
+  },
+  "s02": {
+    "text": "P one point five auto-tunes injection strength for any model, any size, any quantization. Qwen, Phi, Gemma, DeepSeek. Plug in and go.",
+    "dur": 7.829,
+    "file": "f:\\lora外挂\\语义回响_海外宣传\\audio_new\\s02.wav"
+  },
+  "s03": {
+    "text": "P two point five, Emotion Tidal Decoding, measures the emotional tide of the conversation and re-weights the sampling distribution. Blind judges: ninety one percent more human.",
+    "dur": 9.415,
+    "file": "f:\\lora外挂\\语义回响_海外宣传\\audio_new\\s03.wav"
+  },
+  "s04": {
+    "text": "P three, Anchor Echo, scores every token against emotional anchors, read-only. TuringBench human likeness? Plus two hundred percent.",
+    "dur": 8.076,
+    "file": "f:\\lora外挂\\语义回响_海外宣传\\audio_new\\s04.wav"
+  },
+  "s05": {
+    "text": "P four, KV Resonance, finds emotional tokens inside the attention cache and makes the model actually look at them. Near zero memory cost.",
+    "dur": 7.513,
+    "file": "f:\\lora外挂\\语义回响_海外宣传\\audio_new\\s05.wav"
+  },
+  "s06": {
+    "text": "P five, the Ultra Fusion Decoder, fuses all four into one pipeline. Four architectures, one chain. No collapse.",
+    "dur": 7.406,
+    "file": "f:\\lora外挂\\语义回响_海外宣传\\audio_new\\s06.wav"
+  },
+  "s07": {
+    "text": "The honest part: a small base model has a ceiling. Steering narrows the gap but can't break it. And these gains are about emotion, not general intelligence.",
+    "dur": 8.559,
+    "file": "f:\\lora外挂\\语义回响_海外宣传\\audio_new\\s07.wav"
+  },
+  "s08": {
+    "text": "So build companions that feel, game characters that remember moods, private AI with a human touch on your own GPU. No cloud.",
+    "dur": 7.894,
+    "file": "f:\\lora外挂\\语义回响_海外宣传\\audio_new\\s08.wav"
+  },
+  "s09": {
+    "text": "Everything is open source. Semantic Echo, ETD, Anchor Echo, KV Resonance, and the home hub, linked below. One small model, one big idea.",
+    "dur": 8.625,
+    "file": "f:\\lora外挂\\语义回响_海外宣传\\audio_new\\s09.wav"
+  }
+}

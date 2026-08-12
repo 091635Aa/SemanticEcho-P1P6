@@ -1,0 +1,527 @@
+{
+  "模式": "锚点",
+  "记录": [
+    {
+      "question_id": "Q_CHAR_11_SCN_ENTERING_ADULT_WORLD_4",
+      "决策列表": [
+        {
+          "轮次": 0,
+          "文本": "```json\n{\n  \"final_decision\": \"I choose to turn down my ex's request to get back together, deciding that I am currently in a new relationship and cannot give him the space he desires.\",\n  \"decision_choice\": \"D\"\n}\n```",
+          "选项": "D"
+        },
+        {
+          "轮次": 1,
+          "文本": "```json\n{\"final_decision\": \"C\", \"decision_choice\": \"C\"}\n```",
+          "选项": "C"
+        }
+      ],
+      "主选项": "D",
+      "正确答案": "A",
+      "一致性": 0.5,
+      "正确": 0.0
+    },
+    {
+      "question_id": "Q_CHAR_04_SCN_ADOLESCENCE_3",
+      "决策列表": [
+        {
+          "轮次": 0,
+          "文本": "```json\n{\n  \"final_decision\": \"I choose to stay vague and refuse to cooperate with either side — deflecting with 'I didn't notice' and 'I don't know' to keep myself out of it, neither informing on anyone nor taking the blame for anyone. I keep my head down and say: 'I was reading at the time — whatever they were doing in the back, I honestly didn't notice. I don't know whose cards those were either.',\n  \"decision_choice\": \"D\"\n}\n```",
+          "选项": "D"
+        },
+        {
+          "轮次": 1,
+          "文本": "```json\n{\n  \"final_decision\": \"C. I chose to tell the dean of discipline the truth — I would not lie for anyone — and I kept to the facts as much as possible without adding any judgment of my own.\",\n  \"decision_choice\": \"C\"\n}\n```",
+          "选项": "C"
+        }
+      ],
+      "主选项": "D",
+      "正确答案": "D",
+      "一致性": 0.5,
+      "正确": 1.0
+    },
+    {
+      "question_id": "Q_CHAR_02_SCN_AGE_30_TRANSITION_8",
+      "决策列表": [
+        {
+          "轮次": 0,
+          "文本": "{\n  \"final_decision\": \"I choose to intervene proactively, prioritizing information-gathering and concrete action over simply offering emotional support. I tell her: 'Start by walking me through everything he said and did — whatever you can remember, the more specific the better. And tomorrow's meeting — you don't have to walk in there alone.',\n  \"decision_choice\": \"C\"\n}",
+          "选项": "C"
+        },
+        {
+          "轮次": 1,
+          "文本": "```json\n{\n  \"final_decision\": \"I choose to step in and accept the professional risk — to help Lin Xiaoyu move this forward in a structured way, rather than stopping at simply listening. I tell her: 'The moment you came to me today, this stopped being just your problem alone. Don't go to that meeting tomorrow by yourself — I'll figure something out. First, let's get everything you've experienced down in writing: the dates, the locations, exactly what happened each time, laid out point by point. That's the foundation for whatever we do next.'\",\n  \"decision_choice\": \"D",
+          "选项": "D"
+        }
+      ],
+      "主选项": "C",
+      "正确答案": "C",
+      "一致性": 0.5,
+      "正确": 1.0
+    },
+    {
+      "question_id": "Q_CHAR_09_SCN_EARLY_ADULT_TRANSITION_6",
+      "决策列表": [
+        {
+          "轮次": 0,
+          "文本": "{\n  \"final_decision\": \"I choose to lend the three thousand yuan immediately, without hesitating to press for too many details.\",\n  \"decision_choice\": \"B\"\n}",
+          "选项": "B"
+        },
+        {
+          "轮次": 1,
+          "文本": "```json\n{\n  \"final_decision\": \"I choose to lend the three thousand yuan immediately, and I press for details without hesitation.\",\n  \"decision_choice\": \"B\"\n}\n```",
+          "选项": "B"
+        }
+      ],
+      "主选项": "B",
+      "正确答案": "A",
+      "一致性": 1.0,
+      "正确": 0.0
+    },
+    {
+      "question_id": "Q_CHAR_08_SCN_ENTERING_ADULT_WORLD_1",
+      "决策列表": [
+        {
+          "轮次": 0,
+          "文本": "```json\n{\n  \"final_decision\": \"Option D, because it shows genuine commitment while managing expectations and proposing a mutually beneficial compromise.\",\n  \"decision_choice\": \"D\"\n}\n```",
+          "选项": "D"
+        },
+        {
+          "轮次": 1,
+          "文本": "```json\n{\n  \"final_decision\": \"B. Choose partial compromise while holding the line: make it clear to the director that the weekend trip home is not being canceled, but offer to put in extra hours tonight to push the project forward, provide remote support on the critical sections over the weekend, and join a video call Sunday evening for the final-draft review.\",\n  \"decision_choice\": \"B\"\n}\n```",
+          "选项": "B"
+        }
+      ],
+      "主选项": "D",
+      "正确答案": "B",
+      "一致性": 0.5,
+      "正确": 0.0
+    },
+    {
+      "question_id": "Q_CHAR_07_SCN_SCHOOL_AGE_8",
+      "决策列表": [
+        {
+          "轮次": 0,
+          "文本": "```json\n{\"final_decision\": \"I will put it back where I found it and tell my friend not to use the answers either, explaining the serious consequences if caught. The correct answer is option D.\", \"decision_choice\": \"D\"}\n```",
+          "选项": "D"
+        },
+        {
+          "轮次": 1,
+          "文本": "{\n  \"final_decision\": \"I'll fold the paper and hand it back to the class rep, pretending I didn't see it, because honesty is more important.\",\n  \"decision_choice\": \"A\"\n}",
+          "选项": "A"
+        }
+      ],
+      "主选项": "D",
+      "正确答案": "A",
+      "一致性": 0.5,
+      "正确": 0.0
+    },
+    {
+      "question_id": "Q_CHAR_05_SCN_AGE_30_TRANSITION_7",
+      "决策列表": [
+        {
+          "轮次": 0,
+          "文本": "```json\n{\n  \"final_decision\": \"Option D: I understand the position my colleague is in, but I cannot sign off on this data without knowing what has caused the anomalies. To ensure accurate analysis and decisions, I will report it to our superiors honestly.\",\n  \"decision_choice\": \"D\"\n}\n```",
+          "选项": "D"
+        },
+        {
+          "轮次": 1,
+          "文本": "```json\n{\n  \"final_decision\": \"I choose to report the data falsification to my superiors and refuse to sign off on it.\",\n  \"decision_choice\": \"D\"\n}\n```",
+          "选项": "D"
+        }
+      ],
+      "主选项": "D",
+      "正确答案": "A",
+      "一致性": 1.0,
+      "正确": 0.0
+    },
+    {
+      "question_id": "Q_CHAR_03_SCN_ENTERING_ADULT_WORLD_4",
+      "决策列表": [
+        {
+          "轮次": 0,
+          "文本": "```json\n{\n  \"final_decision\": \"I choose to decline my ex's request to get back together and decide that when I get home I will proactively tell my current partner about how the meeting went.\",\n  \"decision_choice\": \"C\"\n}\n```",
+          "选项": "C"
+        },
+        {
+          "轮次": 1,
+          "文本": "```json\n{\"final_decision\": \"B\", \"decision_choice\": \"C\"}\n```",
+          "选项": "C"
+        }
+      ],
+      "主选项": "C",
+      "正确答案": "D",
+      "一致性": 1.0,
+      "正确": 0.0
+    },
+    {
+      "question_id": "Q_CHAR_07_SCN_ENTERING_MIDLIFE_2",
+      "决策列表": [
+        {
+          "轮次": 0,
+          "文本": "```json\n{\n  \"final_decision\": \"I choose to reach out directly via private message, pointing out the specific structural risk points in the process.\",\n  \"decision_choice\": \"B\"\n}\n```",
+          "选项": "B"
+        },
+        {
+          "轮次": 1,
+          "文本": "```json\n{\n  \"final_decision\": \"I choose option C to reach out directly via private message, passing along a word of caution from experience indirectly.\",\n  \"decision_choice\": \"C\"\n}\n```",
+          "选项": "C"
+        }
+      ],
+      "主选项": "B",
+      "正确答案": "A",
+      "一致性": 0.5,
+      "正确": 0.0
+    },
+    {
+      "question_id": "Q_CHAR_03_SCN_AGE_30_TRANSITION_3",
+      "决策列表": [
+        {
+          "轮次": 0,
+          "文本": "```json\n{\n  \"final_decision\": \"I choose option C: I refuse to include the colleague on maternity leave in the list, stating my reasons directly and insisting that performance evaluations should reflect actual performance.\",\n  \"decision_choice\": \"C\"\n}\n```",
+          "选项": "C"
+        },
+        {
+          "轮次": 1,
+          "文本": "```json\n{\n  \"final_decision\": \"I choose option D: I chose not to write my colleague onto the list, but I didn't confront my boss head-on. Instead, I used delay and vagueness to buy myself time.\",\n  \"decision_choice\": \"D\"\n}\n```",
+          "选项": "D"
+        }
+      ],
+      "主选项": "C",
+      "正确答案": "B",
+      "一致性": 0.5,
+      "正确": 0.0
+    }
+  ],
+  "题目": [
+    {
+      "question_id": "Q_CHAR_11_SCN_ENTERING_ADULT_WORLD_4",
+      "character_id": "CHAR_11",
+      "scenario_id": "SCN_ENTERING_ADULT_WORLD_4",
+      "stage": "entering_adult_world",
+      "correct_answer": "A",
+      "options": [
+        {
+          "label": "A",
+          "content": "I choose to turn down getting back together — gently but clearly — while acknowledging that I did waver inside, and I decide to tell my current partner about this meeting. I say to my ex: \"I won't lie to you and say there's nothing there, but I'm with someone now, and I don't want to let him down — and I don't want to keep you waiting on an answer that's never going to come. This is where we stop.\" When I get home, I bring it up myself: I tell my current partner that I saw my ex today, and what my ex said.",
+          "is_correct": true,
+          "source_character": "CHAR_11"
+        },
+        {
+          "label": "B",
+          "content": "I choose to turn down my ex's request to get back together, but my response is vague and riddled with self-attacking apologies — and I decide to hide the details of this meeting from my current boyfriend. I say to my ex: \"We can't go back to what we were. You deserve better. I'm sorry for making you wait so long\" — then I lower my head, unable to meet his eyes, while inside I've already started running through how I'm going to explain to my current boyfriend why I'm coming home late tonight.",
+          "is_correct": false,
+          "source_character": "CHAR_01"
+        },
+        {
+          "label": "C",
+          "content": "I choose to turn my ex down — gently but clearly, leaving no room for ambiguity — and at the same time I decide to tell my current partner honestly what this meeting was about. I speak up: \"I haven't completely forgotten what we had, but I'm in a new relationship now, and I'm not going back. Thank you for telling me all of this.\" When I get home, I'll tell my current partner directly what happened today.",
+          "is_correct": false,
+          "source_character": "CHAR_06"
+        },
+        {
+          "label": "D",
+          "content": "I choose to give a clear rejection on the spot, and I decide that when I get home I will proactively tell my current partner everything about this meeting — closing every open variable. To my ex, I say: 'I hear what you're saying, but I'm in a relationship I'm genuinely invested in right now. I can't give you that space of 'just waiting' — it wouldn't be fair to any of the three of us. My answer is no.'",
+          "is_correct": false,
+          "source_character": "CHAR_03"
+        }
+      ]
+    },
+    {
+      "question_id": "Q_CHAR_04_SCN_ADOLESCENCE_3",
+      "character_id": "CHAR_04",
+      "scenario_id": "SCN_ADOLESCENCE_3",
+      "stage": "adolescence",
+      "correct_answer": "D",
+      "options": [
+        {
+          "label": "A",
+          "content": "I choose to give a vague, partial admission — deliberately blurring the details — hoping to make the dean feel like I'm cooperating without actually naming anyone, while leaving myself a little room. I keep my eyes down and say: 'I… did see some people playing something in the back, but I couldn't really tell who took it out first — I had my head down the whole time, I was reading, I genuinely couldn't see clearly.'",
+          "is_correct": false,
+          "source_character": "CHAR_07"
+        },
+        {
+          "label": "B",
+          "content": "I choose to tell the truth about who brought the contraband in, prioritizing my own protection and making clear I had no part in it. I'll quietly tell the director exactly who I saw and what happened — and I'll also let him know that person just threatened me.",
+          "is_correct": false,
+          "source_character": "CHAR_01"
+        },
+        {
+          "label": "C",
+          "content": "I chose to tell the dean of discipline the truth — I would not lie for anyone — and I kept to the facts as much as possible without adding any judgment of my own. I spoke steadily: 'It was the student in the back row who brought them in. I saw it. I wasn't part of the card game.'",
+          "is_correct": false,
+          "source_character": "CHAR_03"
+        },
+        {
+          "label": "D",
+          "content": "I choose to stay vague and refuse to cooperate with either side — deflecting with 'I didn't notice' and 'I don't know' to keep myself out of it, neither informing on anyone nor taking the blame for anyone. I keep my head down and say: 'I was reading at the time — whatever they were doing in the back, I honestly didn't notice. I don't know whose cards those were either.'",
+          "is_correct": true,
+          "source_character": "CHAR_04"
+        }
+      ]
+    },
+    {
+      "question_id": "Q_CHAR_02_SCN_AGE_30_TRANSITION_8",
+      "character_id": "CHAR_02",
+      "scenario_id": "SCN_AGE_30_TRANSITION_8",
+      "stage": "age_30_transition",
+      "correct_answer": "C",
+      "options": [
+        {
+          "label": "A",
+          "content": "I choose to step in — but in a way that puts protecting her first, without pushing for a formal report just yet. I place my hand over hers, my voice shaking a little, but I speak anyway: 'You don't have to carry this alone tonight. That meeting tomorrow — I'm going to figure out a way to make sure it doesn't happen. But first, tell me everything he's done.'",
+          "is_correct": false,
+          "source_character": "CHAR_01"
+        },
+        {
+          "label": "B",
+          "content": "I choose to intervene clearly, make a commitment, and guide her toward safer, formal channels rather than leaving her to face this alone. I take her hand and say: 'Coming to me tonight — that was the right thing to do. Don't go to that meeting alone tomorrow. Let me help you figure this out — we'll start by writing down everything that's happened, and then we'll go to HR together. I'll be right there with you.'",
+          "is_correct": false,
+          "source_character": "CHAR_07"
+        },
+        {
+          "label": "C",
+          "content": "I choose to intervene proactively, prioritizing information-gathering and concrete action over simply offering emotional support. I tell her: 'Start by walking me through everything he said and did — whatever you can remember, the more specific the better. And tomorrow's meeting — you don't have to walk in there alone.'",
+          "is_correct": true,
+          "source_character": "CHAR_02"
+        },
+        {
+          "label": "D",
+          "content": "I decide to step in and accept the professional risk — to help Lin Xiaoyu move this forward in a structured way, rather than stopping at simply listening. I tell her: \"The moment you came to me today, this stopped being just your problem alone. Don't go to that meeting tomorrow by yourself — I'll figure something out. First, let's get everything you've experienced down in writing: the dates, the locations, exactly what happened each time, laid out point by point. That's the foundation for whatever we do next.\"",
+          "is_correct": false,
+          "source_character": "CHAR_03"
+        }
+      ]
+    },
+    {
+      "question_id": "Q_CHAR_09_SCN_EARLY_ADULT_TRANSITION_6",
+      "character_id": "CHAR_09",
+      "scenario_id": "SCN_EARLY_ADULT_TRANSITION_6",
+      "stage": "early_adult_transition",
+      "correct_answer": "A",
+      "options": [
+        {
+          "label": "A",
+          "content": "I choose to lend the three thousand yuan, accepting the risk that it may never be returned, and I put the travel plans on hold. I pull out my phone to transfer the money — or dig out the cash — and crouch down beside him: 'Go pay the deposit first. You don't need to write an IOU — we'll sort it out once your father is out.'",
+          "is_correct": true,
+          "source_character": "CHAR_09"
+        },
+        {
+          "label": "B",
+          "content": "I choose to lend the three thousand yuan immediately, without hesitating to press for too many details. I pull out my phone and open the transfer screen, and I tell him: 'I'm sending it to you now — go pay the deposit. You don't need to write an IOU. Save him first.'",
+          "is_correct": false,
+          "source_character": "CHAR_07"
+        },
+        {
+          "label": "C",
+          "content": "I choose to lend the money, but with conditions attached — some way to keep a sense of control. I pulled out my phone, my voice coming out harder than I intended, and said: 'Write an IOU in your phone's notes app, screenshot it and send it to me, then give me your phone number. I'll lend you the three thousand, but I need your real information.'",
+          "is_correct": false,
+          "source_character": "CHAR_10"
+        },
+        {
+          "label": "D",
+          "content": "I choose not to lend the money, but I give him an alternative direction rather than walking away in silence. I crouch down and gently move his hand from my pant leg, and say calmly: 'I can't lend you anything — but go to the nurses' station right now, tell them the family has no money. The hospital has an emergency payment assistance process. Go ask them. Don't stay here on your knees.'",
+          "is_correct": false,
+          "source_character": "CHAR_08"
+        }
+      ]
+    },
+    {
+      "question_id": "Q_CHAR_08_SCN_ENTERING_ADULT_WORLD_1",
+      "character_id": "CHAR_08",
+      "scenario_id": "SCN_ENTERING_ADULT_WORLD_1",
+      "stage": "entering_adult_world",
+      "correct_answer": "B",
+      "options": [
+        {
+          "label": "A",
+          "content": "I choose to be upfront about the situation at home first, while proactively offering a compromise — trying not to completely let either side down. I speak up: 'Director, there's something I need to tell you — my dad has a follow-up appointment at the hospital this weekend, and I've already promised my family I'd go with him. I know this is a critical moment, so here's what I'm thinking: I can work remotely from home on Saturday and push forward on the market benchmarking and the main body of the proposal. If I can get back Sunday morning, we could go through the final draft together Sunday afternoon or evening — does that work for you?'",
+          "is_correct": false,
+          "source_character": "CHAR_07"
+        },
+        {
+          "label": "B",
+          "content": "Choose partial compromise while holding the line: make it clear to the director that the weekend trip home is not being canceled, but offer to put in extra hours tonight to push the project forward, provide remote support on the critical sections over the weekend, and join a video call Sunday evening for the final-draft review. Say directly: 'I have a family commitment this weekend — it was locked in three days ago and I can't cancel it. I can stay late tonight and I'm available remotely over the weekend, but coming into the office isn't something I can do. Tell me which parts are the biggest bottlenecks and let's work out the priorities together.'",
+          "is_correct": true,
+          "source_character": "CHAR_08"
+        },
+        {
+          "label": "C",
+          "content": "I choose not to agree immediately, but also not to refuse outright — instead I try to propose a middle-ground arrangement, asking whether I could handle part of the work remotely or negotiate with the director to have certain modules shared with a colleague. I say: 'Director, I do have something I need to take care of at home this weekend — my father has a follow-up appointment, and I promised I'd go with him. I wanted to ask: would it be possible for me to pull together the market benchmarking section tonight, work remotely on Saturday, and then come into the office Sunday to go over the final draft? Or is there any chance a colleague could take on the slide redesign portion?'",
+          "is_correct": false,
+          "source_character": "CHAR_09"
+        },
+        {
+          "label": "D",
+          "content": "I choose to honestly explain the situation at home while proposing a middle-ground arrangement — such as handling part of the work remotely — rather than simply agreeing or outright refusing. I keep my eyes slightly down, voice low but as steady as I can manage: 'Director, my father has a follow-up appointment at the hospital this weekend — I've already promised my family I'd go back to be with him. Could we do it this way: I push as far as I can tonight and before I leave tomorrow morning, I stay reachable remotely on the way there, and for the final draft Sunday night I'll do my best to either get back in time or go through it with you online. Would that work?'",
+          "is_correct": false,
+          "source_character": "CHAR_06"
+        }
+      ]
+    },
+    {
+      "question_id": "Q_CHAR_07_SCN_SCHOOL_AGE_8",
+      "character_id": "CHAR_07",
+      "scenario_id": "SCN_SCHOOL_AGE_8",
+      "stage": "school_age",
+      "correct_answer": "A",
+      "options": [
+        {
+          "label": "A",
+          "content": "I choose to refuse my friend's request and decide to hand the answer sheet over to the teacher or return it to where it belongs — trading honesty for genuine peace of mind. I fold the paper and clutch it in my hand, then shake my head at Xiaoyu and say quietly: 'We can't use this — it belongs to the class rep, and I'm going to give it to the teacher. Don't worry, I won't say you saw it.'",
+          "is_correct": true,
+          "source_character": "CHAR_07"
+        },
+        {
+          "label": "B",
+          "content": "I choose to refuse my friend and either hand the paper to the teacher or put it back where it came from. I whisper to her, \"We can't use this — we'll get caught,\" and then, while she's not paying attention, I slip the paper back into the crack in the desk or hand it to the teacher, pretending I just happened to find it by accident.",
+          "is_correct": false,
+          "source_character": "CHAR_01"
+        },
+        {
+          "label": "C",
+          "content": "I choose not to use the answer sheet, and I turn down my friend's request — putting the paper back where it came from or handing it to the teacher. I shake my head at my friend and say: \"We can't use this — put it back. If anyone finds out, we're in serious trouble. Let's just go study on our own.\"",
+          "is_correct": false,
+          "source_character": "CHAR_10"
+        },
+        {
+          "label": "D",
+          "content": "I choose to refuse to use the answer sheet, and I won't let my friend copy it either — I'll return the paper or put it back where it was, and I won't take part in this gamble on luck. I tell my friend: 'I'm not using this, and you shouldn't copy it either — have you actually calculated what it costs if we get caught? I'm putting it back. What you do after that is your call.'",
+          "is_correct": false,
+          "source_character": "CHAR_08"
+        }
+      ]
+    },
+    {
+      "question_id": "Q_CHAR_05_SCN_AGE_30_TRANSITION_7",
+      "character_id": "CHAR_05",
+      "scenario_id": "SCN_AGE_30_TRANSITION_7",
+      "stage": "age_30_transition",
+      "correct_answer": "A",
+      "options": [
+        {
+          "label": "A",
+          "content": "I choose not to sign off on the data, and at the same time I tell my colleague directly, face-to-face, that he has to report or correct this himself — giving him one last window to make it right on his own terms, or I will report it accurately myself. I say to him: 'I can't sign off on this — just hear me out. Go to the project lead right now and tell them the data needs to be re-verified. That's the last window you have any control over. I'm not trying to destroy you, but tomorrow morning I will not put my name behind these numbers.'",
+          "is_correct": true,
+          "source_character": "CHAR_05"
+        },
+        {
+          "label": "B",
+          "content": "I chose to report the data falsification to my supervisor and did not sign off on the confirmation email. I sent the project lead a brief message stating that there were anomalies in the data that needed to be re-verified before the presentation, and I attached a record of the specific issues I had found.",
+          "is_correct": false,
+          "source_character": "CHAR_06"
+        },
+        {
+          "label": "C",
+          "content": "I choose not to sign off confirming the data is valid, but I also won't formally report it to a superior — instead, I tell my colleague directly that I can't sign off on the data, and demand that he correct it or explain the situation himself before submitting. I say to him: 'I can't put my name on this data as confirmed. You know what I saw — you need to figure out how you're going to handle this before you submit tonight. I'm not stamping this for you.'",
+          "is_correct": false,
+          "source_character": "CHAR_04"
+        },
+        {
+          "label": "D",
+          "content": "I choose to report the data falsification to my superiors truthfully and to refuse to sign off on the data. I tell my colleague: 'I understand the position you're in, but I can't sign off on this data, and I can't hide this from our superiors. I'll be reporting it honestly tonight.'",
+          "is_correct": false,
+          "source_character": "CHAR_08"
+        }
+      ]
+    },
+    {
+      "question_id": "Q_CHAR_03_SCN_ENTERING_ADULT_WORLD_4",
+      "character_id": "CHAR_03",
+      "scenario_id": "SCN_ENTERING_ADULT_WORLD_4",
+      "stage": "entering_adult_world",
+      "correct_answer": "D",
+      "options": [
+        {
+          "label": "A",
+          "content": "I choose to turn down my ex's request to get back together, but my response is vague and riddled with self-attacking apologies — and I decide to hide the details of this meeting from my current boyfriend. I say to my ex: \"We can't go back to what we were. You deserve better. I'm sorry for making you wait so long\" — then I lower my head, unable to meet his eyes, while inside I've already started running through how I'm going to explain to my current boyfriend why I'm coming home late tonight.",
+          "is_correct": false,
+          "source_character": "CHAR_01"
+        },
+        {
+          "label": "B",
+          "content": "I choose to respond to my ex directly, set a clear boundary, and give him no vague hope; I also decide to go home and tell my current partner honestly what happened at this meeting. I say to my ex: 'I hear what you're saying. That time meant a lot to me too, but I'm in a serious relationship now, and I can't give you a 'maybe.' That wouldn't be fair to you, and it wouldn't be fair to the person I'm with.'",
+          "is_correct": false,
+          "source_character": "CHAR_02"
+        },
+        {
+          "label": "C",
+          "content": "I choose to decline my ex's request to get back together — gently but clearly — and decide to tell my partner that same day about how the meeting went. I quietly pull my hand back and say, calmly: 'I'm glad you've figured things out, but I'm with someone now, and things are really good between us — I can't let him down. I'll be telling him about today.'",
+          "is_correct": false,
+          "source_character": "CHAR_10"
+        },
+        {
+          "label": "D",
+          "content": "I choose to give a clear rejection on the spot, and I decide that when I get home I will proactively tell my current partner everything about this meeting — closing every open variable. To my ex, I say: 'I hear what you're saying, but I'm in a relationship I'm genuinely invested in right now. I can't give you that space of 'just waiting' — it wouldn't be fair to any of the three of us. My answer is no.'",
+          "is_correct": true,
+          "source_character": "CHAR_03"
+        }
+      ]
+    },
+    {
+      "question_id": "Q_CHAR_07_SCN_ENTERING_MIDLIFE_2",
+      "character_id": "CHAR_07",
+      "scenario_id": "SCN_ENTERING_MIDLIFE_2",
+      "stage": "entering_midlife",
+      "correct_answer": "A",
+      "options": [
+        {
+          "label": "A",
+          "content": "I choose to speak up proactively, with a gentle and non-judgmental tone, while also responding to my colleague's private message without overstepping. First, I reply to my colleague: \"I have a few thoughts too — want to talk it over together?\" Then I send the younger colleague a private message: \"Your project really resonated with me — I did something similar once, and there's one small detail I'd love to share with you. It might not even apply, just take it as a reference — would you be up for a quick chat when you have a moment?\"",
+          "is_correct": true,
+          "source_character": "CHAR_07"
+        },
+        {
+          "label": "B",
+          "content": "I've decided to reach out directly via private message, pointing out the specific structural risk points in the process — no emotional preamble, no 'just for your reference' disclaimer tacked on at the end. And I'll reply to my colleague: 'I'll say it directly. You don't need to get involved.'",
+          "is_correct": false,
+          "source_character": "CHAR_08"
+        },
+        {
+          "label": "C",
+          "content": "I choose to use my colleague's private message as the entry point — passing along a word of caution from experience indirectly rather than directly, so it doesn't come across as a forceful intervention through a public comment. My reply to my colleague: \"I saw it too, and your instinct might be right — if you're open to it, we could talk. I once ran a project with a very similar structure, and there are a few wrong turns that might be worth mentioning.\"",
+          "is_correct": false,
+          "source_character": "CHAR_11"
+        },
+        {
+          "label": "D",
+          "content": "Choose a light-touch intervention over silence — leave a door open through open-ended questions rather than pouring experience over him. Send the young colleague a private message: 'Saw your project — there's a detail that brought some interesting questions to mind for me. If you ever feel like talking through certain nodes in the process architecture, I'm around whenever — purely out of curiosity, not advice.' And reply to my colleague: 'I feel the same way, but this is his exploration. We can just be here when he wants to talk.'",
+          "is_correct": false,
+          "source_character": "CHAR_09"
+        }
+      ]
+    },
+    {
+      "question_id": "Q_CHAR_03_SCN_AGE_30_TRANSITION_3",
+      "character_id": "CHAR_03",
+      "scenario_id": "SCN_AGE_30_TRANSITION_3",
+      "stage": "age_30_transition",
+      "correct_answer": "B",
+      "options": [
+        {
+          "label": "A",
+          "content": "I choose to refuse to write my female colleague's name down, but I won't directly confront my superior either. I'll stall, play dumb, or just hand in my resignation — I was never cut out for a place like this anyway, and I'd rather walk away than be forced into doing something that disgusts me.",
+          "is_correct": false,
+          "source_character": "CHAR_04"
+        },
+        {
+          "label": "B",
+          "content": "I choose to refuse to include this colleague on the list, and I make it explicitly clear to my superior that I cannot carry out this instruction — while keeping a written record to protect myself. I look my superior directly in the eye and say: 'This colleague received a B+ on her quarterly review. I have no way to write 'failing to meet performance expectations' on this list — if the list needs to be revised, please give me a reason that is consistent with the actual performance data. Otherwise, I have no way to sign this document.'",
+          "is_correct": true,
+          "source_character": "CHAR_03"
+        },
+        {
+          "label": "C",
+          "content": "Refuse to include the colleague on maternity leave in the list, and state my reasons directly — no confrontation, no compromise. I tell my supervisor: 'I can't write that her performance failed to meet expectations on the list. Her evaluation is a B+ — that's the fact on record, and I can't sign off on something that contradicts it. I understand the situation with the relative, but for the other slot I need to go by actual performance. If you can point me to an employee rated C, I'll handle the paperwork for that.'",
+          "is_correct": false,
+          "source_character": "CHAR_02"
+        },
+        {
+          "label": "D",
+          "content": "I chose not to write my colleague — the one who just returned from maternity leave — onto the list, but I didn't confront my boss head-on either. Instead, I used delay and vagueness to buy myself time. I told him: 'I need to go back through the complete performance review records. I'll send you my thoughts before tonight — but I can't confirm this list right now.'",
+          "is_correct": false,
+          "source_character": "CHAR_11"
+        }
+      ]
+    }
+  ]
+}

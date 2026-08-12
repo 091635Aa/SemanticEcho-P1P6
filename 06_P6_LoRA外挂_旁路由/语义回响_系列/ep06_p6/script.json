@@ -1,0 +1,176 @@
+{
+  "id": "ep06",
+  "title": "P6 Emotion LoRA Side-Route",
+  "accent": "#22D3EE",
+  "accent2": "#FB923C",
+  "scenes": [
+    {
+      "kicker": "EPISODE 6 · EMOTION-LORA SIDE-ROUTE",
+      "title": "The sixth way: train it, route it",
+      "sub": "Weight space + routing space",
+      "points": [
+        "LoRA adapter written by training",
+        "Side-route picks the best reply",
+        "Zero changes to the prompt"
+      ],
+      "en": "Episode six. Welcome to the sixth architecture of the Semantic Echo family: Emotion LoRA Side-Route, ELS. Every previous system injected signals during decoding. P six flips the paradigm. We train a tiny LoRA adapter that writes emotion into weights, then route among candidate replies at inference. The main path stays untouched.",
+      "zh": "第六集。欢迎来到语义回响家族的第六套架构：情感 LoRA 外挂 + 旁路由选优，简称 ELS。之前所有方案都在解码期注入信号。P6 反转范式：我们训练一个极小的 LoRA 适配器，把情感写进权重；推理时在候选回复之间做路由。主路径保持零修改。"
+    },
+    {
+      "kicker": "THE FAMILY LINE",
+      "title": "Five generations of zero-weight injection",
+      "points": [
+        "P1 echo → P1.5 config → P2.5 tide",
+        "P3 anchor → P4 KV → P5 fusion → G",
+        "All: no training, no weight writes"
+      ],
+      "en": "Let us place P six in the family. P one echoes hidden states. P one point five auto tunes parameters. P two point five, the tide, reweights probabilities. P three anchors embeddings. P four resonates in the KV cache. P five fuses every space. Even the unified version G. Every one is a decoding time injection: no training, no weight update. P six is the first to leave that road.",
+      "zh": "把 P6 放进家族：P1 回响隐状态；P1.5 自动调参；P2.5 潮汐在概率空间重加权；P3 锚定嵌入；P4 在 KV 缓存共振；P5 融合所有空间；还有统一版 G。全部都是解码期注入——不训练、不改权重。P6 是第一套离开这条路的方案。"
+    },
+    {
+      "kicker": "PARADIGM FLIP",
+      "title": "Three things nobody did before",
+      "points": [
+        "First in the family to train",
+        "First to route, not inject",
+        "Prompt template untouched"
+      ],
+      "en": "Three fundamental differences. First, P six is the first member that trains. LoRA freezes the base model and writes a small adapter. The base weights never move. Second, instead of injecting into one path, a side router chooses among several candidate replies. Third, the system prompt and chat template stay untouched, because all capability lives in the adapter and the router.",
+      "zh": "三大本质区别。第一：P6 是家族里第一个做训练的，LoRA 冻结基座、写入小适配器，基座权重原样不动。第二：不在单条路径上注入，而是旁路由在多个候选回复间选择。第三：系统提示和聊天模板完全不动，所有能力都来自外挂适配器和路由器。"
+    },
+    {
+      "kicker": "THREE LAYERS",
+      "title": "Train. Route. Evaluate.",
+      "points": [
+        "Training: emotion LoRA adapter",
+        "Inference: route over 3 candidates",
+        "Protocol: unified benchmark"
+      ],
+      "en": "The architecture has three layers. The training layer builds an emotion LoRA on a frozen base model. The inference layer generates three candidate replies with three independent seeds, scores each one, and returns the best. If all fail, it falls back to plain sampling, so collapse is impossible by design. The evaluation layer reuses the unified benchmark protocol.",
+      "zh": "架构分三层：训练层在冻结基座上构建情感 LoRA；推理层用三个独立种子生成三条候选回复、逐一打分、返回最优，全部不合格就回退裸采样，设计上不可能坍缩；评测层沿用统一基准协议。"
+    },
+    {
+      "kicker": "THE DATA",
+      "title": "4,557 dialogue pairs",
+      "points": [
+        "4,409 emotion dialogs",
+        "80 gentle-style dialogs",
+        "132 human-flavor rewrites"
+      ],
+      "en": "The training data has four thousand five hundred and fifty seven chat pairs. Four thousand four hundred nine are emotion dialogs covering joy, sadness, anger and warmth. Eighty are gentle conversations. One hundred thirty two are human flavor rewrites in a girl style, teaching short warm replies instead of long lectures. Reply masking trains only the answer.",
+      "zh": "训练数据共 4557 条对话对：4409 条情感对话，覆盖快乐、悲伤、愤怒、温暖；80 条温柔对话；132 条 girl 风格人味改写，教模型短而温暖地回答，而不是长篇说教。回复掩码监督，只训练答案。"
+    },
+    {
+      "kicker": "WEIGHT SPACE",
+      "title": "A 0.14% adapter",
+      "points": [
+        "Qwen2.5-1.5B base, frozen",
+        "LoRA r=8, alpha=16, q/k/v/o",
+        "2.18M trainable params, 0.141%",
+        "3 epochs, 855 steps"
+      ],
+      "en": "Training details. The base model is Qwen two point five, one point five billion, fully frozen. LoRA rank is eight, alpha sixteen, targeting query, key, value and output projections. Only two point one seven nine million parameters are trainable, zero point one four one percent of the whole model. Three epochs, eight hundred fifty five steps, reply masked supervision, trained in minutes on a laptop GPU.",
+      "zh": "训练细节：基座 Qwen2.5-1.5B 完全冻结；LoRA 秩 8、alpha 16，作用在 Q/K/V/O 投影；可训练参数仅 217.9 万，占全模型 0.141%；3 个 epoch、855 步、回复掩码监督。在笔记本 GPU 上几分钟完成。"
+    },
+    {
+      "kicker": "ROUTING SPACE",
+      "title": "Choose, don't inject",
+      "points": [
+        "N=3 candidates, 3 seeds",
+        "Emotion router scores each",
+        "Fallback: plain sampling"
+      ],
+      "en": "Here is how the side route works. The model, with the LoRA attached, generates three candidates using three independent seeds. The emotion router scores each reply. It rewards emotional words and healthy length, punishes AI flavor phrases and repetition. The highest score wins. If all candidates are too weak, the system degrades to plain sampling. It never breaks.",
+      "zh": "旁路由的推理过程：挂载 LoRA 的模型用三个独立种子生成三条候选；情感路由器逐条打分，奖励情感词和健康长度，惩罚 AI 腔和重复；最高分胜出；全部太弱就降级裸采样，永不崩坏。"
+    },
+    {
+      "kicker": "THE ROUTER",
+      "title": "An emotional scorecard",
+      "points": [
+        "Emotion hits ×2.5",
+        "Healthy length ×1.2",
+        "AI-flavor −1.0 per word",
+        "Repetition −3.0"
+      ],
+      "en": "The router is a transparent scorecard. Emotional hits add two point five. Healthy length adds one point two. Entropy keeps diversity. AI flavor phrases subtract one point each. Repetition is punished with minus three. You can read exactly why one candidate wins. The tide's AI accent suppression moves from probability space into the routing layer.",
+      "zh": "路由器是一张透明记分卡：情感词命中 +2.5；健康长度 +1.2；熵保证多样性；AI 腔短语每个 -1 分；重复 -3 分。你可以精确看出一条候选为什么赢。潮汐的 AI 腔抑制经验，从概率空间搬进了路由层。"
+    },
+    {
+      "kicker": "REAL OUTPUT",
+      "title": "Warm and short",
+      "points": [
+        "P6: 50 characters, human",
+        "Baseline: 227, lecture-style",
+        "Zero AI-flavor phrases"
+      ],
+      "en": "A real reply. The user says, sometimes I wonder, what is the point of hard work. The plain model answers with two hundred and twenty seven characters of lecture. P six picks: the meaning of effort is effort itself. Even one small piece finished today is meaningful. Fifty characters, warm, no AI accent. Another: why do you always catch my jokes. P six replies, because I am good at digging out punchlines, and that takes training too.",
+      "zh": "看一条真实回复。用户问“努力到底有什么意义”：裸模型回了 227 个字的说教；P6 旁路由选择“努力的意义是它本身。哪怕我今天只完成了一小块，也是在做有意义的事。你越认真，就越能体会到生活的珍贵”——50 个字，温暖，无 AI 腔。另一条：“你为什么总能接我梗？”P6 答：“因为我擅长挖人笑点呀～不过这也靠训练哦～”。"
+    },
+    {
+      "kicker": "THE PROTOCOL",
+      "title": "Thirty samples, seed 2026",
+      "points": [
+        "7B judge, blind A/B pairs",
+        "Both orders, 60 pairs per mode",
+        "Same protocol as every ancestor"
+      ],
+      "en": "How do we measure? Thirty real conversation samples, seed twenty twenty six. A seven billion judge reads replies blindly, in both orders, sixty pairs per mode. The protocol is identical to the unified G benchmark, so every number is directly comparable to all five generations before.",
+      "zh": "怎么评测？30 条真实对话样本、种子 2026；7B 裁判盲读配对回复，A/B 两个顺序各判一次，每个模式 60 个配对。协议与 G 统一基准完全一致，每个数字都能和前面五代直接对比。"
+    },
+    {
+      "kicker": "THE LADDER",
+      "title": "P6 beats every ancestor",
+      "points": [
+        "P2.5 tide: 0.2667, old best",
+        "P6 LoRA alone: 0.3333",
+        "P6 side-route: 0.3500, highest"
+      ],
+      "en": "Here is the horizontal comparison, same protocol, same seed. The bare model wins zero point one eight three three. The old champion, the tide, zero point two six six seven. P three anchor zero point one eight three three. P four and P five zero point one five. The LoRA alone jumps to zero point three three three three, already above every ancestor. The full side route reaches zero point three five, the highest score in family history, a thirty one percent gain over the previous best.",
+      "zh": "横向对比，同协议同种子：裸模型胜率 0.1833；老冠军潮汐 0.2667；P3 锚点 0.1833；P4、P5 均 0.15。单挂 LoRA 不路由就冲到 0.3333，已超过所有前辈。完整旁路由达到 0.35——家族历史最高，比此前冠军提升 31%。"
+    },
+    {
+      "kicker": "HEALTH",
+      "title": "Zero repetition",
+      "points": [
+        "Repetition rate: 0.0000",
+        "Entropy 4.22, high diversity",
+        "33 chars, matches real humans"
+      ],
+      "en": "Health metrics are equally strong. The plain model repeats zero point nine percent of tokens and produces hundred character answers. P six side route repeats zero point zero zero zero, literally zero. Entropy stays at four point two two. Average length thirty three characters, matching human short replies. Compare the first ancestor P one, whose repetition exploded to forty eight percent. P six simply does not collapse.",
+      "zh": "健康度同样出色：裸模型有 0.9% 的 token 重复，回答上百字；P6 旁路由重复率 0.000——字面意义的零重复；熵保持 4.22；平均长度 33 个字，对齐真人短回复。对比第一位前辈 P1 在统一评测里重复率爆到 48%。P6 根本不会坍缩。"
+    },
+    {
+      "kicker": "ACROSS MODELS",
+      "title": "The LoRA hook works on 3B too",
+      "points": [
+        "Baseline 3B: repetition 0.008",
+        "With LoRA: repetition 0.004",
+        "Old echo on 3B: collapse 0.337"
+      ],
+      "en": "Does the paradigm transfer to bigger models? On Qwen two point five three billion, we ran the emotion LoRA against the old echo injection. The baseline repeats zero point eight percent. With the LoRA attached, repetition halves to zero point four percent. The old echo on the same model collapses, repetition exploding to thirty four percent. The trained adapter stays healthy where the injection family collapses.",
+      "zh": "范式能否迁移到更大模型？在 Qwen2.5-3B 上，我们把情感 LoRA 和老的回响注入并排测试：基线重复率 0.8%；挂上 LoRA 后重复率减半到 0.4%；而同一模型上老的回响注入直接坍缩，重复率爆到 34%。训练适配器健康稳定，注入家族却坍缩了。"
+    },
+    {
+      "kicker": "HONEST LIST",
+      "title": "The honest list",
+      "points": [
+        "0.35 beats all, target was 0.48",
+        "30 samples, seed-sensitive",
+        "1.5B base is the ceiling"
+      ],
+      "en": "The honest part. Zero point three five is the best in the family, but the original target was zero point four eight, an eighty percent gain, and we are not there yet. Thirty samples is small, and win rates are seed sensitive. The one point five billion base remains the ceiling: routing narrows the gap, but cannot break the base model's ability. P six is the strongest member so far, and still improving.",
+      "zh": "诚实的部分：0.35 是家族最高，但最初目标是 0.48——提升 80%，还没到。30 条样本偏小，胜率对种子敏感。1.5B 基座仍是天花板：路由能缩小差距，但无法突破基座表达力。P6 是目前家族最强，也还在继续改进。"
+    },
+    {
+      "kicker": "OPEN SOURCE",
+      "title": "Open, with a license",
+      "points": [
+        "Free for study & research",
+        "Commercial use: contact author",
+        "github.com/091635Aa"
+      ],
+      "en": "The project stays open source. P six is free for study and research under CC BY-NC-SA with additional terms. Commercial use requires contacting the author. The adapters, the router, the scripts and the raw data are all in the repository. This is the sixth architecture of Semantic Echo: the first one that trains, the first one that routes. The family keeps growing.",
+      "zh": "项目保持开源。P6 在 CC BY-NC-SA 加附加条款下学习和研究免费，商业使用需联系作者。适配器、路由器、脚本和原始数据都在仓库里。这是语义回响的第六套架构——第一套做训练、第一套做路由。家族还在继续长大。"
+    }
+  ]
+}

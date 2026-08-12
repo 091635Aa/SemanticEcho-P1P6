@@ -1,0 +1,15 @@
+# ── 第三方图灵基准原始数据（公开可获取，非本项目实验数据；本项目 TuringBench 评测结果仍在库）──
+01_P1_语义回响/图灵测试/data/turingbench/
+
+# ── 模型词表/训练状态产物（非实验数据；权重类文件本就不入库）──
+**/tokenizer.json
+**/merges.txt
+**/vocab.json
+**/special_tokens_map.json
+**/added_tokens.json
+**/training_args.bin
+
+# ── 常见忽略 ──
+__pycache__/
+*.pyc
+.DS_Store

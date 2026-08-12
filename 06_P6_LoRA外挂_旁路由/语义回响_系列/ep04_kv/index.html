@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>P4 KV Resonance</title>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:100%; height:100%; background:#000; overflow:hidden;
+    font-family:"Space Grotesk","Inter","Segoe UI",system-ui,sans-serif; }
+  .composition { position:relative; width:1920px; height:1080px; overflow:hidden; background:#04060d; }
+  #topbar { position:absolute; top:0; left:0; right:0; height:8px; background:rgba(255,255,255,0.06); z-index:90; }
+  #topbar-fill { height:100%; width:0%; background:linear-gradient(90deg,#FF5D8F,#FFD93D,#FF5D8F); }
+  #brand { position:absolute; top:40px; left:60px; z-index:90; font-weight:700; letter-spacing:4px; font-size:24px; color:rgba(255,255,255,0.85); }
+  #brand span { color:#FF5D8F; }
+  #series-tag { position:absolute; top:44px; right:60px; z-index:90; font-size:20px; color:rgba(255,255,255,0.4); letter-spacing:2px; }
+  .act { position:absolute; inset:0; background:#04060d; }
+  .glow { position:absolute; border-radius:50%; filter:blur(120px); opacity:0.4; }
+  .kicker { position:absolute; left:140px; top:120px; font-size:28px; letter-spacing:8px; font-weight:700;
+    text-transform:uppercase; color:#FF5D8F; }
+  .big-title { position:absolute; left:140px; top:200px; width:1640px; font-size:84px; font-weight:800;
+    line-height:1.08; color:#fff; }
+  .sub { position:absolute; left:140px; top:360px; width:1600px; font-size:38px; color:rgba(255,255,255,0.6); }
+  .pts { position:absolute; left:140px; top:430px; width:1600px; }
+  .pt { display:flex; align-items:center; gap:22px; margin-top:28px; font-size:38px; font-weight:600; color:rgba(255,255,255,0.88); }
+  .dot { width:16px; height:16px; border-radius:50%; flex-shrink:0; box-shadow:0 0 18px currentColor; }
+  .scene-num { position:absolute; left:140px; top:900px; font-size:22px; color:rgba(255,255,255,0.35); letter-spacing:3px; }
+  #cap { position:absolute; left:60px; right:60px; bottom:60px; z-index:80; min-height:120px;
+    border-left:4px solid #FF5D8F; padding-left:26px; background:linear-gradient(180deg,rgba(4,6,13,0.85),rgba(4,6,13,0.98));
+    border-top:1px solid rgba(255,255,255,0.06); border-right:1px solid rgba(255,255,255,0.06);
+    border-bottom:1px solid rgba(255,255,255,0.06); border-radius:0 16px 16px 0; }
+  #cap-zh { font-size:38px; font-weight:700; color:#fff; line-height:1.4; }
+  #cap-en { margin-top:6px; font-size:22px; color:rgba(255,255,255,0.55); line-height:1.4; }
+</style>
+</head>
+<body>
+<div class="composition" data-composition-id="promo-video" data-duration="156.48">
+  <div id="topbar"><div id="topbar-fill"></div></div>
+  <div id="brand">SEMANTIC<span>&nbsp;ECHO</span></div>
+  <div id="series-tag">P4 KV Resonance</div>
+
+  <div class="act clip" id="act0" data-start="0.600" data-duration="16.172" data-track-index="0">
+    <div class="glow" id="gl0" style="left:120px;top:140px;width:520px;height:520px;background:#FF5D8F;"></div>
+    <div class="kicker" id="k0">EPISODE 4 · KV RESONANCE</div>
+    <div class="big-title" id="t0">Making the model look at emotion</div>
+    <div class="sub" id="su0">Attention cache space · runtime KV scaling</div>
+    <div class="pts" id="p0"><div class="pt"><span class="dot" style="background:#FF5D8F;"></span><span>Locate emotional tokens in KV cache</span></div><div class="pt"><span class="dot" style="background:#FF5D8F;"></span><span>Scale their keys, bounded</span></div><div class="pt"><span class="dot" style="background:#FF5D8F;"></span><span>Near-zero memory cost</span></div></div>
+    <div class="scene-num" id="n0">01 / 10</div>
+  </div>
+  <div class="act clip" id="act1" data-start="16.772" data-duration="18.652" data-track-index="1">
+    <div class="glow" id="gl1" style="left:120px;top:140px;width:520px;height:520px;background:#FF5D8F;"></div>
+    <div class="kicker" id="k1">MECHANISM</div>
+    <div class="big-title" id="t1">K[p] *= 1 + κ · clip(g, 0, 1)</div>
+    
+    <div class="pts" id="p1"><div class="pt"><span class="dot" style="background:#FF5D8F;"></span><span>Score table locates emotion tokens</span></div><div class="pt"><span class="dot" style="background:#FF5D8F;"></span><span>Scale the key vectors in cache</span></div><div class="pt"><span class="dot" style="background:#FF5D8F;"></span><span>Softmax keeps it bounded</span></div></div>
+    <div class="scene-num" id="n1">02 / 10</div>
+  </div>
+  <div class="act clip" id="act2" data-start="35.424" data-duration="16.972" data-track-index="2">
+    <div class="glow" id="gl2" style="left:120px;top:140px;width:520px;height:520px;background:#FF5D8F;"></div>
+    <div class="kicker" id="k2">RESONANCE</div>
+    <div class="big-title" id="t2">Inner + outer emotion fused</div>
+    
+    <div class="pts" id="p2"><div class="pt"><span class="dot" style="background:#FF5D8F;"></span><span>v_eff = (1-γ)·v_target + γ·v_dyn</span></div><div class="pt"><span class="dot" style="background:#FF5D8F;"></span><span>External VAD goal + inner hidden state</span></div><div class="pt"><span class="dot" style="background:#FF5D8F;"></span><span>Resonance, not injection</span></div></div>
+    <div class="scene-num" id="n2">03 / 10</div>
+  </div>
+  <div class="act clip" id="act3" data-start="52.396" data-duration="22.252" data-track-index="3">
+    <div class="glow" id="gl3" style="left:120px;top:140px;width:520px;height:520px;background:#FF5D8F;"></div>
+    <div class="kicker" id="k3">RESULTS</div>
+    <div class="big-title" id="t3">The strongest combo</div>
+    
+    <div class="pts" id="p3"><div class="pt"><span class="dot" style="background:#FF5D8F;"></span><span>P3+P4 dual channel: 0.2667 win rate</span></div><div class="pt"><span class="dot" style="background:#FF5D8F;"></span><span>+23% over baseline, family best</span></div><div class="pt"><span class="dot" style="background:#FF5D8F;"></span><span>Entropy 1.7, repetition 0.005</span></div></div>
+    <div class="scene-num" id="n3">04 / 10</div>
+  </div>
+  <div class="act clip" id="act4" data-start="74.648" data-duration="14.332" data-track-index="4">
+    <div class="glow" id="gl4" style="left:120px;top:140px;width:520px;height:520px;background:#FF5D8F;"></div>
+    <div class="kicker" id="k4">COST</div>
+    <div class="big-title" id="t4">Almost free</div>
+    
+    <div class="pts" id="p4"><div class="pt"><span class="dot" style="background:#FF5D8F;"></span><span>VRAM increase ≈ 0</span></div><div class="pt"><span class="dot" style="background:#FF5D8F;"></span><span>Runtime cache scaling</span></div><div class="pt"><span class="dot" style="background:#FF5D8F;"></span><span>No weights touched</span></div></div>
+    <div class="scene-num" id="n4">05 / 10</div>
+  </div>
+  <div class="act clip" id="act5" data-start="88.980" data-duration="17.772" data-track-index="5">
+    <div class="glow" id="gl5" style="left:120px;top:140px;width:520px;height:520px;background:#FF5D8F;"></div>
+    <div class="kicker" id="k5">P4 · SEED</div>
+    <div class="big-title" id="t5">Seeds matter</div>
+    
+    <div class="pts" id="p5"><div class="pt"><span class="dot" style="background:#FF5D8F;"></span><span>Win rate is seed-sensitive</span></div><div class="pt"><span class="dot" style="background:#FF5D8F;"></span><span>Each mode uses its own seed</span></div><div class="pt"><span class="dot" style="background:#FF5D8F;"></span><span>Future: multi-seed average</span></div></div>
+    <div class="scene-num" id="n5">06 / 10</div>
+  </div>
+  <div class="act clip" id="act6" data-start="106.753" data-duration="11.772" data-track-index="6">
+    <div class="glow" id="gl6" style="left:120px;top:140px;width:520px;height:520px;background:#FF5D8F;"></div>
+    <div class="kicker" id="k6">P4 · IMPLEMENTATION</div>
+    <div class="big-title" id="t6">Runtime cache, zero writes</div>
+    
+    <div class="pts" id="p6"><div class="pt"><span class="dot" style="background:#FF5D8F;"></span><span>Scale keys in-place</span></div><div class="pt"><span class="dot" style="background:#FF5D8F;"></span><span>Track positions to avoid stacking</span></div><div class="pt"><span class="dot" style="background:#FF5D8F;"></span><span>No persisted changes</span></div></div>
+    <div class="scene-num" id="n6">07 / 10</div>
+  </div>
+  <div class="act clip" id="act7" data-start="118.525" data-duration="13.372" data-track-index="7">
+    <div class="glow" id="gl7" style="left:120px;top:140px;width:520px;height:520px;background:#FF5D8F;"></div>
+    <div class="kicker" id="k7">HONEST PART</div>
+    <div class="big-title" id="t7">Limits</div>
+    
+    <div class="pts" id="p7"><div class="pt"><span class="dot" style="background:#FF5D8F;"></span><span>Single channel trails baseline</span></div><div class="pt"><span class="dot" style="background:#FF5D8F;"></span><span>Needs local cache access</span></div><div class="pt"><span class="dot" style="background:#FF5D8F;"></span><span>Seed-sensitive evaluation</span></div></div>
+    <div class="scene-num" id="n7">08 / 10</div>
+  </div>
+  <div class="act clip" id="act8" data-start="131.897" data-duration="10.652" data-track-index="8">
+    <div class="glow" id="gl8" style="left:120px;top:140px;width:520px;height:520px;background:#FF5D8F;"></div>
+    <div class="kicker" id="k8">LICENSE</div>
+    <div class="big-title" id="t8">Open source, with a license</div>
+    
+    <div class="pts" id="p8"><div class="pt"><span class="dot" style="background:#FF5D8F;"></span><span>CC BY-NC-SA 4.0 + restrictions</span></div><div class="pt"><span class="dot" style="background:#FF5D8F;"></span><span>Free for study &amp; research</span></div><div class="pt"><span class="dot" style="background:#FF5D8F;"></span><span>Commercial use: contact author</span></div></div>
+    <div class="scene-num" id="n8">09 / 10</div>
+  </div>
+  <div class="act clip" id="act9" data-start="142.549" data-duration="13.932" data-track-index="9">
+    <div class="glow" id="gl9" style="left:120px;top:140px;width:520px;height:520px;background:#FF5D8F;"></div>
+    <div class="kicker" id="k9">GITHUB</div>
+    <div class="big-title" id="t9">The resonance is open</div>
+    
+    <div class="pts" id="p9"><div class="pt"><span class="dot" style="background:#FF5D8F;"></span><span>github.com/091635Aa/SemanticEcho-KVResonance</span></div><div class="pt"><span class="dot" style="background:#FF5D8F;"></span><span>github.com/091635Aa/SemanticEcho</span></div><div class="pt"><span class="dot" style="background:#FF5D8F;"></span><span>Final episode next: P5 Ultra Fusion</span></div></div>
+    <div class="scene-num" id="n9">10 / 10</div>
+  </div>
+  <div id="cap"><div id="cap-zh"></div><div id="cap-en"></div></div>
+</div>
+<script>
+  window.__timelines = window.__timelines || {};
+  const tl = gsap.timeline({paused:true});
+  const DUR = 156.48;
+  tl.to("#topbar-fill", {width:"100%",duration:DUR,ease:"none"}, 0);
+tl.call(()=>{const e=document.getElementById("cap-en");e.innerHTML="Episode four: P4, KV Resonance. P3 guides the output through logits. P4 goes deeper, into the attention cache itself. It makes the model literally look at the emotional parts of the conversation.";document.getElementById("cap-zh").innerHTML="\u7b2c\u56db\u96c6\uff1aP4 KV \u60c5\u611f\u5171\u632f\u3002P3 \u901a\u8fc7 logits \u5f15\u5bfc\u8f93\u51fa\uff0cP4 \u8d70\u5f97\u66f4\u6df1\uff0c\u8fdb\u5165\u6ce8\u610f\u529b\u7f13\u5b58\u5185\u90e8\u3002\u5b83\u8ba9\u6a21\u578b\u771f\u6b63\u201c\u770b\u5411\u201d\u5bf9\u8bdd\u4e2d\u5e26\u60c5\u611f\u7684\u90e8\u5206\u3002";},[],1.100);tl.call(()=>{const e=document.getElementById("cap-en");e.innerHTML="The mechanism: the dense score table from P3 becomes a navigation map. It locates emotional tokens inside the KV cache, and scales their key vectors by a bounded factor. Because attention runs through softmax, the modulation stays naturally bounded.";document.getElementById("cap-zh").innerHTML="\u673a\u5236\uff1aP3 \u7684\u7a20\u5bc6\u6253\u5206\u8868\u53d8\u6210\u4e00\u5f20\u5bfc\u822a\u56fe\u3002\u5b83\u5728 KV \u7f13\u5b58\u4e2d\u5b9a\u4f4d\u60c5\u611f token\uff0c\u628a\u5b83\u4eec\u7684 key \u5411\u91cf\u4e58\u4ee5\u4e00\u4e2a\u6709\u754c\u7684\u7cfb\u6570\u3002\u56e0\u4e3a\u6ce8\u610f\u529b\u7ecf\u8fc7 softmax \u5f52\u4e00\u5316\uff0c\u8c03\u5236\u5929\u7136\u6709\u754c\u3002";},[],17.272);tl.call(()=>{const e=document.getElementById("cap-en");e.innerHTML="Here is the resonance. The emotional direction fuses an outer goal from the external VAD, and an inner dynamic state from the model's own hidden states, like P1's self-echo. The model resonates with both what it reads and what it feels.";document.getElementById("cap-zh").innerHTML="\u8fd9\u5c31\u662f\u201c\u5171\u632f\u201d\u7684\u7531\u6765\u3002\u60c5\u611f\u65b9\u5411\u878d\u5408\u4e86\u5916\u90e8\u7684 VAD \u76ee\u6807\uff0c\u4ee5\u53ca\u6a21\u578b\u81ea\u8eab\u9690\u85cf\u72b6\u6001\u7684\u5185\u5fc3\u52a8\u6001\uff08\u7c7b\u4f3c P1 \u7684\u81ea\u6211\u56de\u54cd\uff09\u3002\u6a21\u578b\u65e2\u5171\u9e23\u4e8e\u5b83\u8bfb\u5230\u7684\uff0c\u4e5f\u5171\u9e23\u4e8e\u5b83\u611f\u53d7\u5230\u7684\u3002";},[],35.924);tl.call(()=>{const e=document.getElementById("cap-en");e.innerHTML="Alone, P4 is modest. But combined with P3, it is the family champion. The P3 plus P4 dual channel reaches a 0.2667 blind judge win rate, a 23 percent gain over baseline, the highest of the whole family. And it stays healthy: entropy 1.7, repetition only 0.005.";document.getElementById("cap-zh").innerHTML="\u5355\u72ec\u4f7f\u7528 P4 \u63d0\u5347\u6709\u9650\uff0c\u4f46\u4e0e P3 \u7ec4\u5408\u540e\uff0c\u5b83\u5c31\u662f\u5bb6\u65cf\u51a0\u519b\u3002P3+P4 \u53cc\u901a\u9053\u76f2\u8bc4\u80dc\u7387\u8fbe 0.2667\uff0c\u6bd4\u57fa\u7ebf\u63d0\u5347 23%\uff0c\u5168\u5bb6\u65cf\u6700\u9ad8\u3002\u800c\u4e14\u4fdd\u6301\u5065\u5eb7\uff1a\u71b5 1.7\uff0c\u91cd\u590d\u7387\u4ec5 0.005\u3002";},[],52.896);tl.call(()=>{const e=document.getElementById("cap-en");e.innerHTML="The cost is almost nothing. Memory overhead is near zero, because it only scales existing cache values at runtime. No weights are modified, no fine-tuning, nothing persisted.";document.getElementById("cap-zh").innerHTML="\u4ee3\u4ef7\u51e0\u4e4e\u4e3a\u96f6\u3002\u663e\u5b58\u5f00\u9500\u8d8b\u8fd1\u4e8e\u96f6\uff0c\u56e0\u4e3a\u5b83\u53ea\u662f\u5728\u8fd0\u884c\u65f6\u7f29\u653e\u5df2\u6709\u7684\u7f13\u5b58\u503c\u3002\u4e0d\u4fee\u6539\u6743\u91cd\u3001\u4e0d\u5fae\u8c03\u3001\u4e0d\u7559\u4efb\u4f55\u6301\u4e45\u5316\u3002";},[],75.148);tl.call(()=>{const e=document.getElementById("cap-en");e.innerHTML="One honest note on numbers. The evaluation is seed sensitive. Each mode runs with its own random seed, so the absolute win rate swings a lot between seeds. The right way to read these numbers is multi-seed averaging, which is the next planned step.";document.getElementById("cap-zh").innerHTML="\u5173\u4e8e\u6570\u5b57\u6709\u4e00\u4e2a\u8bda\u5b9e\u63d0\u9192\uff1a\u8bc4\u6d4b\u5bf9\u968f\u673a\u79cd\u5b50\u654f\u611f\u3002\u6bcf\u79cd\u6a21\u5f0f\u7528\u72ec\u7acb\u79cd\u5b50\u8fd0\u884c\uff0c\u7edd\u5bf9\u80dc\u7387\u5728\u4e0d\u540c\u79cd\u5b50\u95f4\u6ce2\u52a8\u5f88\u5927\u3002\u6b63\u786e\u7684\u8bfb\u6cd5\u662f\u591a\u79cd\u5b50\u5e73\u5747\uff0c\u8fd9\u4e5f\u662f\u4e0b\u4e00\u6b65\u8ba1\u5212\u3002";},[],89.480);tl.call(()=>{const e=document.getElementById("cap-en");e.innerHTML="The implementation detail. The transformer cache is scaled in place, and token positions are tracked so the same factor is never applied twice. Nothing is persisted. Every run starts clean.";document.getElementById("cap-zh").innerHTML="\u5b9e\u73b0\u7ec6\u8282\uff1atransformer \u7f13\u5b58\u5728\u539f\u5730\u7f29\u653e\uff0c\u5e76\u8ddf\u8e2a token \u4f4d\u7f6e\u9632\u6b62\u540c\u4e00\u7cfb\u6570\u88ab\u53e0\u52a0\u4e24\u6b21\u3002\u4e0d\u7559\u4efb\u4f55\u6301\u4e45\u5316\uff0c\u6bcf\u6b21\u8fd0\u884c\u90fd\u4ece\u5e72\u51c0\u72b6\u6001\u5f00\u59cb\u3002";},[],107.253);tl.call(()=>{const e=document.getElementById("cap-en");e.innerHTML="The honest part. Single-channel P4 without P3 trails the baseline, because the small model's AI accent is not yet suppressed. It needs local cache access, so cloud APIs require fallback. And evaluations are seed sensitive, so numbers should be read with care.";document.getElementById("cap-zh").innerHTML="\u8bda\u5b9e\u90e8\u5206\u3002\u4e0d\u52a0 P3 \u7684 P4 \u5355\u901a\u9053\u4f1a\u8f93\u7ed9\u57fa\u7ebf\uff0c\u56e0\u4e3a\u5c0f\u6a21\u578b\u7684 AI \u8154\u8fd8\u6ca1\u88ab\u6291\u5236\u3002\u5b83\u9700\u8981\u672c\u5730\u7f13\u5b58\u8bbf\u95ee\uff0c\u4e91\u7aef API \u8981\u8d70\u964d\u7ea7\u3002\u800c\u4e14\u8bc4\u6d4b\u5bf9\u968f\u673a\u79cd\u5b50\u654f\u611f\uff0c\u6570\u5b57\u8981\u8c28\u614e\u89e3\u8bfb\u3002";},[],119.025);tl.call(()=>{const e=document.getElementById("cap-en");e.innerHTML="License note: CC BY-NC-SA 4.0 with additional terms, free for study and research, commercial use requires the author's license.";document.getElementById("cap-zh").innerHTML="\u6388\u6743\u8bf4\u660e\uff1aCC BY-NC-SA 4.0 \u52a0\u9644\u52a0\u6761\u6b3e\uff0c\u7814\u7a76\u548c\u5b66\u4e60\u514d\u8d39\uff0c\u5546\u4e1a\u4f7f\u7528\u9700\u4f5c\u8005\u6388\u6743\u3002";},[],132.397);tl.call(()=>{const e=document.getElementById("cap-en");e.innerHTML="The KV Resonance repository is open source. And that sets up the finale. Next episode: P5, the Ultra Fusion Decoder, which fuses all four architectures into one pipeline.";document.getElementById("cap-zh").innerHTML="KV \u5171\u632f\u4ed3\u5e93\u5df2\u5f00\u6e90\u3002\u8fd9\u4e3a\u7ec8\u7ae0\u505a\u4e86\u94fa\u57ab\u3002\u4e0b\u4e00\u96c6\uff1aP5 \u8d85\u878d\u5408\u89e3\u7801\u5668\uff0c\u628a\u56db\u79cd\u67b6\u6784\u878d\u5408\u8fdb\u540c\u4e00\u6761\u7ba1\u7ebf\u3002";},[],143.049);
+  tl.set("#act1", {clipPath:"circle(0% at 50% 50%)"}, 0);
+  tl.set("#act2", {clipPath:"circle(0% at 50% 50%)"}, 0);
+  tl.set("#act3", {clipPath:"circle(0% at 50% 50%)"}, 0);
+  tl.set("#act4", {clipPath:"circle(0% at 50% 50%)"}, 0);
+  tl.set("#act5", {clipPath:"circle(0% at 50% 50%)"}, 0);
+  tl.set("#act6", {clipPath:"circle(0% at 50% 50%)"}, 0);
+  tl.set("#act7", {clipPath:"circle(0% at 50% 50%)"}, 0);
+  tl.set("#act8", {clipPath:"circle(0% at 50% 50%)"}, 0);
+  tl.set("#act9", {clipPath:"circle(0% at 50% 50%)"}, 0);
+
+  tl.fromTo("#act1", {clipPath:"circle(0% at 50% 50%)"}, {clipPath:"circle(150% at 50% 50%)",duration:0.7,ease:"power3.inOut"}, 16.372);
+  tl.fromTo("#act2", {clipPath:"circle(0% at 50% 50%)"}, {clipPath:"circle(150% at 50% 50%)",duration:0.7,ease:"power3.inOut"}, 35.024);
+  tl.fromTo("#act3", {clipPath:"circle(0% at 50% 50%)"}, {clipPath:"circle(150% at 50% 50%)",duration:0.7,ease:"power3.inOut"}, 51.996);
+  tl.fromTo("#act4", {clipPath:"circle(0% at 50% 50%)"}, {clipPath:"circle(150% at 50% 50%)",duration:0.7,ease:"power3.inOut"}, 74.248);
+  tl.fromTo("#act5", {clipPath:"circle(0% at 50% 50%)"}, {clipPath:"circle(150% at 50% 50%)",duration:0.7,ease:"power3.inOut"}, 88.580);
+  tl.fromTo("#act6", {clipPath:"circle(0% at 50% 50%)"}, {clipPath:"circle(150% at 50% 50%)",duration:0.7,ease:"power3.inOut"}, 106.353);
+  tl.fromTo("#act7", {clipPath:"circle(0% at 50% 50%)"}, {clipPath:"circle(150% at 50% 50%)",duration:0.7,ease:"power3.inOut"}, 118.125);
+  tl.fromTo("#act8", {clipPath:"circle(0% at 50% 50%)"}, {clipPath:"circle(150% at 50% 50%)",duration:0.7,ease:"power3.inOut"}, 131.497);
+  tl.fromTo("#act9", {clipPath:"circle(0% at 50% 50%)"}, {clipPath:"circle(150% at 50% 50%)",duration:0.7,ease:"power3.inOut"}, 142.149);
+
+  tl.fromTo("#k0", {y:-30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 1.000);
+  tl.fromTo("#t0", {y:40,opacity:0}, {y:0,opacity:1,duration:0.6,ease:"power4.out"}, 1.150);
+  tl.fromTo("#p0", {y:30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 1.500);
+  tl.fromTo("#k1", {y:-30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 17.172);
+  tl.fromTo("#t1", {y:40,opacity:0}, {y:0,opacity:1,duration:0.6,ease:"power4.out"}, 17.322);
+  tl.fromTo("#p1", {y:30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 17.672);
+  tl.fromTo("#k2", {y:-30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 35.824);
+  tl.fromTo("#t2", {y:40,opacity:0}, {y:0,opacity:1,duration:0.6,ease:"power4.out"}, 35.974);
+  tl.fromTo("#p2", {y:30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 36.324);
+  tl.fromTo("#k3", {y:-30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 52.796);
+  tl.fromTo("#t3", {y:40,opacity:0}, {y:0,opacity:1,duration:0.6,ease:"power4.out"}, 52.946);
+  tl.fromTo("#p3", {y:30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 53.296);
+  tl.fromTo("#k4", {y:-30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 75.048);
+  tl.fromTo("#t4", {y:40,opacity:0}, {y:0,opacity:1,duration:0.6,ease:"power4.out"}, 75.198);
+  tl.fromTo("#p4", {y:30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 75.548);
+  tl.fromTo("#k5", {y:-30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 89.380);
+  tl.fromTo("#t5", {y:40,opacity:0}, {y:0,opacity:1,duration:0.6,ease:"power4.out"}, 89.530);
+  tl.fromTo("#p5", {y:30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 89.880);
+  tl.fromTo("#k6", {y:-30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 107.153);
+  tl.fromTo("#t6", {y:40,opacity:0}, {y:0,opacity:1,duration:0.6,ease:"power4.out"}, 107.303);
+  tl.fromTo("#p6", {y:30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 107.653);
+  tl.fromTo("#k7", {y:-30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 118.925);
+  tl.fromTo("#t7", {y:40,opacity:0}, {y:0,opacity:1,duration:0.6,ease:"power4.out"}, 119.075);
+  tl.fromTo("#p7", {y:30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 119.425);
+  tl.fromTo("#k8", {y:-30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 132.297);
+  tl.fromTo("#t8", {y:40,opacity:0}, {y:0,opacity:1,duration:0.6,ease:"power4.out"}, 132.447);
+  tl.fromTo("#p8", {y:30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 132.797);
+  tl.fromTo("#k9", {y:-30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 142.949);
+  tl.fromTo("#t9", {y:40,opacity:0}, {y:0,opacity:1,duration:0.6,ease:"power4.out"}, 143.099);
+  tl.fromTo("#p9", {y:30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 143.449);
+  tl.fromTo("#su0", {y:24,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 1.350);
+
+  window.__timelines["promo-video"] = tl;
+</script>
+</body>
+</html>

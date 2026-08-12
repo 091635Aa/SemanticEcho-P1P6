@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>P6 Emotion LoRA Side-Route</title>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:100%; height:100%; background:#000; overflow:hidden;
+    font-family:"Space Grotesk","Inter","Segoe UI",system-ui,sans-serif; }
+  .composition { position:relative; width:1920px; height:1080px; overflow:hidden; background:#04060d; }
+  #topbar { position:absolute; top:0; left:0; right:0; height:8px; background:rgba(255,255,255,0.06); z-index:90; }
+  #topbar-fill { height:100%; width:0%; background:linear-gradient(90deg,#22D3EE,#FB923C,#FF5D8F); }
+  #brand { position:absolute; top:40px; left:60px; z-index:90; font-weight:700; letter-spacing:4px; font-size:24px; color:rgba(255,255,255,0.85); }
+  #brand span { color:#22D3EE; }
+  #series-tag { position:absolute; top:44px; right:60px; z-index:90; font-size:20px; color:rgba(255,255,255,0.4); letter-spacing:2px; }
+  .act { position:absolute; inset:0; background:#04060d; }
+  .glow { position:absolute; border-radius:50%; filter:blur(120px); opacity:0.4; }
+  .kicker { position:absolute; left:140px; top:120px; font-size:28px; letter-spacing:8px; font-weight:700;
+    text-transform:uppercase; color:#22D3EE; }
+  .big-title { position:absolute; left:140px; top:200px; width:1640px; font-size:84px; font-weight:800;
+    line-height:1.08; color:#fff; }
+  .sub { position:absolute; left:140px; top:360px; width:1600px; font-size:38px; color:rgba(255,255,255,0.6); }
+  .pts { position:absolute; left:140px; top:430px; width:1600px; }
+  .pt { display:flex; align-items:center; gap:22px; margin-top:28px; font-size:38px; font-weight:600; color:rgba(255,255,255,0.88); }
+  .dot { width:16px; height:16px; border-radius:50%; flex-shrink:0; box-shadow:0 0 18px currentColor; }
+  .scene-num { position:absolute; left:140px; top:900px; font-size:22px; color:rgba(255,255,255,0.35); letter-spacing:3px; }
+  #cap { position:absolute; left:60px; right:60px; bottom:60px; z-index:80; min-height:120px;
+    border-left:4px solid #22D3EE; padding-left:26px; background:linear-gradient(180deg,rgba(4,6,13,0.85),rgba(4,6,13,0.98));
+    border-top:1px solid rgba(255,255,255,0.06); border-right:1px solid rgba(255,255,255,0.06);
+    border-bottom:1px solid rgba(255,255,255,0.06); border-radius:0 16px 16px 0; }
+  #cap-zh { font-size:38px; font-weight:700; color:#fff; line-height:1.4; }
+  #cap-en { margin-top:6px; font-size:22px; color:rgba(255,255,255,0.55); line-height:1.4; }
+</style>
+</head>
+<body>
+<div class="composition" data-composition-id="promo-video" data-duration="409.83">
+  <div id="topbar"><div id="topbar-fill"></div></div>
+  <div id="brand">SEMANTIC<span>&nbsp;ECHO</span></div>
+  <div id="series-tag">P6 Emotion LoRA Side-Route</div>
+
+  <div class="act clip" id="act0" data-start="0.600" data-duration="25.772" data-track-index="0">
+    <div class="glow" id="gl0" style="left:120px;top:140px;width:520px;height:520px;background:#22D3EE;"></div>
+    <div class="kicker" id="k0">EPISODE 6 · EMOTION-LORA SIDE-ROUTE</div>
+    <div class="big-title" id="t0">The sixth way: train it, route it</div>
+    <div class="sub" id="su0">Weight space + routing space</div>
+    <div class="pts" id="p0"><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>LoRA adapter written by training</span></div><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>Side-route picks the best reply</span></div><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>Zero changes to the prompt</span></div></div>
+    <div class="scene-num" id="n0">01 / 15</div>
+  </div>
+  <div class="act clip" id="act1" data-start="26.372" data-duration="30.972" data-track-index="1">
+    <div class="glow" id="gl1" style="left:120px;top:140px;width:520px;height:520px;background:#22D3EE;"></div>
+    <div class="kicker" id="k1">THE FAMILY LINE</div>
+    <div class="big-title" id="t1">Five generations of zero-weight injection</div>
+    
+    <div class="pts" id="p1"><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>P1 echo → P1.5 config → P2.5 tide</span></div><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>P3 anchor → P4 KV → P5 fusion → G</span></div><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>All: no training, no weight writes</span></div></div>
+    <div class="scene-num" id="n1">02 / 15</div>
+  </div>
+  <div class="act clip" id="act2" data-start="57.344" data-duration="25.932" data-track-index="2">
+    <div class="glow" id="gl2" style="left:120px;top:140px;width:520px;height:520px;background:#22D3EE;"></div>
+    <div class="kicker" id="k2">PARADIGM FLIP</div>
+    <div class="big-title" id="t2">Three things nobody did before</div>
+    
+    <div class="pts" id="p2"><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>First in the family to train</span></div><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>First to route, not inject</span></div><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>Prompt template untouched</span></div></div>
+    <div class="scene-num" id="n2">03 / 15</div>
+  </div>
+  <div class="act clip" id="act3" data-start="83.276" data-duration="23.384" data-track-index="3">
+    <div class="glow" id="gl3" style="left:120px;top:140px;width:520px;height:520px;background:#22D3EE;"></div>
+    <div class="kicker" id="k3">THREE LAYERS</div>
+    <div class="big-title" id="t3">Train. Route. Evaluate.</div>
+    
+    <div class="pts" id="p3"><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>Training: emotion LoRA adapter</span></div><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>Inference: route over 3 candidates</span></div><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>Protocol: unified benchmark</span></div></div>
+    <div class="scene-num" id="n3">04 / 15</div>
+  </div>
+  <div class="act clip" id="act4" data-start="106.660" data-duration="23.452" data-track-index="4">
+    <div class="glow" id="gl4" style="left:120px;top:140px;width:520px;height:520px;background:#22D3EE;"></div>
+    <div class="kicker" id="k4">THE DATA</div>
+    <div class="big-title" id="t4">4,557 dialogue pairs</div>
+    
+    <div class="pts" id="p4"><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>4,409 emotion dialogs</span></div><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>80 gentle-style dialogs</span></div><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>132 human-flavor rewrites</span></div></div>
+    <div class="scene-num" id="n4">05 / 15</div>
+  </div>
+  <div class="act clip" id="act5" data-start="130.112" data-duration="31.144" data-track-index="5">
+    <div class="glow" id="gl5" style="left:120px;top:140px;width:520px;height:520px;background:#22D3EE;"></div>
+    <div class="kicker" id="k5">WEIGHT SPACE</div>
+    <div class="big-title" id="t5">A 0.14% adapter</div>
+    
+    <div class="pts" id="p5"><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>Qwen2.5-1.5B base, frozen</span></div><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>LoRA r=8, alpha=16, q/k/v/o</span></div><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>2.18M trainable params, 0.141%</span></div><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>3 epochs, 855 steps</span></div></div>
+    <div class="scene-num" id="n5">06 / 15</div>
+  </div>
+  <div class="act clip" id="act6" data-start="161.256" data-duration="26.092" data-track-index="6">
+    <div class="glow" id="gl6" style="left:120px;top:140px;width:520px;height:520px;background:#22D3EE;"></div>
+    <div class="kicker" id="k6">ROUTING SPACE</div>
+    <div class="big-title" id="t6">Choose, don't inject</div>
+    
+    <div class="pts" id="p6"><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>N=3 candidates, 3 seeds</span></div><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>Emotion router scores each</span></div><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>Fallback: plain sampling</span></div></div>
+    <div class="scene-num" id="n6">07 / 15</div>
+  </div>
+  <div class="act clip" id="act7" data-start="187.348" data-duration="24.812" data-track-index="7">
+    <div class="glow" id="gl7" style="left:120px;top:140px;width:520px;height:520px;background:#22D3EE;"></div>
+    <div class="kicker" id="k7">THE ROUTER</div>
+    <div class="big-title" id="t7">An emotional scorecard</div>
+    
+    <div class="pts" id="p7"><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>Emotion hits ×2.5</span></div><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>Healthy length ×1.2</span></div><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>AI-flavor −1.0 per word</span></div><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>Repetition −3.0</span></div></div>
+    <div class="scene-num" id="n7">08 / 15</div>
+  </div>
+  <div class="act clip" id="act8" data-start="212.160" data-duration="33.864" data-track-index="8">
+    <div class="glow" id="gl8" style="left:120px;top:140px;width:520px;height:520px;background:#22D3EE;"></div>
+    <div class="kicker" id="k8">REAL OUTPUT</div>
+    <div class="big-title" id="t8">Warm and short</div>
+    
+    <div class="pts" id="p8"><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>P6: 50 characters, human</span></div><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>Baseline: 227, lecture-style</span></div><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>Zero AI-flavor phrases</span></div></div>
+    <div class="scene-num" id="n8">09 / 15</div>
+  </div>
+  <div class="act clip" id="act9" data-start="246.025" data-duration="21.292" data-track-index="9">
+    <div class="glow" id="gl9" style="left:120px;top:140px;width:520px;height:520px;background:#22D3EE;"></div>
+    <div class="kicker" id="k9">THE PROTOCOL</div>
+    <div class="big-title" id="t9">Thirty samples, seed 2026</div>
+    
+    <div class="pts" id="p9"><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>7B judge, blind A/B pairs</span></div><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>Both orders, 60 pairs per mode</span></div><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>Same protocol as every ancestor</span></div></div>
+    <div class="scene-num" id="n9">10 / 15</div>
+  </div>
+  <div class="act clip" id="act10" data-start="267.317" data-duration="36.344" data-track-index="10">
+    <div class="glow" id="gl10" style="left:120px;top:140px;width:520px;height:520px;background:#22D3EE;"></div>
+    <div class="kicker" id="k10">THE LADDER</div>
+    <div class="big-title" id="t10">P6 beats every ancestor</div>
+    
+    <div class="pts" id="p10"><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>P2.5 tide: 0.2667, old best</span></div><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>P6 LoRA alone: 0.3333</span></div><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>P6 side-route: 0.3500, highest</span></div></div>
+    <div class="scene-num" id="n10">11 / 15</div>
+  </div>
+  <div class="act clip" id="act11" data-start="303.660" data-duration="29.544" data-track-index="11">
+    <div class="glow" id="gl11" style="left:120px;top:140px;width:520px;height:520px;background:#22D3EE;"></div>
+    <div class="kicker" id="k11">HEALTH</div>
+    <div class="big-title" id="t11">Zero repetition</div>
+    
+    <div class="pts" id="p11"><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>Repetition rate: 0.0000</span></div><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>Entropy 4.22, high diversity</span></div><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>33 chars, matches real humans</span></div></div>
+    <div class="scene-num" id="n11">12 / 15</div>
+  </div>
+  <div class="act clip" id="act12" data-start="333.205" data-duration="28.344" data-track-index="12">
+    <div class="glow" id="gl12" style="left:120px;top:140px;width:520px;height:520px;background:#22D3EE;"></div>
+    <div class="kicker" id="k12">ACROSS MODELS</div>
+    <div class="big-title" id="t12">The LoRA hook works on 3B too</div>
+    
+    <div class="pts" id="p12"><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>Baseline 3B: repetition 0.008</span></div><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>With LoRA: repetition 0.004</span></div><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>Old echo on 3B: collapse 0.337</span></div></div>
+    <div class="scene-num" id="n12">13 / 15</div>
+  </div>
+  <div class="act clip" id="act13" data-start="361.549" data-duration="24.753" data-track-index="13">
+    <div class="glow" id="gl13" style="left:120px;top:140px;width:520px;height:520px;background:#22D3EE;"></div>
+    <div class="kicker" id="k13">HONEST LIST</div>
+    <div class="big-title" id="t13">The honest list</div>
+    
+    <div class="pts" id="p13"><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>0.35 beats all, target was 0.48</span></div><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>30 samples, seed-sensitive</span></div><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>1.5B base is the ceiling</span></div></div>
+    <div class="scene-num" id="n13">14 / 15</div>
+  </div>
+  <div class="act clip" id="act14" data-start="386.302" data-duration="23.532" data-track-index="14">
+    <div class="glow" id="gl14" style="left:120px;top:140px;width:520px;height:520px;background:#22D3EE;"></div>
+    <div class="kicker" id="k14">OPEN SOURCE</div>
+    <div class="big-title" id="t14">Open, with a license</div>
+    
+    <div class="pts" id="p14"><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>Free for study &amp; research</span></div><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>Commercial use: contact author</span></div><div class="pt"><span class="dot" style="background:#22D3EE;"></span><span>github.com/091635Aa</span></div></div>
+    <div class="scene-num" id="n14">15 / 15</div>
+  </div>
+  <div id="cap"><div id="cap-zh"></div><div id="cap-en"></div></div>
+</div>
+<script>
+  window.__timelines = window.__timelines || {};
+  const tl = gsap.timeline({paused:true});
+  const DUR = 409.83;
+  tl.to("#topbar-fill", {width:"100%",duration:DUR,ease:"none"}, 0);
+tl.call(()=>{const e=document.getElementById("cap-en");e.innerHTML="Episode six. Welcome to the sixth architecture of the Semantic Echo family: Emotion LoRA Side-Route, ELS. Every previous system injected signals during decoding. P six flips the paradigm. We train a tiny LoRA adapter that writes emotion into weights, then route among candidate replies at inference. The main path stays untouched.";document.getElementById("cap-zh").innerHTML="\u7b2c\u516d\u96c6\u3002\u6b22\u8fce\u6765\u5230\u8bed\u4e49\u56de\u54cd\u5bb6\u65cf\u7684\u7b2c\u516d\u5957\u67b6\u6784\uff1a\u60c5\u611f LoRA \u5916\u6302 + \u65c1\u8def\u7531\u9009\u4f18\uff0c\u7b80\u79f0 ELS\u3002\u4e4b\u524d\u6240\u6709\u65b9\u6848\u90fd\u5728\u89e3\u7801\u671f\u6ce8\u5165\u4fe1\u53f7\u3002P6 \u53cd\u8f6c\u8303\u5f0f\uff1a\u6211\u4eec\u8bad\u7ec3\u4e00\u4e2a\u6781\u5c0f\u7684 LoRA \u9002\u914d\u5668\uff0c\u628a\u60c5\u611f\u5199\u8fdb\u6743\u91cd\uff1b\u63a8\u7406\u65f6\u5728\u5019\u9009\u56de\u590d\u4e4b\u95f4\u505a\u8def\u7531\u3002\u4e3b\u8def\u5f84\u4fdd\u6301\u96f6\u4fee\u6539\u3002";},[],1.100);tl.call(()=>{const e=document.getElementById("cap-en");e.innerHTML="Let us place P six in the family. P one echoes hidden states. P one point five auto tunes parameters. P two point five, the tide, reweights probabilities. P three anchors embeddings. P four resonates in the KV cache. P five fuses every space. Even the unified version G. Every one is a decoding time injection: no training, no weight update. P six is the first to leave that road.";document.getElementById("cap-zh").innerHTML="\u628a P6 \u653e\u8fdb\u5bb6\u65cf\uff1aP1 \u56de\u54cd\u9690\u72b6\u6001\uff1bP1.5 \u81ea\u52a8\u8c03\u53c2\uff1bP2.5 \u6f6e\u6c50\u5728\u6982\u7387\u7a7a\u95f4\u91cd\u52a0\u6743\uff1bP3 \u951a\u5b9a\u5d4c\u5165\uff1bP4 \u5728 KV \u7f13\u5b58\u5171\u632f\uff1bP5 \u878d\u5408\u6240\u6709\u7a7a\u95f4\uff1b\u8fd8\u6709\u7edf\u4e00\u7248 G\u3002\u5168\u90e8\u90fd\u662f\u89e3\u7801\u671f\u6ce8\u5165\u2014\u2014\u4e0d\u8bad\u7ec3\u3001\u4e0d\u6539\u6743\u91cd\u3002P6 \u662f\u7b2c\u4e00\u5957\u79bb\u5f00\u8fd9\u6761\u8def\u7684\u65b9\u6848\u3002";},[],26.872);tl.call(()=>{const e=document.getElementById("cap-en");e.innerHTML="Three fundamental differences. First, P six is the first member that trains. LoRA freezes the base model and writes a small adapter. The base weights never move. Second, instead of injecting into one path, a side router chooses among several candidate replies. Third, the system prompt and chat template stay untouched, because all capability lives in the adapter and the router.";document.getElementById("cap-zh").innerHTML="\u4e09\u5927\u672c\u8d28\u533a\u522b\u3002\u7b2c\u4e00\uff1aP6 \u662f\u5bb6\u65cf\u91cc\u7b2c\u4e00\u4e2a\u505a\u8bad\u7ec3\u7684\uff0cLoRA \u51bb\u7ed3\u57fa\u5ea7\u3001\u5199\u5165\u5c0f\u9002\u914d\u5668\uff0c\u57fa\u5ea7\u6743\u91cd\u539f\u6837\u4e0d\u52a8\u3002\u7b2c\u4e8c\uff1a\u4e0d\u5728\u5355\u6761\u8def\u5f84\u4e0a\u6ce8\u5165\uff0c\u800c\u662f\u65c1\u8def\u7531\u5728\u591a\u4e2a\u5019\u9009\u56de\u590d\u95f4\u9009\u62e9\u3002\u7b2c\u4e09\uff1a\u7cfb\u7edf\u63d0\u793a\u548c\u804a\u5929\u6a21\u677f\u5b8c\u5168\u4e0d\u52a8\uff0c\u6240\u6709\u80fd\u529b\u90fd\u6765\u81ea\u5916\u6302\u9002\u914d\u5668\u548c\u8def\u7531\u5668\u3002";},[],57.844);tl.call(()=>{const e=document.getElementById("cap-en");e.innerHTML="The architecture has three layers. The training layer builds an emotion LoRA on a frozen base model. The inference layer generates three candidate replies with three independent seeds, scores each one, and returns the best. If all fail, it falls back to plain sampling, so collapse is impossible by design. The evaluation layer reuses the unified benchmark protocol.";document.getElementById("cap-zh").innerHTML="\u67b6\u6784\u5206\u4e09\u5c42\uff1a\u8bad\u7ec3\u5c42\u5728\u51bb\u7ed3\u57fa\u5ea7\u4e0a\u6784\u5efa\u60c5\u611f LoRA\uff1b\u63a8\u7406\u5c42\u7528\u4e09\u4e2a\u72ec\u7acb\u79cd\u5b50\u751f\u6210\u4e09\u6761\u5019\u9009\u56de\u590d\u3001\u9010\u4e00\u6253\u5206\u3001\u8fd4\u56de\u6700\u4f18\uff0c\u5168\u90e8\u4e0d\u5408\u683c\u5c31\u56de\u9000\u88f8\u91c7\u6837\uff0c\u8bbe\u8ba1\u4e0a\u4e0d\u53ef\u80fd\u574d\u7f29\uff1b\u8bc4\u6d4b\u5c42\u6cbf\u7528\u7edf\u4e00\u57fa\u51c6\u534f\u8bae\u3002";},[],83.776);tl.call(()=>{const e=document.getElementById("cap-en");e.innerHTML="The training data has four thousand five hundred and fifty seven chat pairs. Four thousand four hundred nine are emotion dialogs covering joy, sadness, anger and warmth. Eighty are gentle conversations. One hundred thirty two are human flavor rewrites in a girl style, teaching short warm replies instead of long lectures. Reply masking trains only the answer.";document.getElementById("cap-zh").innerHTML="\u8bad\u7ec3\u6570\u636e\u5171 4557 \u6761\u5bf9\u8bdd\u5bf9\uff1a4409 \u6761\u60c5\u611f\u5bf9\u8bdd\uff0c\u8986\u76d6\u5feb\u4e50\u3001\u60b2\u4f24\u3001\u6124\u6012\u3001\u6e29\u6696\uff1b80 \u6761\u6e29\u67d4\u5bf9\u8bdd\uff1b132 \u6761 girl \u98ce\u683c\u4eba\u5473\u6539\u5199\uff0c\u6559\u6a21\u578b\u77ed\u800c\u6e29\u6696\u5730\u56de\u7b54\uff0c\u800c\u4e0d\u662f\u957f\u7bc7\u8bf4\u6559\u3002\u56de\u590d\u63a9\u7801\u76d1\u7763\uff0c\u53ea\u8bad\u7ec3\u7b54\u6848\u3002";},[],107.160);tl.call(()=>{const e=document.getElementById("cap-en");e.innerHTML="Training details. The base model is Qwen two point five, one point five billion, fully frozen. LoRA rank is eight, alpha sixteen, targeting query, key, value and output projections. Only two point one seven nine million parameters are trainable, zero point one four one percent of the whole model. Three epochs, eight hundred fifty five steps, reply masked supervision, trained in minutes on a laptop GPU.";document.getElementById("cap-zh").innerHTML="\u8bad\u7ec3\u7ec6\u8282\uff1a\u57fa\u5ea7 Qwen2.5-1.5B \u5b8c\u5168\u51bb\u7ed3\uff1bLoRA \u79e9 8\u3001alpha 16\uff0c\u4f5c\u7528\u5728 Q/K/V/O \u6295\u5f71\uff1b\u53ef\u8bad\u7ec3\u53c2\u6570\u4ec5 217.9 \u4e07\uff0c\u5360\u5168\u6a21\u578b 0.141%\uff1b3 \u4e2a epoch\u3001855 \u6b65\u3001\u56de\u590d\u63a9\u7801\u76d1\u7763\u3002\u5728\u7b14\u8bb0\u672c GPU \u4e0a\u51e0\u5206\u949f\u5b8c\u6210\u3002";},[],130.612);tl.call(()=>{const e=document.getElementById("cap-en");e.innerHTML="Here is how the side route works. The model, with the LoRA attached, generates three candidates using three independent seeds. The emotion router scores each reply. It rewards emotional words and healthy length, punishes AI flavor phrases and repetition. The highest score wins. If all candidates are too weak, the system degrades to plain sampling. It never breaks.";document.getElementById("cap-zh").innerHTML="\u65c1\u8def\u7531\u7684\u63a8\u7406\u8fc7\u7a0b\uff1a\u6302\u8f7d LoRA \u7684\u6a21\u578b\u7528\u4e09\u4e2a\u72ec\u7acb\u79cd\u5b50\u751f\u6210\u4e09\u6761\u5019\u9009\uff1b\u60c5\u611f\u8def\u7531\u5668\u9010\u6761\u6253\u5206\uff0c\u5956\u52b1\u60c5\u611f\u8bcd\u548c\u5065\u5eb7\u957f\u5ea6\uff0c\u60e9\u7f5a AI \u8154\u548c\u91cd\u590d\uff1b\u6700\u9ad8\u5206\u80dc\u51fa\uff1b\u5168\u90e8\u592a\u5f31\u5c31\u964d\u7ea7\u88f8\u91c7\u6837\uff0c\u6c38\u4e0d\u5d29\u574f\u3002";},[],161.756);tl.call(()=>{const e=document.getElementById("cap-en");e.innerHTML="The router is a transparent scorecard. Emotional hits add two point five. Healthy length adds one point two. Entropy keeps diversity. AI flavor phrases subtract one point each. Repetition is punished with minus three. You can read exactly why one candidate wins. The tide's AI accent suppression moves from probability space into the routing layer.";document.getElementById("cap-zh").innerHTML="\u8def\u7531\u5668\u662f\u4e00\u5f20\u900f\u660e\u8bb0\u5206\u5361\uff1a\u60c5\u611f\u8bcd\u547d\u4e2d +2.5\uff1b\u5065\u5eb7\u957f\u5ea6 +1.2\uff1b\u71b5\u4fdd\u8bc1\u591a\u6837\u6027\uff1bAI \u8154\u77ed\u8bed\u6bcf\u4e2a -1 \u5206\uff1b\u91cd\u590d -3 \u5206\u3002\u4f60\u53ef\u4ee5\u7cbe\u786e\u770b\u51fa\u4e00\u6761\u5019\u9009\u4e3a\u4ec0\u4e48\u8d62\u3002\u6f6e\u6c50\u7684 AI \u8154\u6291\u5236\u7ecf\u9a8c\uff0c\u4ece\u6982\u7387\u7a7a\u95f4\u642c\u8fdb\u4e86\u8def\u7531\u5c42\u3002";},[],187.848);tl.call(()=>{const e=document.getElementById("cap-en");e.innerHTML="A real reply. The user says, sometimes I wonder, what is the point of hard work. The plain model answers with two hundred and twenty seven characters of lecture. P six picks: the meaning of effort is effort itself. Even one small piece finished today is meaningful. Fifty characters, warm, no AI accent. Another: why do you always catch my jokes. P six replies, because I am good at digging out punchlines, and that takes training too.";document.getElementById("cap-zh").innerHTML="\u770b\u4e00\u6761\u771f\u5b9e\u56de\u590d\u3002\u7528\u6237\u95ee\u201c\u52aa\u529b\u5230\u5e95\u6709\u4ec0\u4e48\u610f\u4e49\u201d\uff1a\u88f8\u6a21\u578b\u56de\u4e86 227 \u4e2a\u5b57\u7684\u8bf4\u6559\uff1bP6 \u65c1\u8def\u7531\u9009\u62e9\u201c\u52aa\u529b\u7684\u610f\u4e49\u662f\u5b83\u672c\u8eab\u3002\u54ea\u6015\u6211\u4eca\u5929\u53ea\u5b8c\u6210\u4e86\u4e00\u5c0f\u5757\uff0c\u4e5f\u662f\u5728\u505a\u6709\u610f\u4e49\u7684\u4e8b\u3002\u4f60\u8d8a\u8ba4\u771f\uff0c\u5c31\u8d8a\u80fd\u4f53\u4f1a\u5230\u751f\u6d3b\u7684\u73cd\u8d35\u201d\u2014\u201450 \u4e2a\u5b57\uff0c\u6e29\u6696\uff0c\u65e0 AI \u8154\u3002\u53e6\u4e00\u6761\uff1a\u201c\u4f60\u4e3a\u4ec0\u4e48\u603b\u80fd\u63a5\u6211\u6897\uff1f\u201dP6 \u7b54\uff1a\u201c\u56e0\u4e3a\u6211\u64c5\u957f\u6316\u4eba\u7b11\u70b9\u5440\uff5e\u4e0d\u8fc7\u8fd9\u4e5f\u9760\u8bad\u7ec3\u54e6\uff5e\u201d\u3002";},[],212.660);tl.call(()=>{const e=document.getElementById("cap-en");e.innerHTML="How do we measure? Thirty real conversation samples, seed twenty twenty six. A seven billion judge reads replies blindly, in both orders, sixty pairs per mode. The protocol is identical to the unified G benchmark, so every number is directly comparable to all five generations before.";document.getElementById("cap-zh").innerHTML="\u600e\u4e48\u8bc4\u6d4b\uff1f30 \u6761\u771f\u5b9e\u5bf9\u8bdd\u6837\u672c\u3001\u79cd\u5b50 2026\uff1b7B \u88c1\u5224\u76f2\u8bfb\u914d\u5bf9\u56de\u590d\uff0cA/B \u4e24\u4e2a\u987a\u5e8f\u5404\u5224\u4e00\u6b21\uff0c\u6bcf\u4e2a\u6a21\u5f0f 60 \u4e2a\u914d\u5bf9\u3002\u534f\u8bae\u4e0e G \u7edf\u4e00\u57fa\u51c6\u5b8c\u5168\u4e00\u81f4\uff0c\u6bcf\u4e2a\u6570\u5b57\u90fd\u80fd\u548c\u524d\u9762\u4e94\u4ee3\u76f4\u63a5\u5bf9\u6bd4\u3002";},[],246.525);tl.call(()=>{const e=document.getElementById("cap-en");e.innerHTML="Here is the horizontal comparison, same protocol, same seed. The bare model wins zero point one eight three three. The old champion, the tide, zero point two six six seven. P three anchor zero point one eight three three. P four and P five zero point one five. The LoRA alone jumps to zero point three three three three, already above every ancestor. The full side route reaches zero point three five, the highest score in family history, a thirty one percent gain over the previous best.";document.getElementById("cap-zh").innerHTML="\u6a2a\u5411\u5bf9\u6bd4\uff0c\u540c\u534f\u8bae\u540c\u79cd\u5b50\uff1a\u88f8\u6a21\u578b\u80dc\u7387 0.1833\uff1b\u8001\u51a0\u519b\u6f6e\u6c50 0.2667\uff1bP3 \u951a\u70b9 0.1833\uff1bP4\u3001P5 \u5747 0.15\u3002\u5355\u6302 LoRA \u4e0d\u8def\u7531\u5c31\u51b2\u5230 0.3333\uff0c\u5df2\u8d85\u8fc7\u6240\u6709\u524d\u8f88\u3002\u5b8c\u6574\u65c1\u8def\u7531\u8fbe\u5230 0.35\u2014\u2014\u5bb6\u65cf\u5386\u53f2\u6700\u9ad8\uff0c\u6bd4\u6b64\u524d\u51a0\u519b\u63d0\u5347 31%\u3002";},[],267.817);tl.call(()=>{const e=document.getElementById("cap-en");e.innerHTML="Health metrics are equally strong. The plain model repeats zero point nine percent of tokens and produces hundred character answers. P six side route repeats zero point zero zero zero, literally zero. Entropy stays at four point two two. Average length thirty three characters, matching human short replies. Compare the first ancestor P one, whose repetition exploded to forty eight percent. P six simply does not collapse.";document.getElementById("cap-zh").innerHTML="\u5065\u5eb7\u5ea6\u540c\u6837\u51fa\u8272\uff1a\u88f8\u6a21\u578b\u6709 0.9% \u7684 token \u91cd\u590d\uff0c\u56de\u7b54\u4e0a\u767e\u5b57\uff1bP6 \u65c1\u8def\u7531\u91cd\u590d\u7387 0.000\u2014\u2014\u5b57\u9762\u610f\u4e49\u7684\u96f6\u91cd\u590d\uff1b\u71b5\u4fdd\u6301 4.22\uff1b\u5e73\u5747\u957f\u5ea6 33 \u4e2a\u5b57\uff0c\u5bf9\u9f50\u771f\u4eba\u77ed\u56de\u590d\u3002\u5bf9\u6bd4\u7b2c\u4e00\u4f4d\u524d\u8f88 P1 \u5728\u7edf\u4e00\u8bc4\u6d4b\u91cc\u91cd\u590d\u7387\u7206\u5230 48%\u3002P6 \u6839\u672c\u4e0d\u4f1a\u574d\u7f29\u3002";},[],304.160);tl.call(()=>{const e=document.getElementById("cap-en");e.innerHTML="Does the paradigm transfer to bigger models? On Qwen two point five three billion, we ran the emotion LoRA against the old echo injection. The baseline repeats zero point eight percent. With the LoRA attached, repetition halves to zero point four percent. The old echo on the same model collapses, repetition exploding to thirty four percent. The trained adapter stays healthy where the injection family collapses.";document.getElementById("cap-zh").innerHTML="\u8303\u5f0f\u80fd\u5426\u8fc1\u79fb\u5230\u66f4\u5927\u6a21\u578b\uff1f\u5728 Qwen2.5-3B \u4e0a\uff0c\u6211\u4eec\u628a\u60c5\u611f LoRA \u548c\u8001\u7684\u56de\u54cd\u6ce8\u5165\u5e76\u6392\u6d4b\u8bd5\uff1a\u57fa\u7ebf\u91cd\u590d\u7387 0.8%\uff1b\u6302\u4e0a LoRA \u540e\u91cd\u590d\u7387\u51cf\u534a\u5230 0.4%\uff1b\u800c\u540c\u4e00\u6a21\u578b\u4e0a\u8001\u7684\u56de\u54cd\u6ce8\u5165\u76f4\u63a5\u574d\u7f29\uff0c\u91cd\u590d\u7387\u7206\u5230 34%\u3002\u8bad\u7ec3\u9002\u914d\u5668\u5065\u5eb7\u7a33\u5b9a\uff0c\u6ce8\u5165\u5bb6\u65cf\u5374\u574d\u7f29\u4e86\u3002";},[],333.705);tl.call(()=>{const e=document.getElementById("cap-en");e.innerHTML="The honest part. Zero point three five is the best in the family, but the original target was zero point four eight, an eighty percent gain, and we are not there yet. Thirty samples is small, and win rates are seed sensitive. The one point five billion base remains the ceiling: routing narrows the gap, but cannot break the base model's ability. P six is the strongest member so far, and still improving.";document.getElementById("cap-zh").innerHTML="\u8bda\u5b9e\u7684\u90e8\u5206\uff1a0.35 \u662f\u5bb6\u65cf\u6700\u9ad8\uff0c\u4f46\u6700\u521d\u76ee\u6807\u662f 0.48\u2014\u2014\u63d0\u5347 80%\uff0c\u8fd8\u6ca1\u5230\u300230 \u6761\u6837\u672c\u504f\u5c0f\uff0c\u80dc\u7387\u5bf9\u79cd\u5b50\u654f\u611f\u30021.5B \u57fa\u5ea7\u4ecd\u662f\u5929\u82b1\u677f\uff1a\u8def\u7531\u80fd\u7f29\u5c0f\u5dee\u8ddd\uff0c\u4f46\u65e0\u6cd5\u7a81\u7834\u57fa\u5ea7\u8868\u8fbe\u529b\u3002P6 \u662f\u76ee\u524d\u5bb6\u65cf\u6700\u5f3a\uff0c\u4e5f\u8fd8\u5728\u7ee7\u7eed\u6539\u8fdb\u3002";},[],362.049);tl.call(()=>{const e=document.getElementById("cap-en");e.innerHTML="The project stays open source. P six is free for study and research under CC BY-NC-SA with additional terms. Commercial use requires contacting the author. The adapters, the router, the scripts and the raw data are all in the repository. This is the sixth architecture of Semantic Echo: the first one that trains, the first one that routes. The family keeps growing.";document.getElementById("cap-zh").innerHTML="\u9879\u76ee\u4fdd\u6301\u5f00\u6e90\u3002P6 \u5728 CC BY-NC-SA \u52a0\u9644\u52a0\u6761\u6b3e\u4e0b\u5b66\u4e60\u548c\u7814\u7a76\u514d\u8d39\uff0c\u5546\u4e1a\u4f7f\u7528\u9700\u8054\u7cfb\u4f5c\u8005\u3002\u9002\u914d\u5668\u3001\u8def\u7531\u5668\u3001\u811a\u672c\u548c\u539f\u59cb\u6570\u636e\u90fd\u5728\u4ed3\u5e93\u91cc\u3002\u8fd9\u662f\u8bed\u4e49\u56de\u54cd\u7684\u7b2c\u516d\u5957\u67b6\u6784\u2014\u2014\u7b2c\u4e00\u5957\u505a\u8bad\u7ec3\u3001\u7b2c\u4e00\u5957\u505a\u8def\u7531\u3002\u5bb6\u65cf\u8fd8\u5728\u7ee7\u7eed\u957f\u5927\u3002";},[],386.802);
+  tl.set("#act1", {clipPath:"circle(0% at 50% 50%)"}, 0);
+  tl.set("#act2", {clipPath:"circle(0% at 50% 50%)"}, 0);
+  tl.set("#act3", {clipPath:"circle(0% at 50% 50%)"}, 0);
+  tl.set("#act4", {clipPath:"circle(0% at 50% 50%)"}, 0);
+  tl.set("#act5", {clipPath:"circle(0% at 50% 50%)"}, 0);
+  tl.set("#act6", {clipPath:"circle(0% at 50% 50%)"}, 0);
+  tl.set("#act7", {clipPath:"circle(0% at 50% 50%)"}, 0);
+  tl.set("#act8", {clipPath:"circle(0% at 50% 50%)"}, 0);
+  tl.set("#act9", {clipPath:"circle(0% at 50% 50%)"}, 0);
+  tl.set("#act10", {clipPath:"circle(0% at 50% 50%)"}, 0);
+  tl.set("#act11", {clipPath:"circle(0% at 50% 50%)"}, 0);
+  tl.set("#act12", {clipPath:"circle(0% at 50% 50%)"}, 0);
+  tl.set("#act13", {clipPath:"circle(0% at 50% 50%)"}, 0);
+  tl.set("#act14", {clipPath:"circle(0% at 50% 50%)"}, 0);
+
+  tl.fromTo("#act1", {clipPath:"circle(0% at 50% 50%)"}, {clipPath:"circle(150% at 50% 50%)",duration:0.7,ease:"power3.inOut"}, 25.972);
+  tl.fromTo("#act2", {clipPath:"circle(0% at 50% 50%)"}, {clipPath:"circle(150% at 50% 50%)",duration:0.7,ease:"power3.inOut"}, 56.944);
+  tl.fromTo("#act3", {clipPath:"circle(0% at 50% 50%)"}, {clipPath:"circle(150% at 50% 50%)",duration:0.7,ease:"power3.inOut"}, 82.876);
+  tl.fromTo("#act4", {clipPath:"circle(0% at 50% 50%)"}, {clipPath:"circle(150% at 50% 50%)",duration:0.7,ease:"power3.inOut"}, 106.260);
+  tl.fromTo("#act5", {clipPath:"circle(0% at 50% 50%)"}, {clipPath:"circle(150% at 50% 50%)",duration:0.7,ease:"power3.inOut"}, 129.712);
+  tl.fromTo("#act6", {clipPath:"circle(0% at 50% 50%)"}, {clipPath:"circle(150% at 50% 50%)",duration:0.7,ease:"power3.inOut"}, 160.856);
+  tl.fromTo("#act7", {clipPath:"circle(0% at 50% 50%)"}, {clipPath:"circle(150% at 50% 50%)",duration:0.7,ease:"power3.inOut"}, 186.948);
+  tl.fromTo("#act8", {clipPath:"circle(0% at 50% 50%)"}, {clipPath:"circle(150% at 50% 50%)",duration:0.7,ease:"power3.inOut"}, 211.760);
+  tl.fromTo("#act9", {clipPath:"circle(0% at 50% 50%)"}, {clipPath:"circle(150% at 50% 50%)",duration:0.7,ease:"power3.inOut"}, 245.625);
+  tl.fromTo("#act10", {clipPath:"circle(0% at 50% 50%)"}, {clipPath:"circle(150% at 50% 50%)",duration:0.7,ease:"power3.inOut"}, 266.917);
+  tl.fromTo("#act11", {clipPath:"circle(0% at 50% 50%)"}, {clipPath:"circle(150% at 50% 50%)",duration:0.7,ease:"power3.inOut"}, 303.260);
+  tl.fromTo("#act12", {clipPath:"circle(0% at 50% 50%)"}, {clipPath:"circle(150% at 50% 50%)",duration:0.7,ease:"power3.inOut"}, 332.805);
+  tl.fromTo("#act13", {clipPath:"circle(0% at 50% 50%)"}, {clipPath:"circle(150% at 50% 50%)",duration:0.7,ease:"power3.inOut"}, 361.149);
+  tl.fromTo("#act14", {clipPath:"circle(0% at 50% 50%)"}, {clipPath:"circle(150% at 50% 50%)",duration:0.7,ease:"power3.inOut"}, 385.902);
+
+  tl.fromTo("#k0", {y:-30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 1.000);
+  tl.fromTo("#t0", {y:40,opacity:0}, {y:0,opacity:1,duration:0.6,ease:"power4.out"}, 1.150);
+  tl.fromTo("#p0", {y:30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 1.500);
+  tl.fromTo("#k1", {y:-30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 26.772);
+  tl.fromTo("#t1", {y:40,opacity:0}, {y:0,opacity:1,duration:0.6,ease:"power4.out"}, 26.922);
+  tl.fromTo("#p1", {y:30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 27.272);
+  tl.fromTo("#k2", {y:-30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 57.744);
+  tl.fromTo("#t2", {y:40,opacity:0}, {y:0,opacity:1,duration:0.6,ease:"power4.out"}, 57.894);
+  tl.fromTo("#p2", {y:30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 58.244);
+  tl.fromTo("#k3", {y:-30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 83.676);
+  tl.fromTo("#t3", {y:40,opacity:0}, {y:0,opacity:1,duration:0.6,ease:"power4.out"}, 83.826);
+  tl.fromTo("#p3", {y:30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 84.176);
+  tl.fromTo("#k4", {y:-30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 107.060);
+  tl.fromTo("#t4", {y:40,opacity:0}, {y:0,opacity:1,duration:0.6,ease:"power4.out"}, 107.210);
+  tl.fromTo("#p4", {y:30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 107.560);
+  tl.fromTo("#k5", {y:-30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 130.512);
+  tl.fromTo("#t5", {y:40,opacity:0}, {y:0,opacity:1,duration:0.6,ease:"power4.out"}, 130.662);
+  tl.fromTo("#p5", {y:30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 131.012);
+  tl.fromTo("#k6", {y:-30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 161.656);
+  tl.fromTo("#t6", {y:40,opacity:0}, {y:0,opacity:1,duration:0.6,ease:"power4.out"}, 161.806);
+  tl.fromTo("#p6", {y:30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 162.156);
+  tl.fromTo("#k7", {y:-30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 187.748);
+  tl.fromTo("#t7", {y:40,opacity:0}, {y:0,opacity:1,duration:0.6,ease:"power4.out"}, 187.898);
+  tl.fromTo("#p7", {y:30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 188.248);
+  tl.fromTo("#k8", {y:-30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 212.560);
+  tl.fromTo("#t8", {y:40,opacity:0}, {y:0,opacity:1,duration:0.6,ease:"power4.out"}, 212.710);
+  tl.fromTo("#p8", {y:30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 213.060);
+  tl.fromTo("#k9", {y:-30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 246.425);
+  tl.fromTo("#t9", {y:40,opacity:0}, {y:0,opacity:1,duration:0.6,ease:"power4.out"}, 246.575);
+  tl.fromTo("#p9", {y:30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 246.925);
+  tl.fromTo("#k10", {y:-30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 267.717);
+  tl.fromTo("#t10", {y:40,opacity:0}, {y:0,opacity:1,duration:0.6,ease:"power4.out"}, 267.867);
+  tl.fromTo("#p10", {y:30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 268.217);
+  tl.fromTo("#k11", {y:-30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 304.060);
+  tl.fromTo("#t11", {y:40,opacity:0}, {y:0,opacity:1,duration:0.6,ease:"power4.out"}, 304.210);
+  tl.fromTo("#p11", {y:30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 304.560);
+  tl.fromTo("#k12", {y:-30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 333.605);
+  tl.fromTo("#t12", {y:40,opacity:0}, {y:0,opacity:1,duration:0.6,ease:"power4.out"}, 333.755);
+  tl.fromTo("#p12", {y:30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 334.105);
+  tl.fromTo("#k13", {y:-30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 361.949);
+  tl.fromTo("#t13", {y:40,opacity:0}, {y:0,opacity:1,duration:0.6,ease:"power4.out"}, 362.099);
+  tl.fromTo("#p13", {y:30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 362.449);
+  tl.fromTo("#k14", {y:-30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 386.702);
+  tl.fromTo("#t14", {y:40,opacity:0}, {y:0,opacity:1,duration:0.6,ease:"power4.out"}, 386.852);
+  tl.fromTo("#p14", {y:30,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 387.202);
+  tl.fromTo("#su0", {y:24,opacity:0}, {y:0,opacity:1,duration:0.5,ease:"power3.out"}, 1.350);
+
+  window.__timelines["promo-video"] = tl;
+</script>
+</body>
+</html>
