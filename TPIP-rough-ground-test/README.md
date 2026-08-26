@@ -16,8 +16,15 @@
 │   └── demo/
 │       ├── base.npz           # 基线(点对点体式) 合成示例轨迹
 │       └── tpip.npz           # 扩展(连贯摆线) 合成示例轨迹
+├── legged/                     # P1~P6 → 足式机器人平移实测
+│   ├── mapping.md             # LLM 方法 → 机器人控制平移映射表
+│   ├── legged_env.py          # CPU 微仿真: 6关节双足 + 3基座族 + 步态蓝图
+│   ├── plugins.py             # P1~P6 全部插件实现 (零权重注入)
+│   ├── run_experiments.py     # 三阶段测试框架 (全矩阵/强度扫描/通用验证)
+│   ├── results.json           # 全部原始数据
+│   └── final_report.md        # 最终汇总结论
 └── report/
-    └── conclusion.md          # 三问答结论 (Q1/Q2/Q3)
+    └── conclusion.md          # TPIP 三问答结论 (Q1/Q2/Q3)
 ```
 
 ## 快速自检
