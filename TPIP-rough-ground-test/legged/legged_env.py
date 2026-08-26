@@ -1,0 +1,117 @@
+#!/usr/bin/env python3
+"""
+legged_env.py — CPU 微仿真：简化的多关节足式机器人代理模型
+
+特征：
+- 6 关节（每条腿 3 关节 × 2 腿）
+- 自回归动作生成：a(t) -> dq(t+1) -> q(t+1)
+- 三种基座"模型族"：p2p(点对点僵硬) / standard(标准 RL) / transformer(类 Transformer)
+- 统一观测：o = [q, dq, goal_dist, terrain_roughness]
+"""
+
+from __future__ import annotations
+import numpy as np
+
+
+class BasePolicy:
+    """基座策略（只读，模拟三种不同"模型族"）。"""
+
+    def __init__(self, n_joints: int = 6, family: str = "p2p", seed: int = 42):
+        assert family in ("p2p", "standard", "transformer")
+        self.n_joints = n_joints
+        self.family = family
+        rng = np.random.default_rng(seed)
+        # 线性映射 obs(2*n_joints+2) -> action(n_joints)
+        self.W = rng.normal(0, 0.12, (n_joints, 2 * n_joints + 2))
+        self.b = rng.normal(0, 0.02, n_joints)
+
+    def forward(self, obs: np.ndarray, t: float = 0.0) -> np.ndarray:
+        """返回原始动作（无插件）。obs shape: (2*n_joints+2,)"""
+        a = self.W @ obs + self.b
+        if self.family == "p2p":
+            # 点对点特征：阶跃量化 + 高频 PID 震颤 + 随机重规划
+            a = np.round(a / 0.08) * 0.08
+            jitter = np.sin(2 * np.pi * 23.7 * t) * 0.05
+            a = a + jitter
+            # 偶尔"重规划"跳变
+            if int(t * 100) % 137 == 0:
+                a += np.random.default_rng(int(t * 1000)).normal(0, 0.2, self.n_joints)
+        elif self.family == "standard":
+            a = np.tanh(a) * 0.6
+        else:  # transformer
+            a = np.clip(a, -1.0, 1.0) * 0.4
+        return a.astype(float)
+
+    @property
+    def obs_dim(self) -> int:
+        return 2 * self.n_joints + 2
+
+
+class GaitPhaseBlueprint:
+    """共享全局步态相位蓝图（电路B 的平移）。"""
+
+    def __init__(self, n_joints: int = 6, freq: float = 2.0):
+        self.n_joints = n_joints
+        self.freq = freq
+        # 各关节相位偏移，制造交替步态
+        self.phase_offsets = np.linspace(0, np.pi, n_joints)
+
+    def action(self, t: float) -> np.ndarray:
+        phi = 2 * np.pi * self.freq * t
+        return 0.25 * np.sin(phi + self.phase_offsets)
+
+    def contact(self, t: float) -> np.ndarray:
+        """足底触地标志（布尔）。"""
+        phi = (2 * np.pi * self.freq * t + self.phase_offsets) % (2 * np.pi)
+        return (phi < np.pi).astype(float)  # 0=摆动, 1=支撑
+
+
+class LeggedMicroSim:
+    """简化的自回归动力学：a -> dq += a*dt, q += dq*dt。"""
+
+    def __init__(self, base: BasePolicy, plugins=None,
+                 T: int = 800, dt: float = 0.01, seed: int = 42):
+        self.base = base
+        self.plugins = plugins or []
+        self.T = T
+        self.dt = dt
+        self.rng = np.random.default_rng(seed)
+        self.blueprint = GaitPhaseBlueprint(base.n_joints)
+
+    def _obs(self, q, dq, goal, terrain):
+        return np.concatenate([q, dq, [goal, terrain]])
+
+    def run(self, goal: float = 3.0, terrain: float = 0.3) -> dict:
+        n = self.base.n_joints
+        q = self.rng.normal(0, 0.05, n)
+        dq = np.zeros(n)
+        traj = {"q": [], "dq": [], "a": [], "t": [], "contact": []}
+
+        for step in range(self.T):
+            t = step * self.dt
+            obs = self._obs(q, dq, goal, terrain)
+            a = self.base.forward(obs, t)
+            bp = self.blueprint.action(t)
+            ct = self.blueprint.contact(t)
+
+            # P 插件注入
+            for plug in self.plugins:
+                a = plug.inject(a, t=t, q=q, dq=dq, blueprint=bp,
+                                contact=ct, terrain=terrain,
+                                progress=step / self.T)
+
+            # 动力学更新
+            dq = dq * 0.98 + a * self.dt  # 轻度阻尼
+            q = q + dq * self.dt
+            q = np.clip(q, -np.pi, np.pi)
+
+            traj["q"].append(q.copy())
+            traj["dq"].append(dq.copy())
+            traj["a"].append(a.copy())
+            traj["t"].append(t)
+            traj["contact"].append(ct.copy())
+
+        for k in ("q", "dq", "a", "contact"):
+            traj[k] = np.stack(traj[k], axis=0)
+        traj["t"] = np.array(traj["t"])
+        return traj
