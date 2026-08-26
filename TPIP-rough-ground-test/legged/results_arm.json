@@ -1,0 +1,210 @@
+{
+  "v1": {
+    "P1_语义回响": {
+      "p2p_arm": {
+        "opt_mean": 0.006308212336207378,
+        "opt_std": 0.0,
+        "all_positive": true
+      },
+      "pid_arm": {
+        "opt_mean": 0.010316284835320226,
+        "opt_std": 0.0,
+        "all_positive": true
+      },
+      "learned": {
+        "opt_mean": 0.010511706610609298,
+        "opt_std": 0.0,
+        "all_positive": true
+      }
+    },
+    "P2.5_潮汐": {
+      "p2p_arm": {
+        "opt_mean": 0.12423168443815294,
+        "opt_std": 0.0,
+        "all_positive": true
+      },
+      "pid_arm": {
+        "opt_mean": -0.0032724403842639286,
+        "opt_std": 4.336808689942018e-19,
+        "all_positive": false
+      },
+      "learned": {
+        "opt_mean": -0.007573660259171197,
+        "opt_std": 8.673617379884035e-19,
+        "all_positive": false
+      }
+    },
+    "P3_锚点回响": {
+      "p2p_arm": {
+        "opt_mean": -0.0029159268022535168,
+        "opt_std": 0.0,
+        "all_positive": false
+      },
+      "pid_arm": {
+        "opt_mean": -0.002624368040093279,
+        "opt_std": 0.0,
+        "all_positive": false
+      },
+      "learned": {
+        "opt_mean": -0.004051519055875055,
+        "opt_std": 0.0,
+        "all_positive": false
+      }
+    },
+    "P4_KV共振": {
+      "p2p_arm": {
+        "opt_mean": -0.009608593210577106,
+        "opt_std": 0.0,
+        "all_positive": false
+      },
+      "pid_arm": {
+        "opt_mean": -0.010131006913329762,
+        "opt_std": 0.0,
+        "all_positive": false
+      },
+      "learned": {
+        "opt_mean": -0.12222077117750732,
+        "opt_std": 0.0,
+        "all_positive": false
+      }
+    },
+    "P5_超融合": {
+      "p2p_arm": {
+        "opt_mean": -0.00891078979238652,
+        "opt_std": 0.0,
+        "all_positive": false
+      },
+      "pid_arm": {
+        "opt_mean": -0.12798444387527289,
+        "opt_std": 0.0,
+        "all_positive": false
+      },
+      "learned": {
+        "opt_mean": -0.12144391417506235,
+        "opt_std": 0.0,
+        "all_positive": false
+      }
+    },
+    "P6_情感导演": {
+      "p2p_arm": {
+        "opt_mean": 0.10407573443623097,
+        "opt_std": 0.0,
+        "all_positive": true
+      },
+      "pid_arm": {
+        "opt_mean": -0.0014382012171540515,
+        "opt_std": 0.0,
+        "all_positive": false
+      },
+      "learned": {
+        "opt_mean": -0.004419355315899482,
+        "opt_std": 0.0,
+        "all_positive": false
+      }
+    }
+  },
+  "v2": {
+    "V1_AdaptiveEcho": {
+      "p2p_arm": {
+        "opt_mean": 0.008524364641846305,
+        "opt_std": 0.0,
+        "all_positive": true
+      },
+      "pid_arm": {
+        "opt_mean": 0.009311752229115764,
+        "opt_std": 0.0,
+        "all_positive": true
+      },
+      "learned": {
+        "opt_mean": 0.008931566919769166,
+        "opt_std": 0.0,
+        "all_positive": true
+      }
+    },
+    "V2_GatedTidal": {
+      "p2p_arm": {
+        "opt_mean": 0.00455582101153055,
+        "opt_std": 0.0,
+        "all_positive": true
+      },
+      "pid_arm": {
+        "opt_mean": 0.0048993987684331905,
+        "opt_std": 0.0,
+        "all_positive": true
+      },
+      "learned": {
+        "opt_mean": 0.007353840374844991,
+        "opt_std": 8.673617379884035e-19,
+        "all_positive": true
+      }
+    },
+    "V3_SelfAnchored": {
+      "p2p_arm": {
+        "opt_mean": -0.10482501276067993,
+        "opt_std": 1.3877787807814457e-17,
+        "all_positive": false
+      },
+      "pid_arm": {
+        "opt_mean": -0.0003805945776027895,
+        "opt_std": 0.0,
+        "all_positive": false
+      },
+      "learned": {
+        "opt_mean": 0.0008163954608589334,
+        "opt_std": 0.0,
+        "all_positive": true
+      }
+    },
+    "V4_AdaptiveKV": {
+      "p2p_arm": {
+        "opt_mean": 0.002002317457218894,
+        "opt_std": 0.0,
+        "all_positive": true
+      },
+      "pid_arm": {
+        "opt_mean": 0.0023029505171751744,
+        "opt_std": 0.0,
+        "all_positive": true
+      },
+      "learned": {
+        "opt_mean": 0.003188451541340851,
+        "opt_std": 0.0,
+        "all_positive": true
+      }
+    },
+    "V5_SmartFusion": {
+      "p2p_arm": {
+        "opt_mean": 0.306881510831381,
+        "opt_std": 0.0,
+        "all_positive": true
+      },
+      "pid_arm": {
+        "opt_mean": 0.013657743537285572,
+        "opt_std": 1.734723475976807e-18,
+        "all_positive": true
+      },
+      "learned": {
+        "opt_mean": 0.009057733875148211,
+        "opt_std": 0.0,
+        "all_positive": true
+      }
+    },
+    "V6_AdaptiveDirector": {
+      "p2p_arm": {
+        "opt_mean": 0.0027933447962891914,
+        "opt_std": 0.0,
+        "all_positive": true
+      },
+      "pid_arm": {
+        "opt_mean": 0.002728636210091869,
+        "opt_std": 0.0,
+        "all_positive": true
+      },
+      "learned": {
+        "opt_mean": 0.0034868235025203387,
+        "opt_std": 0.0,
+        "all_positive": true
+      }
+    }
+  }
+}

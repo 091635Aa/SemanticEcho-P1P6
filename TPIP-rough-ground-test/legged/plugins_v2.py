@@ -43,10 +43,17 @@ class AdaptiveEcho(BasePlugin):
         if len(self._hist) < 3:
             return a
         H = np.array(self._hist)
-        # 自身惯性主方向 = 最近趋势（指数加权均值）
+        # 自身惯性主方向 = 指数加权中位数（对异常跳变更鲁棒）
         w = np.exp(-0.3 * np.arange(len(H))[::-1])
         w /= w.sum()
-        trend = (w[:, None] * H).sum(axis=0)
+        # 加权中位数：对每个关节排序后按权重取中位
+        trend = np.zeros(H.shape[1])
+        for j in range(H.shape[1]):
+            col = H[:, j]
+            order = np.argsort(col)
+            cum = np.cumsum(w[order])
+            idx = np.searchsorted(cum, 0.5)
+            trend[j] = col[order[min(idx, len(col)-1)]]
         return a + self.lam * (trend - a)
 
 
@@ -92,8 +99,9 @@ class SelfAnchored(BasePlugin):
     V3 = P3 改进版：锚点 = 基座自身最近一个完整步态周期的平均形态。
     打分 = 当前动作与自身历史模板的相位一致性。
     tanh 有界加性注入，但方向来自自身。
+    beta=0.2（降低以避免对平滑基座的微弱干扰）。
     """
-    def __init__(self, beta=0.4, cycle=50):
+    def __init__(self, beta=0.2, cycle=50):
         self.beta = beta
         self.cycle = cycle
         self._hist = []
@@ -161,6 +169,55 @@ class SmartFusion(BasePlugin):
 
 
 # ──────────────────────────────────────────────────────────────────── #
+#  V7 — JerkAdaptiveFusion：jerk 门控的三通道融合（V1+V2+V4，去掉 V3）  #
+# ──────────────────────────────────────────────────────────────────── #
+class JerkAdaptiveFusion(BasePlugin):
+    """
+    V7 = V1(惯性回响) + V2(门控潮汐) + V4(自相似KV)，去掉有问题的 V3(自锚定)。
+    jerk 高时全通道开（大幅平滑），jerk 低时仅 V4 开（轻微强化一致性）。
+    """
+    def __init__(self):
+        self._echo = AdaptiveEcho(lam=0.25)
+        self._tidal = GatedTidal(alpha=0.20)
+        self._kv = AdaptiveKV(kappa=0.12)
+        self._jerk_hist = []
+        self._last_a = None
+
+    def _measure_jerk(self, a):
+        if self._last_a is None:
+            self._last_a = a.copy()
+            return 0.0
+        j = float(np.linalg.norm(a - self._last_a))
+        self._last_a = a.copy()
+        self._jerk_hist.append(j)
+        if len(self._jerk_hist) > 20:
+            self._jerk_hist.pop(0)
+        if len(self._jerk_hist) < 3:
+            return 0.0
+        return float(np.mean(self._jerk_hist))
+
+    def inject(self, a, **kw):
+        j = self._measure_jerk(a)
+        # jerk 门控：jerk > 0.1 → 全通道；jerk < 0.02 → 仅 V4
+        gate_full = float(np.clip((j - 0.02) / 0.08, 0.0, 1.0))
+        gate_kv = 0.15                          # V4 始终轻微开
+
+        a_orig = a.copy()
+        # V4 始终开（最安全的通道）
+        a = self._kv.inject(a, **kw)
+        a = a_orig + gate_kv * (a - a_orig)
+
+        # V1+V2 仅在 jerk 高时开
+        if gate_full > 0:
+            a_mid = a.copy()
+            a_mid = self._echo.inject(a_mid, **kw)
+            a_mid = self._tidal.inject(a_mid, **kw)
+            a = a + gate_full * (a_mid - a)
+
+        return a
+
+
+# ──────────────────────────────────────────────────────────────────── #
 #  改进6：自适应导演（TAD 基于实测 jerk 而非地形猜测）                  #
 # ──────────────────────────────────────────────────────────────────── #
 class AdaptiveDirector(BasePlugin):
@@ -216,4 +273,5 @@ PLUGINS_V2 = {
     "V4_AdaptiveKV": lambda: AdaptiveKV(),
     "V5_SmartFusion": lambda: SmartFusion(),
     "V6_AdaptiveDirector": lambda: AdaptiveDirector(),
+    "V7_JerkAdaptiveFusion": lambda: JerkAdaptiveFusion(),
 }

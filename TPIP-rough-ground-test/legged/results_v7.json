@@ -1,0 +1,68 @@
+{
+  "V5_SmartFusion": {
+    "legged/p2p": {
+      "mean": -0.010627294805268101,
+      "std": 0.4149258595602584,
+      "positive": false
+    },
+    "legged/standard": {
+      "mean": 0.10677131073915869,
+      "std": 0.03960568295796295,
+      "positive": true
+    },
+    "legged/transformer": {
+      "mean": 0.22076358663230247,
+      "std": 0.1866823133729871,
+      "positive": true
+    },
+    "arm/p2p_arm": {
+      "mean": 0.306881510831381,
+      "std": 0.0,
+      "positive": true
+    },
+    "arm/pid_arm": {
+      "mean": 0.013657743537285572,
+      "std": 1.734723475976807e-18,
+      "positive": true
+    },
+    "arm/learned": {
+      "mean": 0.009057733875148211,
+      "std": 0.0,
+      "positive": true
+    },
+    "universal": false
+  },
+  "V7_JerkAdaptiveFusion": {
+    "legged/p2p": {
+      "mean": 0.0014877767144392926,
+      "std": 0.278660974695564,
+      "positive": true
+    },
+    "legged/standard": {
+      "mean": 0.09612399079940499,
+      "std": 0.026510028902955382,
+      "positive": true
+    },
+    "legged/transformer": {
+      "mean": 0.09495664897878406,
+      "std": 0.06729040985566065,
+      "positive": true
+    },
+    "arm/p2p_arm": {
+      "mean": 0.005858847431623092,
+      "std": 0.0,
+      "positive": true
+    },
+    "arm/pid_arm": {
+      "mean": 0.012525024894590986,
+      "std": 1.734723475976807e-18,
+      "positive": true
+    },
+    "arm/learned": {
+      "mean": 0.011533449560341079,
+      "std": 0.0,
+      "positive": true
+    },
+    "universal": true
+  }
+}
