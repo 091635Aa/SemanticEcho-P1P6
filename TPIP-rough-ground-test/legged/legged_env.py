@@ -37,9 +37,17 @@ class BasePolicy:
             if int(t * 100) % 137 == 0:
                 a += np.random.default_rng(int(t * 1000)).normal(0, 0.2, self.n_joints)
         elif self.family == "standard":
-            a = np.tanh(a) * 0.6
-        else:  # transformer
-            a = np.clip(a, -1.0, 1.0) * 0.4
+            # 标准 RL：已学会周期步态，但相位有轻微漂移 + 小幅噪声
+            ph = 2 * np.pi * 1.0 * t + np.linspace(0, np.pi, self.n_joints)
+            periodic = 0.35 * np.sin(ph)                       # 周期步态主成分
+            drift = 0.03 * np.sin(2 * np.pi * 0.3 * t)          # 慢漂移
+            noise = np.random.default_rng(int(t*1000)).normal(0, 0.02, self.n_joints)
+            a = np.tanh(a) * 0.2 + periodic + drift + noise
+        else:  # transformer：周期步态更精准，但有小幅高频纹波
+            ph = 2 * np.pi * 1.0 * t + np.linspace(0, np.pi, self.n_joints)
+            periodic = 0.40 * np.sin(ph)
+            ripple = 0.02 * np.sin(2 * np.pi * 15.0 * t)        # 高频纹波
+            a = np.clip(a, -0.1, 0.1) + periodic + ripple
         return a.astype(float)
 
     @property
@@ -50,7 +58,7 @@ class BasePolicy:
 class GaitPhaseBlueprint:
     """共享全局步态相位蓝图（电路B 的平移）。"""
 
-    def __init__(self, n_joints: int = 6, freq: float = 2.0):
+    def __init__(self, n_joints: int = 6, freq: float = 1.0):
         self.n_joints = n_joints
         self.freq = freq
         # 各关节相位偏移，制造交替步态
@@ -100,10 +108,12 @@ class LeggedMicroSim:
                                 contact=ct, terrain=terrain,
                                 progress=step / self.T)
 
-            # 动力学更新
-            dq = dq * 0.98 + a * self.dt  # 轻度阻尼
-            q = q + dq * self.dt
-            q = np.clip(q, -np.pi, np.pi)
+            # 动力学更新：位置混合型（a=期望关节角，q 一阶跟踪，无正反馈）
+            a_clamped = np.clip(a, -0.6, 0.6)
+            q_new = q * 0.75 + a_clamped * 0.25
+            q_new = np.clip(q_new, -np.pi, np.pi)
+            dq = (q_new - q) / self.dt
+            q = q_new
 
             traj["q"].append(q.copy())
             traj["dq"].append(dq.copy())

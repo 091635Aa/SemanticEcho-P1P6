@@ -253,14 +253,21 @@ def load_trajectory(path: str, dt: float = 0.01):
 def compute_coherence(q, dq, q_ddot, foot_contact=None,
                       w_jerk=0.5, w_phase=0.5, dt=0.01, jitter_mult=4.0) -> dict:
     q = np.asarray(q, dtype=float)
+    dq = np.asarray(dq, dtype=float)
     # 加加速度 = 加速度的时间导数 (对所有关节/维度取整体 RMS, 形状无关)
     jerk = central_diff(np.asarray(q_ddot, dtype=float), dt)
     rms_jerk = float(np.sqrt(np.mean(jerk ** 2)))
     # 代表性 1D 信号(方差最大的通道) 供步态标度/相图使用, 保证 1D/多通道一致
-    rep = q if q.ndim == 1 else q[:, int(np.argmax(np.var(q, axis=0)))]
+    if q.ndim > 1:
+        rep_idx = int(np.argmax(np.var(q, axis=0)))
+        rep = q[:, rep_idx]
+        rep_dq = dq[:, rep_idx] if dq.ndim > 1 else dq
+    else:
+        rep = q
+        rep_dq = dq if dq.ndim == 1 else dq[:, 0]
     gait_scale = gait_jerk_scale(rep, dt)
     s_smooth = smoothness_score(rms_jerk, gait_scale, jitter_mult)
-    p_coinc = _phase_coincidence(rep, dq, foot_contact, dt=dt)
+    p_coinc = _phase_coincidence(rep, rep_dq, foot_contact, dt=dt)
     ci = w_jerk * s_smooth + w_phase * p_coinc
     return {
         "coherence_index": ci,
