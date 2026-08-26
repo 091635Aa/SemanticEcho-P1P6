@@ -157,4 +157,33 @@ jerk 门控：
 | [results_v7.json](results_v7.json) | V7跨任务数据 |
 | [mapping.md](mapping.md) | P1~P6 LLM→机器人平移映射表 |
 | [research_report.md](research_report.md) | 第二轮科研报告 |
+| [stress_final_report.md](stress_final_report.md) | **压测扩展最终报告（17~30轮）** |
+| [plugins_v8.py](plugins_v8.py) | GoldilocksFusion V8（金发茄门控） |
+| [stress_test17~30b.py](stress_test30b.py) | 无上限压测脚本（T=3200→2.5M） |
+| [stress_test17~30b.json](stress_test30b.json) | 压测结果数据 |
+| [fast_drift_test.py](fast_drift_test.py) | FastDriftSuppressor 反证（不可行） |
 | 本文件 | 最终科研总结 |
+
+---
+
+## 九、压测扩展附录（续，直至用户停止）
+
+在 V7 论证 6/6 通用之后，根据用户要求（"正向提升 10%+，多轮压测，无上限"）进行了 17~30 轮无上限压测，最终收敛于 **BestCombo**：
+
+```
+Pipeline = Cascade7[GoldilocksFusion ×7] → KalmanSmoother → AdaptiveLPF
+```
+
+**最终成绩（CPU 微仿真）：**
+
+| 指标 | 最优值 |
+|---|---|
+| avg = (std+trans)/2 | **+65.88%**（T=2,500,000） |
+| standard 族 | +57.05% |
+| transformer 族 | **+74.71%** |
+| p2p 族 | +42.35% |
+| Universal | YES（全程） |
+
+**T-scaling 定律**：T=6400→+45.1%，25600 跃迁→+52.8%，102400→+63.3%，204800→+65.0%，819200→+65.0%，1638400→+65.6%，2500000→**+65.9%**。越长的轨迹对 CI 中 P_coinc（周期稳定）估计越准，TPIP 平滑累积效果越充分；每翻倍 T 约 +0.46~0.1 百分点，已进入平台区。
+
+**70% 冲击评估**：log2 拟合需 T≈10⁹ 步（100+ 小时，且噪声 > 增益）；FastDriftSuppressor 反证全负（-4~-8%）；blueprint 直注、SG/Wiener/Spectral 均无增益 → **现有框架内无可行机制到 70%，故停止交付**。详见 [stress_final_report.md](stress_final_report.md)。

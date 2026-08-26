@@ -1,0 +1,32 @@
+{
+  "R0_cascade7+K+LPF_T2000000": {
+    "p2p": {
+      "mean": 0.4234849221869173,
+      "std": 0.0
+    },
+    "standard": {
+      "mean": 0.56988776330602,
+      "std": 0.0
+    },
+    "transformer": {
+      "mean": 0.745341810680893,
+      "std": 0.0
+    },
+    "universal": true
+  },
+  "R1_cascade7+K+LPF_T2500000": {
+    "p2p": {
+      "mean": 0.4234756142777959,
+      "std": 0.0
+    },
+    "standard": {
+      "mean": 0.5704604525812675,
+      "std": 0.0
+    },
+    "transformer": {
+      "mean": 0.7471012543971449,
+      "std": 0.0
+    },
+    "universal": true
+  }
+}
