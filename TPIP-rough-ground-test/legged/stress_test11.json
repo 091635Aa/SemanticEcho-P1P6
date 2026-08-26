@@ -1,0 +1,302 @@
+{
+  "R0_cascade7_wide_ref": {
+    "p2p": {
+      "mean": 0.017933010324968378,
+      "std": 0.25801917103030486
+    },
+    "standard": {
+      "mean": 0.2742774717752468,
+      "std": 0.0879569846821976
+    },
+    "transformer": {
+      "mean": 0.377245211308486,
+      "std": 0.21973628257800373
+    },
+    "universal": true
+  },
+  "R1_pure_tidal_cascade5_fc3": {
+    "p2p": {
+      "mean": 0.0,
+      "std": 0.0
+    },
+    "standard": {
+      "mean": 0.13881050985971316,
+      "std": 0.0543233480484982
+    },
+    "transformer": {
+      "mean": 0.09132072550192757,
+      "std": 0.06479150538799086
+    },
+    "universal": false
+  },
+  "R2_pure_tidal_cascade7_fc3": {
+    "p2p": {
+      "mean": 0.0,
+      "std": 0.0
+    },
+    "standard": {
+      "mean": 0.056214689264592055,
+      "std": 0.032259977608764305
+    },
+    "transformer": {
+      "mean": 0.017431626464132193,
+      "std": 0.0352025038314206
+    },
+    "universal": false
+  },
+  "R3_pure_tidal_cascade7_fc5": {
+    "p2p": {
+      "mean": 0.0,
+      "std": 0.0
+    },
+    "standard": {
+      "mean": 0.18049322402849347,
+      "std": 0.06418455237860408
+    },
+    "transformer": {
+      "mean": 0.18005791497059065,
+      "std": 0.17777439906573564
+    },
+    "universal": false
+  },
+  "R4_pure_tidal_cascade7_fc10": {
+    "p2p": {
+      "mean": 0.0,
+      "std": 0.0
+    },
+    "standard": {
+      "mean": 0.11868776908088705,
+      "std": 0.0337349169630692
+    },
+    "transformer": {
+      "mean": 0.08340576158862933,
+      "std": 0.018837210544453534
+    },
+    "universal": false
+  },
+  "R5_pure_tidal_cascade7_fc15": {
+    "p2p": {
+      "mean": 0.0,
+      "std": 0.0
+    },
+    "standard": {
+      "mean": 0.16674799389373432,
+      "std": 0.04837645212372884
+    },
+    "transformer": {
+      "mean": 0.09941753285047392,
+      "std": 0.017572842874634807
+    },
+    "universal": false
+  },
+  "R6_adaptive_lp_x2": {
+    "p2p": {
+      "mean": 0.0,
+      "std": 0.0
+    },
+    "standard": {
+      "mean": 0.14550506916391875,
+      "std": 0.038781583107620886
+    },
+    "transformer": {
+      "mean": 0.07652593988553062,
+      "std": 0.020299884759641097
+    },
+    "universal": false
+  },
+  "R7_adaptive_lp_x3": {
+    "p2p": {
+      "mean": 0.0,
+      "std": 0.0
+    },
+    "standard": {
+      "mean": 0.15675423859635693,
+      "std": 0.042789266143383936
+    },
+    "transformer": {
+      "mean": 0.09064123152576305,
+      "std": 0.021160670500776534
+    },
+    "universal": false
+  },
+  "R8_adaptive_lp_x1_5": {
+    "p2p": {
+      "mean": 0.0,
+      "std": 0.0
+    },
+    "standard": {
+      "mean": 0.1320152316602931,
+      "std": 0.0364600413108102
+    },
+    "transformer": {
+      "mean": 0.06714274473478214,
+      "std": 0.01818766911867179
+    },
+    "universal": false
+  },
+  "R9_residual_cancel_s05": {
+    "p2p": {
+      "mean": 0.0,
+      "std": 0.0
+    },
+    "standard": {
+      "mean": 0.0025018535828703658,
+      "std": 0.005428513682473593
+    },
+    "transformer": {
+      "mean": 0.009681481416463519,
+      "std": 0.017234383038428995
+    },
+    "universal": false
+  },
+  "R10_residual_cancel_s10": {
+    "p2p": {
+      "mean": 0.0,
+      "std": 0.0
+    },
+    "standard": {
+      "mean": 0.00385094874780728,
+      "std": 0.011335882355989002
+    },
+    "transformer": {
+      "mean": 0.023477839148823308,
+      "std": 0.0399758564144712
+    },
+    "universal": false
+  },
+  "R11_residual_cancel_s20": {
+    "p2p": {
+      "mean": 0.0,
+      "std": 0.0
+    },
+    "standard": {
+      "mean": 0.004031250770295146,
+      "std": 0.011445015441401453
+    },
+    "transformer": {
+      "mean": 0.054831684583938334,
+      "std": 0.09118490863011271
+    },
+    "universal": false
+  },
+  "R12_residual_cancel_s10_fc02": {
+    "p2p": {
+      "mean": 0.0,
+      "std": 0.0
+    },
+    "standard": {
+      "mean": 0.002660448922715854,
+      "std": 0.005676082078111723
+    },
+    "transformer": {
+      "mean": -0.013606711312986791,
+      "std": 0.028415761902046636
+    },
+    "universal": false
+  },
+  "R13_phase_matched_s10": {
+    "p2p": {
+      "mean": 0.0,
+      "std": 0.0
+    },
+    "standard": {
+      "mean": 0.08273345238731192,
+      "std": 0.045345051383799496
+    },
+    "transformer": {
+      "mean": 0.03491697370632606,
+      "std": 0.0020225689170881266
+    },
+    "universal": false
+  },
+  "R14_phase_matched_s15": {
+    "p2p": {
+      "mean": 0.0,
+      "std": 0.0
+    },
+    "standard": {
+      "mean": 0.02727219960981127,
+      "std": 0.023806877438108935
+    },
+    "transformer": {
+      "mean": -0.01569582006938599,
+      "std": 0.04027013169605874
+    },
+    "universal": false
+  },
+  "R15_echo_only_cascade5": {
+    "p2p": {
+      "mean": 0.0,
+      "std": 0.0
+    },
+    "standard": {
+      "mean": 0.09704071622635,
+      "std": 0.02753568144797441
+    },
+    "transformer": {
+      "mean": 0.11723785653117971,
+      "std": 0.07929226661029896
+    },
+    "universal": false
+  },
+  "R16_echo_only_cascade7": {
+    "p2p": {
+      "mean": 0.0,
+      "std": 0.0
+    },
+    "standard": {
+      "mean": 0.10597209745521538,
+      "std": 0.05980093670982284
+    },
+    "transformer": {
+      "mean": 0.07207494331597619,
+      "std": 0.049453434322902556
+    },
+    "universal": false
+  },
+  "R17_al_x2_echo5": {
+    "p2p": {
+      "mean": 0.0,
+      "std": 0.0
+    },
+    "standard": {
+      "mean": 0.11517387585018438,
+      "std": 0.034618117932387
+    },
+    "transformer": {
+      "mean": 0.11298655520391039,
+      "std": 0.03125289141689099
+    },
+    "universal": false
+  },
+  "R18_al_x2_echo7": {
+    "p2p": {
+      "mean": 0.0,
+      "std": 0.0
+    },
+    "standard": {
+      "mean": 0.14557355227127725,
+      "std": 0.09233687619330215
+    },
+    "transformer": {
+      "mean": 0.15143882367406772,
+      "std": 0.13023093608266922
+    },
+    "universal": false
+  },
+  "R19_al_x2_residual_s10": {
+    "p2p": {
+      "mean": 0.0,
+      "std": 0.0
+    },
+    "standard": {
+      "mean": 0.14386292251490568,
+      "std": 0.0386018018706155
+    },
+    "transformer": {
+      "mean": 0.08297264830685865,
+      "std": 0.01739794583043236
+    },
+    "universal": false
+  }
+}
