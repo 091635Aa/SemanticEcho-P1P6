@@ -1,0 +1,17 @@
+{
+  "R0_cascade7+K+LPF_T1638400": {
+    "p2p": {
+      "mean": 0.4234802853990501,
+      "std": 0.0
+    },
+    "standard": {
+      "mean": 0.5692893785428603,
+      "std": 0.0
+    },
+    "transformer": {
+      "mean": 0.7434230552463829,
+      "std": 0.0
+    },
+    "universal": true
+  }
+}
