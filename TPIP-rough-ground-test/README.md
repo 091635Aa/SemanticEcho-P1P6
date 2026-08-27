@@ -53,3 +53,7 @@ python3 metrics/coherence_index.py --data demo/base.npz --data demo/tpip.npz --l
 - 压缩向量维度 `latent_dim ∈ {64, 128, 256, 512}`（默认 256）
 - 门控融合比率 `α:β:γ`（主线保留 / 全局目标 / 瞬时感知）
 - 铁律：**绝不触碰基座任何一层权重**
+
+## 全链路总览
+
+完整经历（理论认证 → 策略设计 → 三十余轮 T-scaling 压测 → 换思路反证 → 宇树套入评估 → 打包交付）见 **[SUPER_DOCUMENT.md](SUPER_DOCUMENT.md)** 与 **[legged/stress_final_report.md](legged/stress_final_report.md)**。最终最优记录：T=2,500,000，avg **+65.88%**，Universal=YES。
