@@ -148,7 +148,7 @@ class ULI(BasePlugin):
         # 用训练集上的"度"估算幅度缩放，防止注入过冲（自标定，非重训）
         pred = Phi @ W
         denom = np.linalg.norm(pred - raw[idx], axis=1).mean() + 1e-9
-        numer = np.linalg.norm(target - raw[idx], axis=1).mean() + 1e-9
+        numer = np.linalg.norm(Y - raw[idx], axis=1).mean() + 1e-9
         self._amp = float(np.clip(numer / denom, 0.5, 2.0))
         return self._amp
 

@@ -1,0 +1,35 @@
+{
+  "T": 102400,
+  "trained_on": "standard",
+  "seeds": [
+    42,
+    7,
+    99
+  ],
+  "bestcombo": {
+    "avg": 0.6209,
+    "std": 0.0313,
+    "families": {
+      "standard": 0.5474,
+      "transformer": 0.6943,
+      "p2p": 0.2999
+    },
+    "universal": false
+  },
+  "ULI_one_plugin_zeroshot": {
+    "avg": -0.2965,
+    "std": 0.0601,
+    "W_out": [
+      69,
+      6
+    ],
+    "amp": 1.0,
+    "families": {
+      "standard": -0.0124,
+      "transformer": -0.5806,
+      "p2p": 0.3178
+    },
+    "universal": false
+  },
+  "avg_delta_ULI_minus_BestCombo": -0.9173
+}

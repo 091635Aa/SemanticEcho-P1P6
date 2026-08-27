@@ -1,0 +1,30 @@
+{
+ "T": 204800,
+ "seeds": [
+  42
+ ],
+ "configs": {
+  "ref_BestCombo": {
+   "name": "ref_BestCombo",
+   "avg": 0.6160130027012951,
+   "families": {
+    "standard": 0.5494239853705982,
+    "transformer": 0.6826020200319919,
+    "p2p": 0.44329262099989586
+   },
+   "universal": true,
+   "time_s": 1131
+  },
+  "BestCombo_uli_0.5": {
+   "name": "BestCombo_uli_0.5",
+   "avg": 0.6217785565516197,
+   "families": {
+    "standard": 0.5507849599597081,
+    "transformer": 0.6927721531435314,
+    "p2p": 0.44367833890472985
+   },
+   "universal": true,
+   "time_s": 2032
+  }
+ }
+}

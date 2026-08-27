@@ -1,0 +1,54 @@
+{
+ "R0_ref_BestCombo": {
+  "name": "ref_BestCombo",
+  "T": 25600,
+  "avg": 0.5364558838375875,
+  "avg_std": 0.05071386944117133,
+  "families": {
+   "standard": 0.48461756008061424,
+   "transformer": 0.5882942075945606,
+   "p2p": 0.2968060079085544
+  },
+  "universal": false,
+  "time_s": 431
+ },
+ "R1_uli_bare": {
+  "name": "uli_bare",
+  "T": 25600,
+  "avg": -0.26462002508724863,
+  "avg_std": 0.08366320753623678,
+  "families": {
+   "standard": -0.013027870742583367,
+   "transformer": -0.516212179431914,
+   "p2p": 0.31763688425267317
+  },
+  "universal": false,
+  "time_s": 349
+ },
+ "R2_BestCombo_uli_s0.5": {
+  "name": "BestCombo_uli_s0.5",
+  "T": 25600,
+  "avg": 0.5408478378312083,
+  "avg_std": 0.050114217197762635,
+  "families": {
+   "standard": 0.4889270299358055,
+   "transformer": 0.5927686457266111,
+   "p2p": 0.30136056091462654
+  },
+  "universal": false,
+  "time_s": 748
+ },
+ "R3_BestCombo_uli_s0.25": {
+  "name": "BestCombo_uli_s0.25",
+  "T": 25600,
+  "avg": 0.5377402347768149,
+  "avg_std": 0.05051022634337189,
+  "families": {
+   "standard": 0.48576069454985243,
+   "transformer": 0.5897197750037774,
+   "p2p": 0.29654074675944136
+  },
+  "universal": false,
+  "time_s": 751
+ }
+}
