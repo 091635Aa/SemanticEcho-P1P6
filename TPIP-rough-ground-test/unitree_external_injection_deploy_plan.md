@@ -108,6 +108,26 @@ a' = LPF( Kalman( CascadeGoldilocks(a, j_k, gate) ) );   // 合成 BestCombo，�
 
 ---
 
-## 七、交付到位
+## 七、开源可得性核实（联网实证，2026-08）
+
+理论挂入点配合**全部开源依赖**后，判定升级为"可复现、可自行闭环验证"。逐一核实如下（均真实存在于公开仓库/活跃维护）：
+
+| 依赖 | 仓库/资源 | 许可 | 活跃度 | 用途 |
+|---|---|---|---|---|
+| 底层 SDK | [unitree_sdk2](https://github.com/unitreerobotics/unitree_sdk2) | **BSD-3-Clause** | 169 commits / 最近 2026-08 更新 | 外挂的通信层（DDS 下发 PD 目标） |
+| RL 训练 | [unitree_rl_lab](https://github.com/unitreerobotics/unitree_rl_lab) | 开源 | 700+ stars，IsaacLab 2.3.0 / 2025-11 | Go2/H1/G1 策略 + **deploy/** C++ 控制例程 |
+| 训练+部署 | [unitree_rl_gym](https://github.com/unitreerobotics/unitree_rl_gym) | **BSD-3-Clause** | 2.8k stars，含 **deploy/** | Isaac Gym→MuJoCo sim2sim + 真机例程 |
+| 物理仿真(side) | [unitree_mujoco](https://github.com/unitreerobotics/unitree_mujoco) | 开源 | 805 stars | P1/P2 廉价验证，sim2real 无缝 |
+| **理想验证台** | [unitree_sim_isaaclab](https://github.com/unitreerobotics/unitree_sim_isaaclab) | 开源 | H1_2/G1 | 高保真 + **DDS 同真机**，外挂可无差别复用 |
+| 模型/SDK | [unitree_model / sdk2_python](https://github.com/unitreerobotics/) | 开源 | URDF/MJCF；Python SDK | 几何/惯量；脚本侧联调 |
+| 第三方可参考 | [go2_isaaclab_deploy](https://github.com/syw-robotics/go2_isaaclab_deploy) · [unitree_cpp_deploy](https://github.com/wty-yy/unitree_cpp_deploy) | Apache-2.0 | C++ `go2_ctrl` + ONNX Runtime + FSM | 直接给出外挂插入点的成品循环 |
+
+**确认的关键落点**：无论官方 `unitree_rl_lab/deploy/robots/go2/*_ctrl`、还是第三方 `go2_ctrl`，都是同一个结构——`读 obs → policy.onnx 前向 → 得关节目标 a → unitree_sdk2 写 PD`。外挂 `tpip_inject(&a, state)` 就插在**前向结果之后、sdk2 下发之前**这一行，任何一份开源 ctrl 都能改，且规约完全相同。
+
+**结论升级**：外挂套入宇树，**理论成立 + 开源可复现 + 许可证宽松（BSD/Apache）**，可完全在开源软件栈内自闭环验证（训练→离线下→加外挂→P1-MuJoCo→P2-IsaacLab/unitree_sim_isaaclab→真机）。唯一留给真机/物理量的是"收益数值"裁决，而不再是"能否接入"。
+
+---
+
+## 八、交付到位
 
 方案与验证请以本文件为准；合成侧代码/数据见 `stress_*`、`verify_architecture.*`、`unitree_ai_model_transfer_plan.md`。克隆仓库后对照 P1–P4 执行。
