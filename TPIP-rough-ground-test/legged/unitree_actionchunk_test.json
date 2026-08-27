@@ -1,0 +1,38 @@
+{
+  "R0": {
+    "name": "BestCombo (ref)",
+    "p2p": 0.44331950556360883,
+    "standard": 0.5039452672126875,
+    "transformer": 0.5607920329506363,
+    "avg": 0.5323686500816619,
+    "universal": true,
+    "time_s": 137
+  },
+  "R1": {
+    "name": "ref+ChunkAlign C=25 s=0.6",
+    "p2p": 0.44331950556360883,
+    "standard": 0.49550007672994545,
+    "transformer": 0.5878247340996987,
+    "avg": 0.541662405414822,
+    "universal": true,
+    "time_s": 144
+  },
+  "R2": {
+    "name": "ref+ChunkPlayback C=25 s=0.6",
+    "p2p": 0.44331950556360883,
+    "standard": 0.11763993991161174,
+    "transformer": 0.05622662696752675,
+    "avg": 0.08693328343956924,
+    "universal": true,
+    "time_s": 141
+  },
+  "R3": {
+    "name": "ref+ChunkAlign C=50 s=0.6",
+    "p2p": 0.44331950556360883,
+    "standard": 0.36681292266768967,
+    "transformer": 0.4402066650384303,
+    "avg": 0.40350979385305996,
+    "universal": true,
+    "time_s": 147
+  }
+}
