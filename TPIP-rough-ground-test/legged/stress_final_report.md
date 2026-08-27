@@ -73,7 +73,38 @@ log2 拟合若要 avg 到 +70%，需 log2(T)≈30，即 **T≈10⁹ 步**。按�
 
 **结论：全部变体为负。** 原因：EMA 慢分量估计携带步态相位信息，直接减去会破坏步态相图重合度 P_coinc——而 P_coinc 正是 CI 增益的主要来源。慢漂移并非可安全去除的 DC 干扰。
 
-### 3.3 停止判定
+### 3.3 换思路再验证（第 31 轮）：逐子指标诊断 + 3 类新机制
+
+为进一步确认 70% 是否有解，做了**逐族 CI 子指标诊断**——不再靠 T-scaling 硬推，而是直接量化瓶颈（T=102400, seed=42）：
+
+| 族 | S_smooth(基线/插件) | P_coinc(基线/插件) |
+|---|---|---|
+| p2p | 0.000 / 0.953 | 0.120 / 0.000 |
+| standard | 0.047 / 0.613 | **0.327 / 0.624** |
+| transformer | 0.051 / 0.666 | 0.981 / 0.978 |
+
+**关键发现：瓶颈不是 jerk，是相位重合度 P_coinc。**
+- std 落后 trans 的根源 = baseline P_coinc 0.327 vs 0.981，由 **0.3Hz 慢漂移**破坏相邻 1Hz 周期重合造成；
+- pipeline 靠降噪（Kalman+LPF 压掉 0.02 噪声）把 std P_coinc 拉到 0.624，但 0.3Hz 漂移仍在；
+- 过度平滑也把 trans P_coinc 轻微从 0.981 磨到 0.978。
+
+据此设计 3 类"加相位而非加平滑"新机制并对比（T=51200, seed=42）:
+
+| 变体 | avg | vs BestCombo |
+|---|---|---|
+| **BestCombo（引用）** | **+0.5324** | — |
+| +DriftPreserve s=0.5（去漂移+保幅） | +0.4063 | **−12.6%** |
+| +DriftPreserve s=0.3 | +0.4574 | **−7.5%** |
+| +PhaseCrispening s=0.15（锐化恢复相位） | +0.5319 | −0.05% |
+| +PhaseCrispening s=0.30 | +0.5311 | −0.13% |
+| +DP0.3+Cr0.15 | +0.4560 | **−7.6%** |
+
+**结论（换思路反证完成）：**
+1. **去漂移在动作空间内对 P_coinc 结构性有害**——即便保幅（DriftPreserve 用能量比回缩放），仍大幅损失 avg。因为 P_coinc 的 `phase_disp/global_scale` 归一化下，任何改变轨道量纲的操作都会让散度比值劣化；
+2. **锐化（Crispening）中性**——说明 pipeline 并未"磨糊"相位到可修复的程度，之前担心过度平滑伤相位不成立；
+3. **BestCombo 已达该仿真-指标组合的动作注入局部最优**。std P_coinc 0.624 的 0.3Hz 漂移天花板是基座结构决定的，动作层注入已无法再抬升。
+
+### 3.4 停止判定
 - 现有框架下无可行机制冲击 70%（T-scaling 不可行、drift 反向、blueprint 直注冲突、SG/Wiener/Spectral 无增益）；
 - 已达 **+65.88% avg / +74.71% trans**，远超 10% 目标且 Universal=YES；
 - 因此停止压测，交付本报告。
@@ -100,6 +131,8 @@ log2 拟合若要 avg 到 +70%，需 log2(T)≈30，即 **T≈10⁹ 步**。按�
 | st30 | T=3276800 | OOM | stress_test30.py |
 | st30b | T=2M + 2.5M（内存优化版） | **+0.6588** | stress_test30b.py |
 | drift | FastDriftSuppressor 反证 | 全负（-4~-8%） | fast_drift_test.py |
+| diag | 逐子指标诊断（std 瓶颈=P_coinc） | 见 3.3 | diagnose_submetrics.py |
+| st31 | 换思路：DriftPreserve/Crispening | BestCombo 全体最优 | new_variants.py |
 
 辅助：`plugins_v8.py`（GoldilocksFusion V8）、`legged_env.py`（基座+动力学）、`metrics/coherence_index.py`（CI）。
 
@@ -115,5 +148,6 @@ log2 拟合若要 avg 到 +70%，需 log2(T)≈30，即 **T≈10⁹ 步**。按�
 
 - 本报告 + [final_summary.md](final_summary.md)（研究总结）
 - 全部压测脚本：stress_test17~30b.py、fast_drift_test.py、plugins_v8.py
+- 换思路诊断第 31 轮：diagnose_submetrics.py(.json)、new_variants.py(.json)
 - 全部数据：stress_test17~30b.json、fast_drift_test.json
 - 仓库随后打包为 ZIP，供克隆到本地复现。

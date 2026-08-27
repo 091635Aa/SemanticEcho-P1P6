@@ -1,0 +1,56 @@
+{
+  "R0": {
+    "name": "BestCombo (ref)",
+    "p2p": 0.44331950556360883,
+    "standard": 0.5039452672126875,
+    "transformer": 0.5607920329506363,
+    "avg": 0.5323686500816619,
+    "universal": true,
+    "time_s": 138
+  },
+  "R1": {
+    "name": "BestCombo+DriftPreserve s=0.5",
+    "p2p": 0.44331843041326596,
+    "standard": 0.42249150065136726,
+    "transformer": 0.39001128426059095,
+    "avg": 0.4062513924559791,
+    "universal": true,
+    "time_s": 142
+  },
+  "R2": {
+    "name": "BestCombo+DriftPreserve s=0.3",
+    "p2p": 0.4433199345706523,
+    "standard": 0.4564251383533722,
+    "transformer": 0.45837354775539024,
+    "avg": 0.45739934305438124,
+    "universal": true,
+    "time_s": 142
+  },
+  "R3": {
+    "name": "BestCombo+Crispening s=0.15",
+    "p2p": 0.4430158836914897,
+    "standard": 0.5038484391410528,
+    "transformer": 0.559890298972691,
+    "avg": 0.5318693690568719,
+    "universal": true,
+    "time_s": 140
+  },
+  "R4": {
+    "name": "BestCombo+Crispening s=0.30",
+    "p2p": 0.44734364238224966,
+    "standard": 0.5037329528024352,
+    "transformer": 0.5585631941853141,
+    "avg": 0.5311480734938747,
+    "universal": true,
+    "time_s": 140
+  },
+  "R5": {
+    "name": "BestCombo+DP0.3+Cr0.15",
+    "p2p": 0.44301041388269363,
+    "standard": 0.45461702064161286,
+    "transformer": 0.4573399539363913,
+    "avg": 0.4559784872890021,
+    "universal": true,
+    "time_s": 144
+  }
+}
