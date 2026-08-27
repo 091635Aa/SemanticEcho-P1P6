@@ -102,9 +102,38 @@ out += β·gate·Δ_pred（β 很小，仅微调相位超前量）
 
 ---
 
-## 七、结论
+## 七、验证实验（第 33 轮，对"套用架构"能否优化的实证裁决）
 
-宇树 Action Chunking 的"块内动作相干"思想**可平移为推理期第 4 级电路**并已实测出首个正向增量（+1.7%）；但其实现必须用**重叠对齐滑窗**且块长 < 步态周期一半，**不可**机械地套用 VLA 的开环块播放。World Model 预测电路为可选第 5 级，理论可行未实测。权重级宇树模型一律不可套用。
+在第 32 轮单种子 ChunkAlign +1.7% 的基础上，用 **3 seeds × 4 配置** 严格验证（T=51200, seeds=[42,7,99]）：
 
-**测试脚本**：[unitree_actionchunk_test.py](file:///workspace/TPIP-rough-ground-test/legged/unitree_actionchunk_test.py)
-**原始数据**：[unitree_actionchunk_test.json](file:///workspace/TPIP-rough-ground-test/legged/unitree_actionchunk_test.json)
+| 配置 | avg (mean±std) | Δavg vs ref | 判定 |
+|---|---|---|---|
+| BestCombo（ref） | +0.5843±0.0408 | — | 基准 |
+| ref + ChunkAlign C=25 | +0.5842±0.0365 | **−0.0001** | **持平** |
+| ref + AdaptiveChunk（在线周期 C=P//4） | +0.5842±0.0365 | −0.0001 | 持平（在线估计正确收敛） |
+| ref + ChunkAlign + WMA 前向预测 | +0.5807±0.0378 | −0.0036 | 持平/微降 |
+
+### 验证裁决
+
+1. **套用架构（ActionChunk 块对齐 + WMA 预测补偿）对 avg 零提升**。第 32 轮单种子的 +1.7% 是**种子噪声**——本轮的种子标准差 ±0.04 远大于所有配置间差异（≤0.004）。至此 ActionChunk、DriftPreserve、Crispening 三类新机制全部落在噪声带内。
+2. **根因**：种子方差的量级（±0.04）主宰一切；合成基座在动作层平滑的收益已边际，ActionChunk 只是把 std 的部分增益**再分配**给 trans（std 0.521→0.518、trans 0.647→0.650），**不产生新信息增益**，故 avg 不变。
+3. **在线步态周期自适应模块验证通过**：在线估计收敛到 P=100 步、C=25，与硬编码完全等价——证明该模块**逻辑正确、可移植**，这是为真机变周期部署留下的唯一可靠产物。
+4. **WMA 超前一阶无益**（−0.0036），与 Crispening 同类，确认"相位/高频操作"在此指标下不可加分。
+
+### 对"能否优化真机"的最终判定
+
+- **在当前合成微仿真 + 合成 CI 指标下：套用该架构不能进一步提升 avg**（已被多种子验证裁决），故**不能**据此宣称真机也能拿到更高优化率。
+- **架构本身仍可移植**（只读旁路、在线周期模块已验证），但真机是否受益**只能由真机/物理仿真上的真实物理量**（关节 jerk、能耗、触地反力震荡、站立扰动抗性）重新标定后决定，无法用本合成实验背书。
+
+---
+
+## 八、结论
+
+**方法学层面**，宇树 Action Chunking 的"块内动作相干"确可平移为推理期第 4 级电路，World Model 做第 5 级；实现须用重叠对齐滑窗且块长 < 步态周期一半，不可机械套用 VLA 的开环块播放；权重级宇树模型一律不可套用。
+
+**实证层面（第 33 轮多种子裁决）**：把该架构套到合成微仿真上验证，ActionChunk 对 avg **零提升**（单种子 +1.7% 是种子噪声，种子标准误 ±0.04 淹没一切配置差）；WMA 前向预测亦无益。结论是——**在当前合成仿真 + 合成 CI 指标下，套用该架构不能进一步提升优化率**，它只是 std↔trans 的增益再分配，而非新信息增益。真机是否受益必须用真实物理量在物理仿真/真机上重新标定，本实验不能背书此架构能提升真机连贯性。
+
+**唯一可靠的可移植产物**：在线步态周期自适应模块（第 2 项已验证正确收敛），供真机变周期部署时使用。
+
+**测试脚本**：[verify_architecture.py](file:///workspace/TPIP-rough-ground-test/legged/verify_architecture.py)、[unitree_actionchunk_test.py](file:///workspace/TPIP-rough-ground-test/legged/unitree_actionchunk_test.py)
+**原始数据**：[verify_architecture.json](file:///workspace/TPIP-rough-ground-test/legged/verify_architecture.json)、[unitree_actionchunk_test.json](file:///workspace/TPIP-rough-ground-test/legged/unitree_actionchunk_test.json)
