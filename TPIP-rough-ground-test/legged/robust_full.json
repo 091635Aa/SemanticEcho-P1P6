@@ -1,0 +1,182 @@
+{
+ "T": 51200,
+ "seeds": [
+  42
+ ],
+ "results": {
+  "clean": {
+   "scenario": "clean",
+   "configs": {
+    "BestCombo+ULI": {
+     "standard": {
+      "cb": 0.1874,
+      "cp": 0.5995,
+      "gain": 0.4121,
+      "opt": 0.5071
+     },
+     "transformer": {
+      "cb": 0.5067,
+      "cp": 0.7863,
+      "gain": 0.2796,
+      "opt": 0.5668
+     },
+     "p2p": {
+      "cb": 0.06,
+      "cp": 0.4771,
+      "gain": 0.4171,
+      "opt": 0.4437
+     }
+    },
+    "PMS2+ULI(V3)": {
+     "standard": {
+      "cb": 0.1874,
+      "cp": 0.5995,
+      "gain": 0.4121,
+      "opt": 0.5072
+     },
+     "transformer": {
+      "cb": 0.5067,
+      "cp": 0.7863,
+      "gain": 0.2796,
+      "opt": 0.5668
+     },
+     "p2p": {
+      "cb": 0.06,
+      "cp": 0.2922,
+      "gain": 0.2322,
+      "opt": 0.247
+     }
+    }
+   },
+   "time_s": 533
+  },
+  "mild": {
+   "scenario": "mild",
+   "configs": {
+    "BestCombo+ULI": {
+     "standard": {
+      "cb": 0.1786,
+      "cp": 0.3121,
+      "gain": 0.1335,
+      "opt": 0.1625
+     },
+     "transformer": {
+      "cb": 0.2647,
+      "cp": 0.3562,
+      "gain": 0.0915,
+      "opt": 0.1245
+     },
+     "p2p": {
+      "cb": 0.0603,
+      "cp": 0.4771,
+      "gain": 0.4168,
+      "opt": 0.4435
+     }
+    },
+    "PMS2+ULI(V3)": {
+     "standard": {
+      "cb": 0.1786,
+      "cp": 0.3121,
+      "gain": 0.1335,
+      "opt": 0.1625
+     },
+     "transformer": {
+      "cb": 0.2647,
+      "cp": 0.3562,
+      "gain": 0.0915,
+      "opt": 0.1245
+     },
+     "p2p": {
+      "cb": 0.0603,
+      "cp": 0.3125,
+      "gain": 0.2522,
+      "opt": 0.2684
+     }
+    }
+   },
+   "time_s": 541
+  },
+  "strong": {
+   "scenario": "strong",
+   "configs": {
+    "BestCombo+ULI": {
+     "standard": {
+      "cb": 0.1586,
+      "cp": 0.2118,
+      "gain": 0.0532,
+      "opt": 0.0633
+     },
+     "transformer": {
+      "cb": 0.2021,
+      "cp": 0.2338,
+      "gain": 0.0317,
+      "opt": 0.0397
+     },
+     "p2p": {
+      "cb": 0.0606,
+      "cp": 0.477,
+      "gain": 0.4164,
+      "opt": 0.4432
+     }
+    },
+    "PMS2+ULI(V3)": {
+     "standard": {
+      "cb": 0.1586,
+      "cp": 0.2118,
+      "gain": 0.0532,
+      "opt": 0.0633
+     },
+     "transformer": {
+      "cb": 0.2021,
+      "cp": 0.2338,
+      "gain": 0.0317,
+      "opt": 0.0397
+     },
+     "p2p": {
+      "cb": 0.0606,
+      "cp": 0.2685,
+      "gain": 0.2079,
+      "opt": 0.2213
+     }
+    }
+   },
+   "time_s": 567
+  }
+ },
+ "credibility_retention": {
+  "BestCombo+ULI": {
+   "standard": {
+    "clean": 1.0,
+    "mild": 0.324,
+    "strong": 0.1291
+   },
+   "transformer": {
+    "clean": 1.0,
+    "mild": 0.3273,
+    "strong": 0.1134
+   },
+   "p2p": {
+    "clean": 1.0,
+    "mild": 0.9993,
+    "strong": 0.9983
+   }
+  },
+  "PMS2+ULI(V3)": {
+   "standard": {
+    "clean": 1.0,
+    "mild": 0.324,
+    "strong": 0.1291
+   },
+   "transformer": {
+    "clean": 1.0,
+    "mild": 0.3273,
+    "strong": 0.1134
+   },
+   "p2p": {
+    "clean": 1.0,
+    "mild": 1.0861,
+    "strong": 0.8953
+   }
+  }
+ }
+}

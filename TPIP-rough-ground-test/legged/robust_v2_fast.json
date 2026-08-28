@@ -1,0 +1,189 @@
+{
+ "T": 5120,
+ "results": {
+  "clean": {
+   "scenario": "clean",
+   "configs": {
+    "BestCombo+ULI": {
+     "standard": {
+      "cb": 0.1406,
+      "cp": 0.317,
+      "gain": 0.1764,
+      "opt": 0.2053
+     },
+     "transformer": {
+      "cb": 0.1491,
+      "cp": 0.3196,
+      "gain": 0.1705,
+      "opt": 0.2003
+     },
+     "p2p": {
+      "cb": 0.0644,
+      "cp": 0.4771,
+      "gain": 0.4128,
+      "opt": 0.4411
+     }
+    },
+    "PMS2+ULI(V3)": {
+     "standard": {
+      "cb": 0.1406,
+      "cp": 0.317,
+      "gain": 0.1764,
+      "opt": 0.2053
+     },
+     "transformer": {
+      "cb": 0.1491,
+      "cp": 0.3196,
+      "gain": 0.1705,
+      "opt": 0.2004
+     },
+     "p2p": {
+      "cb": 0.0644,
+      "cp": 0.2665,
+      "gain": 0.2021,
+      "opt": 0.216
+     }
+    }
+   },
+   "time_s": 50
+  },
+  "sensor_noise": {
+   "scenario": "sensor_noise",
+   "configs": {
+    "BestCombo+ULI": {
+     "standard": {
+      "cb": 0.1403,
+      "cp": 0.3169,
+      "gain": 0.1766,
+      "opt": 0.2054
+     },
+     "transformer": {
+      "cb": 0.1551,
+      "cp": 0.3187,
+      "gain": 0.1635,
+      "opt": 0.1936
+     },
+     "p2p": {
+      "cb": 0.0771,
+      "cp": 0.4771,
+      "gain": 0.4,
+      "opt": 0.4334
+     }
+    },
+    "PMS2+ULI(V3)": {
+     "standard": {
+      "cb": 0.1403,
+      "cp": 0.3169,
+      "gain": 0.1766,
+      "opt": 0.2054
+     },
+     "transformer": {
+      "cb": 0.1551,
+      "cp": 0.3187,
+      "gain": 0.1636,
+      "opt": 0.1936
+     },
+     "p2p": {
+      "cb": 0.0771,
+      "cp": 0.2821,
+      "gain": 0.205,
+      "opt": 0.2221
+     }
+    }
+   },
+   "time_s": 50
+  },
+  "sensor_outlier": {
+   "scenario": "sensor_outlier",
+   "configs": {
+    "BestCombo+ULI": {
+     "standard": {
+      "cb": 0.1403,
+      "cp": 0.3166,
+      "gain": 0.1763,
+      "opt": 0.2051
+     },
+     "transformer": {
+      "cb": 0.1535,
+      "cp": 0.3189,
+      "gain": 0.1654,
+      "opt": 0.1954
+     },
+     "p2p": {
+      "cb": 0.0626,
+      "cp": 0.4771,
+      "gain": 0.4145,
+      "opt": 0.4422
+     }
+    },
+    "PMS2+ULI(V3)": {
+     "standard": {
+      "cb": 0.1403,
+      "cp": 0.3166,
+      "gain": 0.1763,
+      "opt": 0.2051
+     },
+     "transformer": {
+      "cb": 0.1535,
+      "cp": 0.3189,
+      "gain": 0.1654,
+      "opt": 0.1954
+     },
+     "p2p": {
+      "cb": 0.0626,
+      "cp": 0.2652,
+      "gain": 0.2026,
+      "opt": 0.2161
+     }
+    }
+   },
+   "time_s": 51
+  },
+  "full_sensor": {
+   "scenario": "full_sensor",
+   "configs": {
+    "BestCombo+ULI": {
+     "standard": {
+      "cb": 0.1403,
+      "cp": 0.3158,
+      "gain": 0.1755,
+      "opt": 0.2041
+     },
+     "transformer": {
+      "cb": 0.1535,
+      "cp": 0.3186,
+      "gain": 0.1651,
+      "opt": 0.1951
+     },
+     "p2p": {
+      "cb": 0.0621,
+      "cp": 0.4771,
+      "gain": 0.415,
+      "opt": 0.4425
+     }
+    },
+    "PMS2+ULI(V3)": {
+     "standard": {
+      "cb": 0.1403,
+      "cp": 0.3158,
+      "gain": 0.1755,
+      "opt": 0.2042
+     },
+     "transformer": {
+      "cb": 0.1535,
+      "cp": 0.3186,
+      "gain": 0.1651,
+      "opt": 0.1951
+     },
+     "p2p": {
+      "cb": 0.0621,
+      "cp": 0.2828,
+      "gain": 0.2206,
+      "opt": 0.2353
+     }
+    }
+   },
+   "time_s": 50
+  }
+ }
+}

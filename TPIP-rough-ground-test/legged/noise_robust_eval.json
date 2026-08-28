@@ -1,0 +1,153 @@
+{
+ "T": 51200,
+ "seeds": [
+  42
+ ],
+ "scenarios": {
+  "clean": {
+   "obs_noise": 0.0,
+   "act_noise": 0.0,
+   "spike_p": 0.0,
+   "spike_amp": 0.0
+  },
+  "mild_sensor": {
+   "obs_noise": 0.02,
+   "act_noise": 0.01,
+   "spike_p": 0.0,
+   "spike_amp": 0.0
+  },
+  "strong": {
+   "obs_noise": 0.05,
+   "act_noise": 0.02,
+   "spike_p": 0.003,
+   "spike_amp": 0.4
+  }
+ },
+ "results": {
+  "clean": {
+   "scenario": "clean",
+   "configs": {
+    "BestCombo": {
+     "avg": 0.5323686511985823,
+     "families": {
+      "standard": 0.5039,
+      "transformer": 0.5608,
+      "p2p": 0.4433
+     },
+     "universal": true
+    },
+    "BestCombo+ULI": {
+     "avg": 0.5369341318888627,
+     "families": {
+      "standard": 0.5071,
+      "transformer": 0.5668,
+      "p2p": 0.4437
+     },
+     "universal": true
+    },
+    "RobustCombo": {
+     "avg": -0.509173479513137,
+     "families": {
+      "standard": 0.0087,
+      "transformer": -1.0271,
+      "p2p": -0.0639
+     },
+     "universal": false
+    }
+   },
+   "time_s": 676
+  },
+  "mild_sensor": {
+   "scenario": "mild_sensor",
+   "configs": {
+    "BestCombo": {
+     "avg": 0.1435814158802266,
+     "families": {
+      "standard": 0.1625,
+      "transformer": 0.1247,
+      "p2p": 0.4431
+     },
+     "universal": true
+    },
+    "BestCombo+ULI": {
+     "avg": 0.14349984883980182,
+     "families": {
+      "standard": 0.1625,
+      "transformer": 0.1245,
+      "p2p": 0.4435
+     },
+     "universal": true
+    },
+    "RobustCombo": {
+     "avg": -0.22939895357700568,
+     "families": {
+      "standard": -0.2175,
+      "transformer": -0.2413,
+      "p2p": -0.0642
+     },
+     "universal": false
+    }
+   },
+   "time_s": 724
+  },
+  "strong": {
+   "scenario": "strong",
+   "configs": {
+    "BestCombo": {
+     "avg": 0.04908543798934992,
+     "families": {
+      "standard": 0.0603,
+      "transformer": 0.0379,
+      "p2p": -0.0243
+     },
+     "universal": false
+    },
+    "BestCombo+ULI": {
+     "avg": 0.04901619345593962,
+     "families": {
+      "standard": 0.0603,
+      "transformer": 0.0377,
+      "p2p": -0.0234
+     },
+     "universal": false
+    },
+    "RobustCombo": {
+     "avg": -0.1537471150344979,
+     "families": {
+      "standard": -0.1863,
+      "transformer": -0.1212,
+      "p2p": -0.8167
+     },
+     "universal": false
+    }
+   },
+   "time_s": 735
+  }
+ },
+ "robustness": {
+  "BestCombo": {
+   "clean": 0.5324,
+   "drops": {
+    "clean": 0.0,
+    "mild_sensor": -0.3888,
+    "strong": -0.4833
+   }
+  },
+  "BestCombo+ULI": {
+   "clean": 0.5369,
+   "drops": {
+    "clean": 0.0,
+    "mild_sensor": -0.3934,
+    "strong": -0.4879
+   }
+  },
+  "RobustCombo": {
+   "clean": -0.5092,
+   "drops": {
+    "clean": 0.0,
+    "mild_sensor": 0.2798,
+    "strong": 0.3554
+   }
+  }
+ }
+}

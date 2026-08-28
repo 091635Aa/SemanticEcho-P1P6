@@ -1,0 +1,136 @@
+{
+ "T": 51200,
+ "seeds": [
+  42
+ ],
+ "scenarios": {
+  "clean": {
+   "obs": 0.0,
+   "act": 0.0,
+   "spike_p": 0.0,
+   "spike_amp": 0.0
+  },
+  "mild_sensor": {
+   "obs": 0.02,
+   "act": 0.01,
+   "spike_p": 0.0,
+   "spike_amp": 0.0
+  },
+  "strong": {
+   "obs": 0.05,
+   "act": 0.02,
+   "spike_p": 0.003,
+   "spike_amp": 0.4
+  }
+ },
+ "results": {
+  "clean": {
+   "scenario": "clean",
+   "configs": {
+    "BestCombo": {
+     "avg": 0.5323686511985823,
+     "avg_per_seed": [
+      0.5324
+     ],
+     "families": {
+      "standard": 0.5039,
+      "transformer": 0.5608,
+      "p2p": 0.4433
+     },
+     "universal": true
+    },
+    "BestCombo+ULI": {
+     "avg": 0.5369341318888627,
+     "avg_per_seed": [
+      0.5369
+     ],
+     "families": {
+      "standard": 0.5071,
+      "transformer": 0.5668,
+      "p2p": 0.4437
+     },
+     "universal": true
+    }
+   },
+   "time_s": 398
+  },
+  "mild_sensor": {
+   "scenario": "mild_sensor",
+   "configs": {
+    "BestCombo": {
+     "avg": 0.1435814158802266,
+     "avg_per_seed": [
+      0.1436
+     ],
+     "families": {
+      "standard": 0.1625,
+      "transformer": 0.1247,
+      "p2p": 0.4431
+     },
+     "universal": true
+    },
+    "BestCombo+ULI": {
+     "avg": 0.14349984883980182,
+     "avg_per_seed": [
+      0.1435
+     ],
+     "families": {
+      "standard": 0.1625,
+      "transformer": 0.1245,
+      "p2p": 0.4435
+     },
+     "universal": true
+    }
+   },
+   "time_s": 402
+  },
+  "strong": {
+   "scenario": "strong",
+   "configs": {
+    "BestCombo": {
+     "avg": 0.04908543798934992,
+     "avg_per_seed": [
+      0.0491
+     ],
+     "families": {
+      "standard": 0.0603,
+      "transformer": 0.0379,
+      "p2p": -0.0243
+     },
+     "universal": false
+    },
+    "BestCombo+ULI": {
+     "avg": 0.04901619345593962,
+     "avg_per_seed": [
+      0.049
+     ],
+     "families": {
+      "standard": 0.0603,
+      "transformer": 0.0377,
+      "p2p": -0.0234
+     },
+     "universal": false
+    }
+   },
+   "time_s": 419
+  }
+ },
+ "robustness": {
+  "BestCombo": {
+   "clean_avg": 0.5324,
+   "drops": {
+    "clean": 0.0,
+    "mild_sensor": -0.3888,
+    "strong": -0.4833
+   }
+  },
+  "BestCombo+ULI": {
+   "clean_avg": 0.5369,
+   "drops": {
+    "clean": 0.0,
+    "mild_sensor": -0.3934,
+    "strong": -0.4879
+   }
+  }
+ }
+}

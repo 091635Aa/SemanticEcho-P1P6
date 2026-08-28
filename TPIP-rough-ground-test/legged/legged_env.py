@@ -78,16 +78,35 @@ class LeggedMicroSim:
     """简化的自回归动力学：a -> dq += a*dt, q += dq*dt。"""
 
     def __init__(self, base: BasePolicy, plugins=None,
-                 T: int = 800, dt: float = 0.01, seed: int = 42):
+                 T: int = 800, dt: float = 0.01, seed: int = 42,
+                 obs_noise: float = 0.0, act_noise: float = 0.0,
+                 obs_spike_p: float = 0.0, obs_spike_amp: float = 0.0,
+                 act_spike_p: float = 0.0, act_spike_amp: float = 0.0):
         self.base = base
         self.plugins = plugins or []
         self.T = T
         self.dt = dt
+        self.obs_noise = obs_noise      # 传感器观测噪声 σ（插件可感知：进入策略→动作）
+        self.act_noise = act_noise      # 执行噪声 σ（插件不可感知：注入后叠加）
+        self.obs_spike_p = obs_spike_p  # 传感器异常读数离群概率（插件可感知）
+        self.obs_spike_amp = obs_spike_amp
+        self.act_spike_p = act_spike_p  # 执行侧异常概率（插件不可感知）
+        self.act_spike_amp = act_spike_amp
         self.rng = np.random.default_rng(seed)
         self.blueprint = GaitPhaseBlueprint(base.n_joints)
 
     def _obs(self, q, dq, goal, terrain):
-        return np.concatenate([q, dq, [goal, terrain]])
+        # 传感器噪声：只污染"读数"，不污染"真值状态"（插件可感知）
+        obs = np.concatenate([q, dq, [goal, terrain]]).copy()
+        if self.obs_noise > 0:
+            obs[:2 * self.base.n_joints] += self.rng.normal(
+                0, self.obs_noise, 2 * self.base.n_joints)
+        # 传感器"异常测量"离群点（插件可感知，模拟异常读数）
+        if self.obs_spike_p > 0:
+            n = 2 * self.base.n_joints
+            sp = self.rng.random(n) < self.obs_spike_p
+            obs[:n] += self.rng.choice([-1.0, 1.0], n) * self.obs_spike_amp * sp
+        return obs
 
     def run(self, goal: float = 3.0, terrain: float = 0.3) -> dict:
         n = self.base.n_joints
@@ -107,6 +126,13 @@ class LeggedMicroSim:
                 a = plug.inject(a, t=t, q=q, dq=dq, blueprint=bp,
                                 contact=ct, terrain=terrain,
                                 progress=step / self.T)
+
+            # 执行噪声 + 执行侧异常（真实执行器不完美；插件不可感知）
+            if self.act_noise > 0:
+                a = a + self.rng.normal(0, self.act_noise, n)
+            if self.act_spike_p > 0:
+                spike = self.rng.random(n) < self.act_spike_p
+                a = a + self.rng.choice([-1.0, 1.0], n) * self.act_spike_amp * spike
 
             # 动力学更新：位置混合型（a=期望关节角，q 一阶跟踪，无正反馈）
             a_clamped = np.clip(a, -0.6, 0.6)
