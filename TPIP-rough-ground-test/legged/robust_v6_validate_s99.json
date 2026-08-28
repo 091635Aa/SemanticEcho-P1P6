@@ -1,0 +1,239 @@
+{
+ "T": 25600,
+ "seeds": [
+  99
+ ],
+ "results": {
+  "clean": {
+   "scenario": "clean",
+   "T": 25600,
+   "configs": {
+    "champ": {
+     "standard": {
+      "gain_mean": 0.4623,
+      "gain_seed": 0.0,
+      "gain": [
+       0.4623
+      ],
+      "opt_mean": 0.5233,
+      "opt": [
+       0.5233
+      ]
+     },
+     "transformer": {
+      "gain_mean": 0.3278,
+      "gain_seed": 0.0,
+      "gain": [
+       0.3278
+      ],
+      "opt_mean": 0.5921,
+      "opt": [
+       0.5921
+      ]
+     },
+     "p2p": {
+      "gain_mean": -0.02,
+      "gain_seed": 0.0,
+      "gain": [
+       -0.02
+      ],
+      "opt_mean": -0.0381,
+      "opt": [
+       -0.0381
+      ]
+     }
+    },
+    "v6g3s5": {
+     "standard": {
+      "gain_mean": 0.4421,
+      "gain_seed": 0.0,
+      "gain": [
+       0.4421
+      ],
+      "opt_mean": 0.5005,
+      "opt": [
+       0.5005
+      ]
+     },
+     "transformer": {
+      "gain_mean": 0.2784,
+      "gain_seed": 0.0,
+      "gain": [
+       0.2784
+      ],
+      "opt_mean": 0.5028,
+      "opt": [
+       0.5028
+      ]
+     },
+     "p2p": {
+      "gain_mean": -0.02,
+      "gain_seed": 0.0,
+      "gain": [
+       -0.02
+      ],
+      "opt_mean": -0.0381,
+      "opt": [
+       -0.0381
+      ]
+     }
+    }
+   },
+   "time_s": 987
+  },
+  "mild": {
+   "scenario": "mild",
+   "T": 25600,
+   "configs": {
+    "champ": {
+     "standard": {
+      "gain_mean": 0.2128,
+      "gain_seed": 0.0,
+      "gain": [
+       0.2128
+      ],
+      "opt_mean": 0.2409,
+      "opt": [
+       0.2409
+      ]
+     },
+     "transformer": {
+      "gain_mean": 0.2374,
+      "gain_seed": 0.0,
+      "gain": [
+       0.2374
+      ],
+      "opt_mean": 0.277,
+      "opt": [
+       0.277
+      ]
+     },
+     "p2p": {
+      "gain_mean": -0.0175,
+      "gain_seed": 0.0,
+      "gain": [
+       -0.0175
+      ],
+      "opt_mean": -0.0333,
+      "opt": [
+       -0.0333
+      ]
+     }
+    },
+    "v6g3s5": {
+     "standard": {
+      "gain_mean": 0.3377,
+      "gain_seed": 0.0,
+      "gain": [
+       0.3377
+      ],
+      "opt_mean": 0.3823,
+      "opt": [
+       0.3823
+      ]
+     },
+     "transformer": {
+      "gain_mean": 0.4069,
+      "gain_seed": 0.0,
+      "gain": [
+       0.4069
+      ],
+      "opt_mean": 0.4748,
+      "opt": [
+       0.4748
+      ]
+     },
+     "p2p": {
+      "gain_mean": -0.0175,
+      "gain_seed": 0.0,
+      "gain": [
+       -0.0175
+      ],
+      "opt_mean": -0.0333,
+      "opt": [
+       -0.0333
+      ]
+     }
+    }
+   },
+   "time_s": 1002
+  },
+  "strong": {
+   "scenario": "strong",
+   "T": 25600,
+   "configs": {
+    "champ": {
+     "standard": {
+      "gain_mean": 0.1109,
+      "gain_seed": 0.0,
+      "gain": [
+       0.1109
+      ],
+      "opt_mean": 0.1253,
+      "opt": [
+       0.1253
+      ]
+     },
+     "transformer": {
+      "gain_mean": 0.1089,
+      "gain_seed": 0.0,
+      "gain": [
+       0.1089
+      ],
+      "opt_mean": 0.1266,
+      "opt": [
+       0.1266
+      ]
+     },
+     "p2p": {
+      "gain_mean": -0.0199,
+      "gain_seed": 0.0,
+      "gain": [
+       -0.0199
+      ],
+      "opt_mean": -0.0379,
+      "opt": [
+       -0.0379
+      ]
+     }
+    },
+    "v6g3s5": {
+     "standard": {
+      "gain_mean": 0.25,
+      "gain_seed": 0.0,
+      "gain": [
+       0.25
+      ],
+      "opt_mean": 0.2823,
+      "opt": [
+       0.2823
+      ]
+     },
+     "transformer": {
+      "gain_mean": 0.3029,
+      "gain_seed": 0.0,
+      "gain": [
+       0.3029
+      ],
+      "opt_mean": 0.3521,
+      "opt": [
+       0.3521
+      ]
+     },
+     "p2p": {
+      "gain_mean": -0.0199,
+      "gain_seed": 0.0,
+      "gain": [
+       -0.0199
+      ],
+      "opt_mean": -0.0379,
+      "opt": [
+       -0.0379
+      ]
+     }
+    }
+   },
+   "time_s": 1099
+  }
+ }
+}

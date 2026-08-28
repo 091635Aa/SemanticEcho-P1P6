@@ -378,3 +378,240 @@ class RobustComboV4(BasePlugin):
         a = self.combo.inject(a, **kw)
         a = self.uli.inject(a, **kw)
         return self.boost.inject(a, **kw)
+
+
+# --------------------------------------------------------------------------- #
+# 第43轮 — DecoupledNoiseBoost (DNB)：信噪比(SNR)机制                         #
+# --------------------------------------------------------------------------- #
+class DecoupledNoiseBoost(BasePlugin):
+    """
+    DNB：针对"执行噪声 = 固定方差 σ² 叠加在最终指令上"这条不可逆物理路径，
+      不走"把噪声滤掉"(做不到)，而是**抬升相干(周期)能量的信噪比**：
+      把确定性步态的相干幅度放大，使它在固定 σ² 噪声地板之上站得更高。
+
+    流程：
+      1) 状态白噪检测：dq 的逐样本跳变(∝1/dt 放大的执行噪声) 慢 EMA → hf。
+         平滑族在执行噪声下 hf 持续高(白噪)；p2p 重规划跳变是孤立低频 → 低。
+      2) gate = clip(hf/thr_hf,0,1)^p * g_max。
+      3) 注入：取滑窗相位拟合 fitted(与当前相位/幅值匹配的相干分量)，
+         放大 γ = 1 + gammax*gate 倍，向它混合：
+            out = a + gate*lam*(fitted*γ - a)
+         提升 q 中周期分量振幅 / 噪声方差 = 更高的相干 SNR → 更高 CI。
+    """
+    def __init__(self, Win=31, freq=1.0, dt=0.01, g_max=1.0, gammax=1.0, lam=0.6,
+                 thr_hf=0.06, p=1.0, ema_win=0.980, vfloor=1e-3):
+        self.Win = Win
+        self.freq = freq
+        self.dt = dt
+        self.g_max = g_max
+        self.gammax = gammax
+        self.lam = lam
+        self.thr_hf = thr_hf
+        self.p = p
+        self.ema_win = ema_win
+        self.vfloor = vfloor
+        k = np.arange(Win) * dt
+        phi = 2 * np.pi * freq * k
+        self.B = np.stack([np.ones(Win), np.sin(phi), np.cos(phi)], axis=1)
+        self.BtB_inv = np.linalg.inv(self.B.T @ self.B)
+        self.act_buf = deque(maxlen=Win)
+        self._prev_dq = None
+        self._hf_ema = None
+        self._t = 0.0
+        self.gate_sum = 0.0
+        self.gate_n = 0
+
+    def reset(self):
+        self.act_buf.clear(); self._prev_dq = None; self._hf_ema = None
+        self._t = 0.0; self.gate_sum = 0.0; self.gate_n = 0
+
+    @property
+    def mean_gate(self):
+        return (self.gate_sum / self.gate_n) if self.gate_n else 0.0
+
+    def _fit_current(self):
+        A = np.stack(list(self.act_buf))
+        c = self.BtB_inv @ (self.B.T @ A)
+        lk = (self.Win - 1) * self.dt
+        phi_c = 2 * np.pi * self.freq * lk
+        basis_c = np.array([1.0, np.sin(phi_c), np.cos(phi_c)])
+        return basis_c @ c
+
+    def inject(self, a, **kw):
+        a = np.asarray(a).copy()
+        dqv = kw.get("dq", None)
+        self.act_buf.append(a)
+        self._t += self.dt
+        if dqv is not None:
+            dvv = np.asarray(dqv)
+            if self._prev_dq is None:
+                self._prev_dq = dvv.copy()
+            else:
+                d = np.linalg.norm(dvv - self._prev_dq) / (np.linalg.norm(dvv) + self.vfloor)
+                if self._hf_ema is None:
+                    self._hf_ema = d
+                else:
+                    self._hf_ema = self.ema_win * self._hf_ema + (1 - self.ema_win) * d
+                self._prev_dq = dvv.copy()
+        hf = self._hf_ema if self._hf_ema is not None else 0.0
+        if len(self.act_buf) < self.Win or hf <= 0.0:
+            return a
+        gate = float(np.clip(hf / self.thr_hf, 0.0, 1.0)) ** self.p * self.g_max
+        self.gate_sum += gate; self.gate_n += 1
+        if gate < 1e-3:
+            return a
+        fitted = self._fit_current()
+        gamma = 1.0 + self.gammax * gate
+        target = fitted * gamma
+        return (a + (gate * self.lam) * (target - a)).astype(float)
+
+
+class RobustComboV5(BasePlugin):
+    """第43轮：BestCombo -> ULI(干净) -> DNB(状态白噪检测 + 相干幅度放大)。"""
+
+    def __init__(self, combo, uli, **dnb_kw):
+        self.combo = combo
+        self.uli = uli
+        self.dnb = DecoupledNoiseBoost(**dnb_kw)
+
+    def reset(self):
+        self.dnb.reset()
+        if hasattr(self.uli, "reset"):
+            self.uli.reset()
+
+    def inject(self, a, **kw):
+        a = self.combo.inject(a, **kw)
+        a = self.uli.inject(a, **kw)
+        return self.dnb.inject(a, **kw)
+
+
+# --------------------------------------------------------------------------- #
+# 第44轮 — DNB2 (DecoupledNoiseBoost v2)：相干形状门控，保护 p2p               #
+# --------------------------------------------------------------------------- #
+class DecoupledNoiseBoost2(BasePlugin):
+    """
+    DNB2：把 DNB 的"信噪比放大"只施加到已是"相干步态"的平滑族，从而保护
+      p2p(点对点/阶跃体式)。第43轮实测：
+        - mild 下 DNB-g2t06 把平滑族增益从 champ +0.11 抬到 +0.25(≈2.2×)，
+          信噪比放大机制确实有效；
+        - 但 gate(白噪检测)对 p2p 也常开 → 放大动作里不匹配的"拟合正弦"，
+          使 p2p 增益从 +0.42 掉到 +0.17，破坏 Universal。
+    修复：在已有 hf(状态白噪)门控之外，再加一个"相干形状门"：
+        shape_gate(平滑族高 / p2p 低)，由"动作对低阶相位基的残差比"驱动：
+          res_ratio = |a - fitted| / |a|
+          - 平滑族：动作基本落在大频相位子空间 → res_ratio 小 → shape_gate→1(放大)
+          - p2p   ：阶跃/重规划不在此子空间   → res_ratio 大 → shape_gate→0(不放大)
+      最终 effective_gate = hf_gate * shape_gate，平滑族保留 SNR 放大收益，
+      同时 p2p 退化为"不放大"(只保留 BestCombo+ULI)，恢复 Universal。
+    """
+
+    def __init__(self, Win=31, freq=1.0, dt=0.01, g_max=1.0, gammax=1.0, lam=0.6,
+                 thr_hf=0.06, p=1.0, ema_win=0.980, vfloor=1e-3,
+                 sh_cut=0.5, sh_pow=1.0, sh_ema=0.990, sh_floor=0.0):
+        self.Win = Win
+        self.freq = freq
+        self.dt = dt
+        self.g_max = g_max
+        self.gammax = gammax
+        self.lam = lam
+        self.thr_hf = thr_hf
+        self.p = p
+        self.ema_win = ema_win
+        self.vfloor = vfloor
+        self.sh_cut = sh_cut        # 残差比 > sh_cut → shape_gate→0 (p2p 不放大)
+        self.sh_pow = sh_pow
+        self.sh_ema = sh_ema        # 残差比慢 EMA，抗传感器噪声瞬态
+        self.sh_floor = sh_floor    # p2p 保留增强下限
+        k = np.arange(Win) * dt
+        phi = 2 * np.pi * freq * k
+        self.B = np.stack([np.ones(Win), np.sin(phi), np.cos(phi)], axis=1)
+        self.BtB_inv = np.linalg.inv(self.B.T @ self.B)
+        self.act_buf = deque(maxlen=Win)
+        self._prev_dq = None
+        self._hf_ema = None
+        self._res_ema = None
+        self._t = 0.0
+        self.gate_sum = 0.0
+        self.gate_n = 0
+        self.gate_shape_sum = 0.0
+
+    def reset(self):
+        self.act_buf.clear(); self._prev_dq = None; self._hf_ema = None
+        self._res_ema = None
+        self._t = 0.0; self.gate_sum = 0.0; self.gate_n = 0
+        self.gate_shape_sum = 0.0
+
+    @property
+    def mean_gate(self):
+        return (self.gate_sum / self.gate_n) if self.gate_n else 0.0
+
+    @property
+    def mean_shape_gate(self):
+        return (self.gate_shape_sum / self.gate_n) if self.gate_n else 0.0
+
+    def _fit_current(self):
+        A = np.stack(list(self.act_buf))
+        c = self.BtB_inv @ (self.B.T @ A)
+        lk = (self.Win - 1) * self.dt
+        phi_c = 2 * np.pi * self.freq * lk
+        basis_c = np.array([1.0, np.sin(phi_c), np.cos(phi_c)])
+        return basis_c @ c
+
+    def inject(self, a, **kw):
+        a = np.asarray(a).copy()
+        dqv = kw.get("dq", None)
+        self.act_buf.append(a)
+        self._t += self.dt
+        if dqv is not None:
+            dvv = np.asarray(dqv)
+            if self._prev_dq is None:
+                self._prev_dq = dvv.copy()
+            else:
+                d = np.linalg.norm(dvv - self._prev_dq) / (np.linalg.norm(dvv) + self.vfloor)
+                if self._hf_ema is None:
+                    self._hf_ema = d
+                else:
+                    self._hf_ema = self.ema_win * self._hf_ema + (1 - self.ema_win) * d
+                self._prev_dq = dvv.copy()
+        hf = self._hf_ema if self._hf_ema is not None else 0.0
+        if len(self.act_buf) < self.Win or hf <= 0.0:
+            return a
+        fitted = self._fit_current()
+        res_ratio = float(np.linalg.norm(a - fitted) / (np.linalg.norm(a) + self.vfloor))
+        # 残差比慢 EMA：抗传感器噪声瞬态
+        if self._res_ema is None:
+            self._res_ema = res_ratio
+        else:
+            self._res_ema = self.sh_ema * self._res_ema + (1 - self.sh_ema) * res_ratio
+        rr = self._res_ema
+        # 相干形状门(硬阈值)：平滑族 rr 小→高；p2p 阶跃/重规划 rr 大→低
+        shape = (1.0 - min(rr / self.sh_cut, 1.0)) ** self.sh_pow
+        shape_gate = self.sh_floor + (1.0 - self.sh_floor) * shape
+        hf_gate = float(np.clip(hf / self.thr_hf, 0.0, 1.0)) ** self.p * self.g_max
+        gate = hf_gate * shape_gate
+        self.gate_sum += gate; self.gate_n += 1
+        self.gate_shape_sum += shape_gate
+        if gate < 1e-3:
+            return a
+        gamma = 1.0 + self.gammax * gate
+        target = fitted * gamma
+        return (a + (gate * self.lam) * (target - a)).astype(float)
+
+
+class RobustComboV6(BasePlugin):
+    """第44轮：BestCombo -> ULI(干净) -> DNB2(状态白噪 × 相干形状 双门控 SNR 放大)。"""
+
+    def __init__(self, combo, uli, **dnb_kw):
+        self.combo = combo
+        self.uli = uli
+        self.dnb = DecoupledNoiseBoost2(**dnb_kw)
+
+    def reset(self):
+        self.dnb.reset()
+        if hasattr(self.uli, "reset"):
+            self.uli.reset()
+
+    def inject(self, a, **kw):
+        a = self.combo.inject(a, **kw)
+        a = self.uli.inject(a, **kw)
+        return self.dnb.inject(a, **kw)

@@ -1,0 +1,383 @@
+{
+ "T": 8192,
+ "results": {
+  "clean": {
+   "scenario": "clean",
+   "configs": {
+    "anchor-g3s5": {
+     "standard": {
+      "gain": 0.2728,
+      "opt": 0.3283,
+      "gate": 0.9699,
+      "shape": 0.9699
+     },
+     "transformer": {
+      "gain": 0.2381,
+      "opt": 0.2967,
+      "gate": 0.9614,
+      "shape": 0.9614
+     },
+     "p2p": {
+      "gain": 0.4159,
+      "opt": 0.443,
+      "gate": 0.0,
+      "shape": 0.0
+     }
+    },
+    "g4s5": {
+     "standard": {
+      "gain": 0.2436,
+      "opt": 0.2932,
+      "gate": 0.9596,
+      "shape": 0.9596
+     },
+     "transformer": {
+      "gain": 0.2075,
+      "opt": 0.2587,
+      "gate": 0.9589,
+      "shape": 0.9589
+     },
+     "p2p": {
+      "gain": 0.4159,
+      "opt": 0.443,
+      "gate": 0.0,
+      "shape": 0.0
+     }
+    },
+    "g5s5": {
+     "standard": {
+      "gain": 0.2219,
+      "opt": 0.2671,
+      "gate": 0.9516,
+      "shape": 0.9516
+     },
+     "transformer": {
+      "gain": 0.1831,
+      "opt": 0.2282,
+      "gate": 0.9584,
+      "shape": 0.9584
+     },
+     "p2p": {
+      "gain": 0.4159,
+      "opt": 0.443,
+      "gate": 0.0,
+      "shape": 0.0
+     }
+    },
+    "g4s7": {
+     "standard": {
+      "gain": 0.2413,
+      "opt": 0.2905,
+      "gate": 0.9705,
+      "shape": 0.9705
+     },
+     "transformer": {
+      "gain": 0.2055,
+      "opt": 0.2561,
+      "gate": 0.9705,
+      "shape": 0.9705
+     },
+     "p2p": {
+      "gain": 0.4159,
+      "opt": 0.443,
+      "gate": 0.0,
+      "shape": 0.0
+     }
+    },
+    "g5s7": {
+     "standard": {
+      "gain": 0.2187,
+      "opt": 0.2632,
+      "gate": 0.9647,
+      "shape": 0.9647
+     },
+     "transformer": {
+      "gain": 0.1811,
+      "opt": 0.2257,
+      "gate": 0.9702,
+      "shape": 0.9702
+     },
+     "p2p": {
+      "gain": 0.4159,
+      "opt": 0.443,
+      "gate": 0.0,
+      "shape": 0.0
+     }
+    },
+    "g6s7": {
+     "standard": {
+      "gain": 0.2004,
+      "opt": 0.2413,
+      "gate": 0.96,
+      "shape": 0.96
+     },
+     "transformer": {
+      "gain": 0.1614,
+      "opt": 0.2011,
+      "gate": 0.9699,
+      "shape": 0.9699
+     },
+     "p2p": {
+      "gain": 0.4159,
+      "opt": 0.443,
+      "gate": 0.0,
+      "shape": 0.0
+     }
+    }
+   },
+   "time_s": 484
+  },
+  "mild": {
+   "scenario": "mild",
+   "configs": {
+    "anchor-g3s5": {
+     "standard": {
+      "gain": 0.2037,
+      "opt": 0.2433,
+      "gate": 0.97,
+      "shape": 0.97
+     },
+     "transformer": {
+      "gain": 0.1835,
+      "opt": 0.2283,
+      "gate": 0.961,
+      "shape": 0.961
+     },
+     "p2p": {
+      "gain": 0.4136,
+      "opt": 0.4416,
+      "gate": 0.0,
+      "shape": 0.0
+     }
+    },
+    "g4s5": {
+     "standard": {
+      "gain": 0.2047,
+      "opt": 0.2444,
+      "gate": 0.9597,
+      "shape": 0.9597
+     },
+     "transformer": {
+      "gain": 0.1785,
+      "opt": 0.2222,
+      "gate": 0.9581,
+      "shape": 0.9581
+     },
+     "p2p": {
+      "gain": 0.4136,
+      "opt": 0.4416,
+      "gate": 0.0,
+      "shape": 0.0
+     }
+    },
+    "g5s5": {
+     "standard": {
+      "gain": 0.1995,
+      "opt": 0.2383,
+      "gate": 0.9517,
+      "shape": 0.9517
+     },
+     "transformer": {
+      "gain": 0.1673,
+      "opt": 0.2082,
+      "gate": 0.958,
+      "shape": 0.958
+     },
+     "p2p": {
+      "gain": 0.4136,
+      "opt": 0.4416,
+      "gate": 0.0,
+      "shape": 0.0
+     }
+    },
+    "g4s7": {
+     "standard": {
+      "gain": 0.2043,
+      "opt": 0.244,
+      "gate": 0.9706,
+      "shape": 0.9706
+     },
+     "transformer": {
+      "gain": 0.1779,
+      "opt": 0.2214,
+      "gate": 0.97,
+      "shape": 0.97
+     },
+     "p2p": {
+      "gain": 0.4136,
+      "opt": 0.4416,
+      "gate": 0.0,
+      "shape": 0.0
+     }
+    },
+    "g5s7": {
+     "standard": {
+      "gain": 0.1984,
+      "opt": 0.237,
+      "gate": 0.9648,
+      "shape": 0.9648
+     },
+     "transformer": {
+      "gain": 0.1658,
+      "opt": 0.2064,
+      "gate": 0.97,
+      "shape": 0.97
+     },
+     "p2p": {
+      "gain": 0.4136,
+      "opt": 0.4416,
+      "gate": 0.0,
+      "shape": 0.0
+     }
+    },
+    "g6s7": {
+     "standard": {
+      "gain": 0.1902,
+      "opt": 0.2272,
+      "gate": 0.96,
+      "shape": 0.96
+     },
+     "transformer": {
+      "gain": 0.1529,
+      "opt": 0.1902,
+      "gate": 0.9696,
+      "shape": 0.9696
+     },
+     "p2p": {
+      "gain": 0.4136,
+      "opt": 0.4416,
+      "gate": 0.0,
+      "shape": 0.0
+     }
+    }
+   },
+   "time_s": 488
+  },
+  "strong": {
+   "scenario": "strong",
+   "configs": {
+    "anchor-g3s5": {
+     "standard": {
+      "gain": 0.1432,
+      "opt": 0.1681,
+      "gate": 0.969,
+      "shape": 0.969
+     },
+     "transformer": {
+      "gain": 0.1332,
+      "opt": 0.1611,
+      "gate": 0.9617,
+      "shape": 0.9617
+     },
+     "p2p": {
+      "gain": 0.415,
+      "opt": 0.4425,
+      "gate": 0.0,
+      "shape": 0.0
+     }
+    },
+    "g4s5": {
+     "standard": {
+      "gain": 0.1545,
+      "opt": 0.1815,
+      "gate": 0.9588,
+      "shape": 0.9588
+     },
+     "transformer": {
+      "gain": 0.1457,
+      "opt": 0.1762,
+      "gate": 0.9589,
+      "shape": 0.9589
+     },
+     "p2p": {
+      "gain": 0.415,
+      "opt": 0.4425,
+      "gate": 0.0,
+      "shape": 0.0
+     }
+    },
+    "g5s5": {
+     "standard": {
+      "gain": 0.1595,
+      "opt": 0.1873,
+      "gate": 0.9508,
+      "shape": 0.9508
+     },
+     "transformer": {
+      "gain": 0.1489,
+      "opt": 0.1801,
+      "gate": 0.9588,
+      "shape": 0.9588
+     },
+     "p2p": {
+      "gain": 0.415,
+      "opt": 0.4425,
+      "gate": 0.0,
+      "shape": 0.0
+     }
+    },
+    "g4s7": {
+     "standard": {
+      "gain": 0.1553,
+      "opt": 0.1824,
+      "gate": 0.9699,
+      "shape": 0.9699
+     },
+     "transformer": {
+      "gain": 0.1462,
+      "opt": 0.1769,
+      "gate": 0.9706,
+      "shape": 0.9706
+     },
+     "p2p": {
+      "gain": 0.415,
+      "opt": 0.4425,
+      "gate": 0.0,
+      "shape": 0.0
+     }
+    },
+    "g5s7": {
+     "standard": {
+      "gain": 0.1599,
+      "opt": 0.1878,
+      "gate": 0.9641,
+      "shape": 0.9641
+     },
+     "transformer": {
+      "gain": 0.1491,
+      "opt": 0.1803,
+      "gate": 0.9705,
+      "shape": 0.9705
+     },
+     "p2p": {
+      "gain": 0.415,
+      "opt": 0.4425,
+      "gate": 0.0,
+      "shape": 0.0
+     }
+    },
+    "g6s7": {
+     "standard": {
+      "gain": 0.1611,
+      "opt": 0.1892,
+      "gate": 0.9595,
+      "shape": 0.9595
+     },
+     "transformer": {
+      "gain": 0.1452,
+      "opt": 0.1756,
+      "gate": 0.9702,
+      "shape": 0.9702
+     },
+     "p2p": {
+      "gain": 0.415,
+      "opt": 0.4425,
+      "gate": 0.0,
+      "shape": 0.0
+     }
+    }
+   },
+   "time_s": 515
+  }
+ }
+}

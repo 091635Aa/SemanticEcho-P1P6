@@ -1,0 +1,273 @@
+{
+ "T": 14000,
+ "seed": 99,
+ "results": {
+  "clean": {
+   "scenario": "clean",
+   "configs": {
+    "champ": {
+     "standard": {
+      "gain": 0.4312,
+      "opt": 0.4881
+     },
+     "transformer": {
+      "gain": 0.3283,
+      "opt": 0.5583
+     },
+     "p2p": {
+      "gain": -0.0206,
+      "opt": -0.0393
+     }
+    },
+    "v6g3s5(t06)": {
+     "standard": {
+      "gain": 0.4319,
+      "opt": 0.4889
+     },
+     "transformer": {
+      "gain": 0.3034,
+      "opt": 0.5159
+     },
+     "p2p": {
+      "gain": -0.0206,
+      "opt": -0.0393
+     }
+    },
+    "v6g3-thr25": {
+     "standard": {
+      "gain": 0.3977,
+      "opt": 0.4501
+     },
+     "transformer": {
+      "gain": 0.2707,
+      "opt": 0.4603
+     },
+     "p2p": {
+      "gain": -0.0206,
+      "opt": -0.0393
+     }
+    },
+    "v6g3-thr28-p3": {
+     "standard": {
+      "gain": 0.3982,
+      "opt": 0.4507
+     },
+     "transformer": {
+      "gain": 0.2748,
+      "opt": 0.4673
+     },
+     "p2p": {
+      "gain": -0.0206,
+      "opt": -0.0393
+     }
+    },
+    "v6g3-thr30-p4": {
+     "standard": {
+      "gain": 0.3987,
+      "opt": 0.4513
+     },
+     "transformer": {
+      "gain": 0.2785,
+      "opt": 0.4735
+     },
+     "p2p": {
+      "gain": -0.0206,
+      "opt": -0.0393
+     }
+    },
+    "v6g4-thr28-p3": {
+     "standard": {
+      "gain": 0.3865,
+      "opt": 0.4374
+     },
+     "transformer": {
+      "gain": 0.2653,
+      "opt": 0.4512
+     },
+     "p2p": {
+      "gain": -0.0206,
+      "opt": -0.0393
+     }
+    }
+   }
+  },
+  "mild": {
+   "scenario": "mild",
+   "configs": {
+    "champ": {
+     "standard": {
+      "gain": 0.213,
+      "opt": 0.2411
+     },
+     "transformer": {
+      "gain": 0.2361,
+      "opt": 0.2752
+     },
+     "p2p": {
+      "gain": -0.0181,
+      "opt": -0.0344
+     }
+    },
+    "v6g3s5(t06)": {
+     "standard": {
+      "gain": 0.3353,
+      "opt": 0.3796
+     },
+     "transformer": {
+      "gain": 0.4055,
+      "opt": 0.4727
+     },
+     "p2p": {
+      "gain": -0.0181,
+      "opt": -0.0344
+     }
+    },
+    "v6g3-thr25": {
+     "standard": {
+      "gain": 0.272,
+      "opt": 0.3079
+     },
+     "transformer": {
+      "gain": 0.2905,
+      "opt": 0.3386
+     },
+     "p2p": {
+      "gain": -0.0181,
+      "opt": -0.0344
+     }
+    },
+    "v6g3-thr28-p3": {
+     "standard": {
+      "gain": 0.2638,
+      "opt": 0.2987
+     },
+     "transformer": {
+      "gain": 0.2781,
+      "opt": 0.3241
+     },
+     "p2p": {
+      "gain": -0.0181,
+      "opt": -0.0344
+     }
+    },
+    "v6g3-thr30-p4": {
+     "standard": {
+      "gain": 0.2418,
+      "opt": 0.2737
+     },
+     "transformer": {
+      "gain": 0.2566,
+      "opt": 0.2991
+     },
+     "p2p": {
+      "gain": -0.0181,
+      "opt": -0.0344
+     }
+    },
+    "v6g4-thr28-p3": {
+     "standard": {
+      "gain": 0.267,
+      "opt": 0.3022
+     },
+     "transformer": {
+      "gain": 0.2823,
+      "opt": 0.3291
+     },
+     "p2p": {
+      "gain": -0.0181,
+      "opt": -0.0344
+     }
+    }
+   }
+  },
+  "strong": {
+   "scenario": "strong",
+   "configs": {
+    "champ": {
+     "standard": {
+      "gain": 0.1119,
+      "opt": 0.1263
+     },
+     "transformer": {
+      "gain": 0.1111,
+      "opt": 0.129
+     },
+     "p2p": {
+      "gain": -0.0195,
+      "opt": -0.0372
+     }
+    },
+    "v6g3s5(t06)": {
+     "standard": {
+      "gain": 0.2531,
+      "opt": 0.2857
+     },
+     "transformer": {
+      "gain": 0.3082,
+      "opt": 0.3579
+     },
+     "p2p": {
+      "gain": -0.0195,
+      "opt": -0.0372
+     }
+    },
+    "v6g3-thr25": {
+     "standard": {
+      "gain": 0.2531,
+      "opt": 0.2856
+     },
+     "transformer": {
+      "gain": 0.3021,
+      "opt": 0.3508
+     },
+     "p2p": {
+      "gain": -0.0195,
+      "opt": -0.0372
+     }
+    },
+    "v6g3-thr28-p3": {
+     "standard": {
+      "gain": 0.2512,
+      "opt": 0.2835
+     },
+     "transformer": {
+      "gain": 0.2769,
+      "opt": 0.3216
+     },
+     "p2p": {
+      "gain": -0.0195,
+      "opt": -0.0372
+     }
+    },
+    "v6g3-thr30-p4": {
+     "standard": {
+      "gain": 0.2447,
+      "opt": 0.2762
+     },
+     "transformer": {
+      "gain": 0.2552,
+      "opt": 0.2963
+     },
+     "p2p": {
+      "gain": -0.0195,
+      "opt": -0.0372
+     }
+    },
+    "v6g4-thr28-p3": {
+     "standard": {
+      "gain": 0.2339,
+      "opt": 0.264
+     },
+     "transformer": {
+      "gain": 0.2565,
+      "opt": 0.2978
+     },
+     "p2p": {
+      "gain": -0.0195,
+      "opt": -0.0372
+     }
+    }
+   }
+  }
+ }
+}
