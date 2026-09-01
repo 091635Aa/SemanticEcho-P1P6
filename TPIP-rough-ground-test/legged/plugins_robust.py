@@ -1058,7 +1058,17 @@ class PhaseRecomb(BasePlugin):
                  adapt=False, lam_ref=0.45, lam_min=0.05,
                  blend=True, r2b_lo=0.35, r2b_hi=0.75, blend_pow=1.0,
                  rr_stand=False, rr_lo=0.030, rr_hi=0.045, rr_stand_pow=1.0,
-                 gbl=0.0, gbl_alpha=0.05, gbl_floor=0.02):
+                 gbl=0.0, gbl_alpha=0.05, gbl_floor=0.02,
+                 tpl_gate=False, tpl_r2lo=0.30, tpl_r2hi=0.60, tpl_r2p=1.0,
+                 r2_stand=False, r2_stand_lo=0.85, r2_stand_hi=0.95, r2_stand_p=1.0):
+        self.tpl_gate = tpl_gate      # r2门控模板更新: 低1Hz相干周期少贡献(抗噪声污染), 默认关保V14
+        self.tpl_r2lo = tpl_r2lo
+        self.tpl_r2hi = tpl_r2hi
+        self.tpl_r2p = tpl_r2p
+        self.r2_stand = r2_stand      # r2高值 stand-down: 已饱和+超高相干(干净transformer)→lam归零不动(护净损失)
+        self.r2_stand_lo = r2_stand_lo
+        self.r2_stand_hi = r2_stand_hi
+        self.r2_stand_p = r2_stand_p
         self.M, self.dt, self.freq = M, dt, freq
         self.lam = lam
         self.alpha = alpha
@@ -1137,10 +1147,16 @@ class PhaseRecomb(BasePlugin):
                     self._r2_ema = self.r2_ema_ * self._r2_ema + (1 - self.r2_ema_) * r2
                 if self.blend:
                     self.bb = fit1          # (M,n) 本完整周期的1Hz骨干(去抖干净目标)
+                if self.tpl_gate:
+                    # r2门控: 本周期逐关节1Hz相干R²越低→更新权重越小(抗噪声污染模板)
+                    u = np.clip((r2 - self.tpl_r2lo) / (self.tpl_r2hi - self.tpl_r2lo + 1e-9),
+                                0.0, 1.0) ** self.tpl_r2p
+                else:
+                    u = np.ones(n)
                 if self.tpl is None:
                     self.tpl = cyc_ok.copy()
                 else:
-                    self.tpl = (1 - self.alpha) * self.tpl + self.alpha * cyc_ok
+                    self.tpl = (1 - self.alpha * u) * self.tpl + self.alpha * u * cyc_ok
                 self._ncyc += 1
                 # 逐关节残差比：本周期 vs 模板(去均值标准化抗相位/幅值)
                 cm = cyc_ok - cyc_ok.mean(axis=0, keepdims=True)
@@ -1168,6 +1184,12 @@ class PhaseRecomb(BasePlugin):
         fac = np.clip((r2e - self.r2_floor) / (self.r2_ceil - self.r2_floor + 1e-9),
                       0.0, 1.0) ** self.r2_pow
         coh = coh * fac
+        # --- r2高值 stand-down：关节已超高相干(干净饱和transformer, r2→~0.95)→无需干预→门关
+        #     噪声下 r2 回落→门开→保留噪声去抖增益。与 rr_stand(伤害standard)不同, 用r2判别不误伤.
+        if self.r2_stand:
+            st = np.clip((self.r2_stand_hi - r2e) / (self.r2_stand_hi - self.r2_stand_lo + 1e-9),
+                         0.0, 1.0) ** self.r2_stand_p
+            coh = coh * st
         # --- 自适应lam：关节自身越一致(transformer rr小)→lam越小→近乎恒等 ---
         if self.adapt:
             lamj = self.lam * np.clip(e / self.lam_ref, 0.0, 1.0)
