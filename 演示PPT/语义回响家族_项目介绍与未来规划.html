@@ -1,0 +1,1522 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>语义回响家族 Semantic Echo Family · 项目介绍与未来规划</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#0a0e1a; --bg2:#0f1526; --card:rgba(255,255,255,.045);
+    --line:rgba(255,255,255,.10); --txt:#eef2ff; --sub:#9aa3c0;
+    --acc:#e94560; --acc2:#f39c12; --acc3:#2ecc71; --blu:#4d6bfe; --vio:#a78bfa;
+    --ad:.72s; --ease:cubic-bezier(.22,.68,.35,1);
+  }
+  html,body{height:100%;overflow:hidden;background:#05070f;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
+    color:var(--txt);
+  }
+  /* ══ 舞台缩放 ══ */
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:
+    radial-gradient(900px 500px at 80% -10%,rgba(233,69,96,.12),transparent 60%),
+    radial-gradient(800px 500px at -10% 20%,rgba(77,107,254,.12),transparent 60%),var(--bg);}
+  .deck{position:relative;width:1280px;height:720px;transform-origin:center center;}
+
+  /* ══ 幻灯片 ══ */
+  .slide{
+    position:absolute;inset:0;padding:44px 54px 56px;overflow:hidden;
+    background:var(--bg2);border:1px solid var(--line);border-radius:20px;
+    box-shadow:0 30px 80px rgba(0,0,0,.5);
+    display:none;
+  }
+  .slide.on{display:flex;flex-direction:column;}
+  .slide.dark{background:
+    radial-gradient(600px 300px at 20% 0%,rgba(233,69,96,.18),transparent 60%),
+    radial-gradient(600px 300px at 100% 100%,rgba(77,107,254,.14),transparent 60%),var(--bg2);}
+
+  /* ══ 通用元素（全部挂 .anim 由父级驱动）══ */
+  .anim{opacity:0;}
+  .slide.on .anim{opacity:1;}
+  .kicker{display:inline-block;padding:5px 14px;border:1px solid rgba(233,69,96,.5);border-radius:20px;font-size:12px;letter-spacing:2px;color:#ff9aa8;background:rgba(233,69,96,.12);}
+  .kicker.b{cursor:pointer;}
+  .kicker.b.active{background:var(--acc);color:#fff;}
+  .part{font-size:12px;letter-spacing:3px;color:var(--sub);text-transform:uppercase;margin-bottom:6px;}
+  h1{font-size:56px;font-weight:800;line-height:1.12;letter-spacing:.5px;}
+  h2{font-size:34px;font-weight:800;line-height:1.2;display:flex;align-items:center;gap:14px;}
+  h2 .no{font-size:15px;color:#ffd27f;border:1px solid rgba(243,156,18,.5);padding:2px 10px;border-radius:12px;background:rgba(243,156,18,.12);}
+  h3{font-size:16px;font-weight:700;margin-bottom:6px;}
+  .lead{font-size:16px;line-height:1.7;color:#cdd5ee;}
+  .sub{color:var(--sub);}
+  .acc{color:#ff9aa8;} .gld{color:#ffd27f;} .grn{color:#5fe89a;} .blu{color:#7aa2ff;} .vio{color:#cba6ff;}
+  .hlbg{background:linear-gradient(90deg,#e94560,#f39c12,#2ecc71,#4d6bfe);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+  .big{font-size:52px;font-weight:800;}
+  .spacer{flex:1;}
+
+  .grid{display:grid;gap:14px;}
+  .g2{grid-template-columns:1fr 1fr;}
+  .g3{grid-template-columns:repeat(3,1fr);}
+  .g4{grid-template-columns:repeat(4,1fr);}
+  .g5{grid-template-columns:repeat(5,1fr);}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;}
+  .card.hot{border-color:rgba(233,69,96,.4);background:rgba(233,69,96,.08);}
+  .card.grn{border-color:rgba(46,204,113,.4);background:rgba(46,204,113,.07);}
+  .card.gld{border-color:rgba(243,156,18,.4);background:rgba(243,156,18,.07);}
+  .card.blu{border-color:rgba(77,107,254,.4);background:rgba(77,107,254,.07);}
+  .tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:10px;margin-bottom:7px;letter-spacing:.5px;}
+  .t-acc{background:rgba(233,69,96,.15);color:#ff9aa8;}
+  .t-grn{background:rgba(46,204,113,.15);color:#5fe89a;}
+  .t-gld{background:rgba(243,156,18,.15);color:#ffd27f;}
+  .t-blu{background:rgba(77,107,254,.15);color:#7aa2ff;}
+  .t-vio{background:rgba(167,139,250,.15);color:#cba6ff;}
+  .stat{font-size:30px;font-weight:800;}
+  .stat small{font-size:13px;color:var(--sub);font-weight:500;}
+  .look{display:flex;align-items:baseline;gap:5px;}
+  .muted{color:var(--sub);}
+
+  /* ══ 表格 ══ */
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th,td{padding:7px 10px;text-align:left;border-bottom:1px solid var(--line);}
+  th{color:#ffb3bd;background:rgba(233,69,96,.08);font-size:12.5px;white-space:nowrap;}
+  td.up{color:#5fe89a;} td.down{color:#ff9aa8;} td.y{color:#ffd27f;}
+  .tbl{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card);}
+
+  /* ══ 步骤条 / 其他 ══ */
+  .steps{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .step{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);padding:8px 13px;border-radius:12px;font-size:13px;}
+  .step b{display:inline-flex;width:22px;height:22px;align-items:center;justify-content:center;border-radius:50%;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;font-size:12px;}
+  .arrow{color:var(--vio);font-weight:800;font-size:18px;}
+
+  /* ══ 底部页码 ══ */
+  .foot{position:absolute;left:54px;right:54px;bottom:16px;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--sub);}
+  .foot .bar{height:4px;flex:1;margin-left:18px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden;}
+  .foot .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--acc),var(--acc2));transition:width .4s;}
+
+  /* ══ 进度/导航 ══ */
+  .ctl{position:fixed;right:14px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:5px;z-index:50;}
+  .ctl button{width:10px;height:10px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:transparent;cursor:pointer;padding:0;}
+  .ctl button.on{background:var(--acc);border-color:var(--acc);transform:scale(1.5);}
+  .ctl button.section{width:12px;height:12px;border-radius:4px;background:rgba(255,210,127,.25);border-color:rgba(255,210,127,.6);}
+  .nav{position:fixed;left:14px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px;z-index:55;}
+  .nav button{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.05);color:#cdd5ee;cursor:pointer;font-size:16px;}
+  .nav button:hover{background:rgba(233,69,96,.2);border-color:var(--acc);}
+  .hint{position:fixed;left:14px;bottom:12px;color:#5a6380;font-size:11px;z-index:55;}
+  .progressTop{position:fixed;top:0;left:0;height:4px;z-index:60;background:linear-gradient(90deg,var(--acc),var(--acc2),var(--acc3));width:0;transition:width .3s;}
+  .index{position:fixed;right:14px;bottom:12px;color:#5a6380;font-size:12px;z-index:55;letter-spacing:1px;}
+
+  /* ══ 动画库：约 20 种入场 ══ */
+  @keyframes fadeUp{from{transform:translateY(34px);opacity:0}to{transform:none;opacity:1}}
+  @keyframes fadeDown{from{transform:translateY(-34px);opacity:0}to{transform:none;opacity:1}}
+  @keyframes fadeLeft{from{transform:translateX(-40px);opacity:0}to{transform:none;opacity:1}}
+  @keyframes fadeRight{from{transform:translateX(40px);opacity:0}to{transform:none;opacity:1}}
+  @keyframes zoomIn{from{transform:scale(.55);opacity:0}to{transform:none;opacity:1}}
+  @keyframes zoomOut{from{transform:scale(1.4);opacity:0}to{transform:none;opacity:1}}
+  @keyframes flipInX{from{transform:perspective(600px) rotateX(-75deg);opacity:0}to{transform:none;opacity:1}}
+  @keyframes flipInY{from{transform:perspective(600px) rotateY(-75deg);opacity:0}to{transform:none;opacity:1}}
+  @keyframes rotateIn{from{transform:rotate(-14deg) scale(.85);opacity:0}to{transform:none;opacity:1}}
+  @keyframes bounceIn{0%{transform:scale(.3);opacity:0}50%{transform:scale(1.12)}70%{transform:scale(.96)}100%{transform:none;opacity:1}}
+  @keyframes rollIn{from{transform:translateX(-100%) rotate(-330deg);opacity:0}to{transform:none;opacity:1}}
+  @keyframes drop{0%{transform:translateY(-110%);opacity:0}60%{transform:translateY(8px);opacity:1}100%{transform:none}}
+  @keyframes blurIn{from{filter:blur(12px);opacity:0;transform:translateY(14px)}to{filter:blur(0);transform:none;opacity:1}}
+  @keyframes swing{20%{transform:rotate(12deg)}40%{transform:rotate(-8deg)}60%{transform:rotate(4deg)}80%{transform:rotate(-2deg)}100%{transform:rotate(0)}from{opacity:0}}
+  @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
+  @keyframes rubber{0%{transform:scale(1,1)}30%{transform:scale(1.18,.86)}45%{transform:scale(.9,1.1)}60%{transform:scale(1.05,.93)}100%{transform:none}}
+  @keyframes slideL{from{transform:translateX(60%);opacity:0}to{transform:none;opacity:1}}
+  @keyframes slideR{from{transform:translateX(-60%);opacity:0}to{transform:none;opacity:1}}
+  @keyframes lightSpeed{from{transform:translateX(120%) skewX(-25deg);opacity:0}to{transform:none;opacity:1}}
+  @keyframes heartBeat{0%{transform:scale(1)}14%{transform:scale(1.2)}28%{transform:scale(1)}42%{transform:scale(1.18)}70%{transform:scale(1)}}
+  /* ── 扩充动画库：30+ 更多入场/强调效果 ── */
+  @keyframes maskUp{from{clip-path:inset(100% 0 0 0);opacity:0;transform:translateY(26px)}to{clip-path:inset(0 0 0 0);transform:none;opacity:1}}
+  @keyframes maskRight{from{clip-path:inset(0 100% 0 0);opacity:0;transform:translateX(-22px)}to{clip-path:inset(0 0 0 0);transform:none;opacity:1}}
+  @keyframes maskCircle{from{clip-path:circle(0%);opacity:0}to{clip-path:circle(150%);opacity:1}}
+  @keyframes maskDiagonal{from{clip-path:polygon(50% 0,50% 0,50% 100%,50% 100%);opacity:0}to{clip-path:polygon(0 0,100% 0,100% 100%,0 100%);opacity:1}}
+  @keyframes float{0%{transform:translateY(0)}50%{transform:translateY(-14px)}100%{transform:translateY(0)}}
+  @keyframes floatX{0%{transform:translateX(0)}50%{transform:translateX(16px)}100%{transform:translateX(0)}}
+  @keyframes wobble{0%,100%{transform:rotate(0)}20%{transform:rotate(-6deg)}40%{transform:rotate(6deg)}60%{transform:rotate(-3deg)}80%{transform:rotate(3deg)}}
+  @keyframes jack{from{transform:translateY(-50%) translateX(0);opacity:0}50%{transform:translateY(0) translateX(-6px)}100%{transform:none;opacity:1}}
+  @keyframes jello{0%,11.1%,to{transform:none}22.2%{transform:skewX(-12deg) skewY(-12deg)}33.3%{transform:skewX(7deg) skewY(7deg)}44.4%{transform:skewX(-5deg)}55.5%{transform:skewX(4deg)}66.6%{transform:skewX(-2deg)}77.7%{transform:skewX(1deg)}}
+  @keyframes hinge{20%{transform:rotate(72deg)}40%{transform:rotate(50deg)}60%{transform:rotate(68deg)}80%{transform:rotate(58deg)}to{transform:rotate(64deg);opacity:1;transform-origin:top left}}
+  @keyframes zoomBounce{0%{transform:scale(.3);opacity:0}40%{transform:scale(1.3)}60%{transform:scale(.9)}80%{transform:scale(1.06)}to{transform:none;opacity:1}}
+  @keyframes trackIn{from{opacity:0;letter-spacing:-8px;transform:translateY(-18px)}to{opacity:1;letter-spacing:2px;transform:none}}
+  @keyframes popIn{0%{transform:scale(0);opacity:0}70%{transform:scale(1.25);opacity:1}100%{transform:scale(1)}}
+  @keyframes flipInYSlow{from{transform:perspective(800px) rotateY(85deg);opacity:0}to{transform:none;opacity:1}}
+  @keyframes riseL{from{transform:translate(-40px,40px);opacity:0}to{transform:none;opacity:1}}
+  @keyframes riseR{from{transform:translate(40px,40px);opacity:0}to{transform:none;opacity:1}}
+  @keyframes spiralIn{from{transform:rotate(720deg) scale(.2);opacity:0}to{transform:none;opacity:1}}
+  @keyframes blurZoom{from{filter:blur(18px);transform:scale(1.6);opacity:0}to{filter:blur(0);transform:none;opacity:1}}
+  @keyframes gradientShift{background-position:0 50%;background-size:200% 200%}
+  @keyframes skewSlide{from{transform:translateX(70%) skewX(-12deg);opacity:0}to{transform:none;opacity:1}}
+  @keyframes foldDown{from{transform:perspective(700px) rotateX(-85deg);transform-origin:top center;opacity:0}to{transform:none;opacity:1}}
+  @keyframes foldUp{from{transform:perspective(700px) rotateX(85deg);transform-origin:bottom center;opacity:0}to{transform:none;opacity:1}}
+  @keyframes twinkle{0%{transform:scale(.6);opacity:.5}50%{transform:scale(1.25);opacity:1}100%{transform:scale(.6);opacity:.5}}
+  @keyframes echoWave{0%{opacity:0;transform:scale(.6)}40%{opacity:1}100%{transform:scale(1.5);opacity:0}}
+  @keyframes shakeX{0%,100%{transform:translateX(0)}10%,30%,50%,70%,90%{transform:translateX(-6px)}20%,40%,60%,80%{transform:translateX(6px)}}
+  @keyframes flash{0%,100%{opacity:1}50%{opacity:.2}}
+  @keyframes glowPulse{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+
+  .slide.on .fadeUp{animation:fadeUp var(--ad) var(--ease) both}
+  .slide.on .fadeDown{animation:fadeDown var(--ad) var(--ease) both}
+  .slide.on .fadeLeft{animation:fadeLeft var(--ad) var(--ease) both}
+  .slide.on .fadeRight{animation:fadeRight var(--ad) var(--ease) both}
+  .slide.on .zoomIn{animation:zoomIn var(--ad) var(--ease) both}
+  .slide.on .zoomOut{animation:zoomOut var(--ad) var(--ease) both}
+  .slide.on .flipInX{animation:flipInX var(--ad) var(--ease) both}
+  .slide.on .flipInY{animation:flipInY var(--ad) var(--ease) both}
+  .slide.on .rotateIn{animation:rotateIn var(--ad) var(--ease) both}
+  .slide.on .bounceIn{animation:bounceIn .9s var(--ease) both}
+  .slide.on .rollIn{animation:rollIn .9s var(--ease) both}
+  .slide.on .drop{animation:drop .8s var(--ease) both}
+  .slide.on .blurIn{animation:blurIn .85s var(--ease) both}
+  .slide.on .swing{animation:swing 1s var(--ease) both}
+  .slide.on .pulse,.slide.on.spin .pulse{animation:pulse 1.3s ease-in-out infinite}
+  .slide.on .rubber{animation:rubber 1s var(--ease) both}
+  .slide.on .slideL{animation:slideL .8s var(--ease) both}
+  .slide.on .slideR{animation:slideR .8s var(--ease) both}
+  .slide.on .lightSpeed{animation:lightSpeed .9s var(--ease) both}
+  .slide.on .heartBeat{animation:heartBeat 1.2s ease-in-out both}
+  /* ── 30+ 更多动画 class ── */
+  .slide.on .maskUp{animation:maskUp .85s var(--ease) both}
+  .slide.on .maskRight{animation:maskRight .85s var(--ease) both}
+  .slide.on .maskCircle{animation:maskCircle .9s var(--ease) both}
+  .slide.on .maskDiagonal{animation:maskDiagonal .9s var(--ease) both}
+  .slide.on .float{animation:float 4s ease-in-out infinite}
+  .slide.on .floatX{animation:floatX 4.5s ease-in-out infinite}
+  .slide.on .wobble{animation:wobble 1s var(--ease) both}
+  .slide.on .jack{animation:jack .9s var(--ease) both}
+  .slide.on .jello{animation:jello 1s var(--ease) both}
+  .slide.on .hinge{animation:hinge 1.2s ease-in-out both}
+  .slide.on .zoomBounce{animation:zoomBounce .9s var(--ease) both}
+  .slide.on .trackIn{animation:trackIn .8s var(--ease) both}
+  .slide.on .popIn{animation:popIn .7s var(--ease) both}
+  .slide.on .flipInYSlow{animation:flipInYSlow .9s var(--ease) both}
+  .slide.on .riseL{animation:riseL .85s var(--ease) both}
+  .slide.on .riseR{animation:riseR .85s var(--ease) both}
+  .slide.on .spiralIn{animation:spiralIn 1s var(--ease) both}
+  .slide.on .blurZoom{animation:blurZoom 1s var(--ease) both}
+  .slide.on .skewSlide{animation:skewSlide .9s var(--ease) both}
+  .slide.on .foldDown{animation:foldDown .9s var(--ease) both}
+  .slide.on .foldUp{animation:foldUp .9s var(--ease) both}
+  .slide.on .twinkle{animation:twinkle 1.8s ease-in-out infinite}
+  .slide.on .echoWave{animation:echoWave 3s ease-out infinite}
+  .slide.on .shakeX{animation:shakeX .8s var(--ease) both}
+  .slide.on .flash{animation:flash 1.2s var(--ease) both}
+  .slide.on .gradientShift{background-size:220% 220%;animation:glowPulse 5s ease infinite}
+  .slide.on .glowPulse{background-size:220% 220%;animation:glowPulse 4s ease infinite}
+  .slide .stagger>*:nth-child(1){animation-delay:.05s}
+  .slide .stagger>*:nth-child(2){animation-delay:.16s}
+  .slide .stagger>*:nth-child(3){animation-delay:.27s}
+  .slide .stagger>*:nth-child(4){animation-delay:.38s}
+  .slide .stagger>*:nth-child(5){animation-delay:.49s}
+  .slide .stagger>*:nth-child(6){animation-delay:.60s}
+  .slide .stagger>*:nth-child(7){animation-delay:.71s}
+  .slide .stagger>*:nth-child(8){animation-delay:.82s}
+  .slide .stagger>*:nth-child(9){animation-delay:.93s}
+  .slide{--stagger:.1s;}
+
+  /* 布局工具 */
+  .row{display:flex;gap:16px;align-items:stretch;}
+  .row>*{flex:1;}
+  .r2{grid-template-columns:1.2fr 1fr;}
+  .mt{margin-top:14px;} .mt8{margin-top:8px;}
+  .cols-split{display:flex;flex-direction:column;justify-content:space-between;gap:6px;}
+  .center{text-align:center;}
+  .lead-s{font-size:15px;line-height:1.65;color:#c6cdea;}
+  ul.clean{list-style:none;display:flex;flex-direction:column;gap:5px;}
+  ul.clean li{padding-left:18px;position:relative;font-size:13.5px;line-height:1.5;color:#cfd6ee;}
+  ul.clean li::before{content:"▸";position:absolute;left:0;color:var(--acc2);}
+  .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;}
+</style>
+</head>
+<body>
+<div class="progressTop" id="progressTop"></div>
+<div class="nav">
+  <button id="prev" title="上一页">▲</button>
+  <button id="next" title="下一页">▼</button>
+</div>
+<div class="ctl" id="ctl"></div>
+<div class="index" id="index"></div>
+<div class="hint">← → / 空格 / 点击导航跳转 · 全屏提示请按 F</div>
+
+<div class="stage"><div class="deck" id="deck">
+
+<!-- ═══════════════ 1 封面 ═══════════════ -->
+<section class="slide on dark">
+  <div class="foot"><span class="part">COVER</span><span class="bar"><i style="width:1%"></i></span><span class="muted">01</span></div>
+  <div class="anim fadeDown part">SEMANTIC ECHO FAMILY · P1~P6 项目介绍与未来规划</div>
+  <div class="anim zoomIn kicker" style="margin-top:120px">P1 · P1.5 · P2.5 · P3 · P4 · P5 · P6</div>
+  <div class="anim fadeUp" style="margin-top:16px"><h1>让 AI 表达 <span class="hlbg">更有情感</span></h1></div>
+  <div class="anim slideL" style="margin-top:14px"><h2 style="font-size:26px">语义回响家族 · 推理期情感增强引擎</h2></div>
+  <div class="anim blurIn lead" style="margin-top:22px;max-width:860px">一套<span class="gld">不训练 / 不改权重 / 即插即用</span>的情感增强架构家族：回收被 softmax 丢弃的情感向量，让 1.5B 小模型在"AI vs 真人盲评"中反超大厂大模型。</div>
+  <div class="anim pulse" style="margin-top:30px">
+    <div class="g5 grid">
+      <div class="card"><div class="stat grn">0.7046</div><small class="muted">P6 情感导演综合跑分 · 全家族冠军</small></div>
+      <div class="card"><div class="stat gld">+200%</div><small class="muted">TuringBench 人似度提升（P3锚点）</small></div>
+      <div class="card"><div class="stat blu">4/5</div><small class="muted">五项图灵基准 1.5B 反超裸模型</small></div>
+      <div class="card"><div class="stat vio">6 大空间</div><small class="muted">表示/配置/概率/嵌入/注意力/全融合</small></div>
+      <div class="card"><div class="stat acc">164 组</div><small class="muted">全因子实验矩阵 · 全部实测</small></div>
+    </div>
+  </div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 2 目录 ═══════════════ -->
+<section class="slide">
+  <div class="foot"><span class="part">AGENDA</span><span class="bar"><i style="width:2%"></i></span><span class="muted">02</span></div>
+  <div class="anim fadeDown kicker">目录 · AGENDA</div>
+  <div class="anim fadeLeft" style="margin-top:12px"><h2>60 页 · 七大板块</h2></div>
+  <div class="grid g3" style="margin-top:26px">
+    <div class="card anim flipInX"><span class="tag t-acc">A · 开场总览</span><h3>01 项目定位与家族地图</h3><p class="muted" style="font-size:13px">什么是语义回响 · 核心洞察 · 六大空间</p></div>
+    <div class="card anim flipInY"><span class="tag t-gld">B · 核心方案</span><h3>02 P1~P6 六代方案详解</h3><p class="muted" style="font-size:13px">语义回响 / 兼容层 / 潮汐 / 锚点 / KV共振 / 融合 / 导演 / LoRA</p></div>
+    <div class="card anim flipInX"><span class="tag t-grn">C · 数据验证</span><h3>03 评测体系与实验数据</h3><p class="muted" style="font-size:13px">五大基准 · 家族跑分 · 多模型 · 工程压测</p></div>
+    <div class="card anim flipInY"><span class="tag t-blu">D · 工程落地</span><h3>04 产品化与部署</h3><p class="muted" style="font-size:13px">四层记忆 · API服务 · 分级部署 · 成本</p></div>
+    <div class="card anim flipInX"><span class="tag t-vio">E · 商业市场</span><h3>05 市场图景与商业授权</h3><p class="muted" style="font-size:13px">情绪经济 · 监管窗口 · 授权模式 · 路线</p></div>
+    <div class="card anim hot"><span class="tag t-acc">F · 未来规划 ★</span><h3>06 未来项目规划 Roadmap</h3><p class="muted" style="font-size:13px">短期攻坚 · 中期商业化 · 长期基座 · 里程碑 · 风险</p></div>
+  </div>
+  <div class="anim fadeUp center" style="margin-top:30px"><span class="acc big" style="font-size:22px">信息密度目标 ≥ 80%</span> <span class="sub" style="font-size:14px">— 每一页都是可落地的结论与数字</span></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 3 项目是什么 ═══════════════ -->
+<section class="slide">
+  <div class="foot"><span class="part">A · 开场总览</span><span class="bar"><i style="width:5%"></i></span><span class="muted">03</span></div>
+  <div class="anim fadeDown kicker">项目定位 · WHAT</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>项目是什么</h2></div>
+  <div class="row mt" style="margin-top:18px">
+    <div class="card anim fadeLeft r2" style="flex:1.3">
+      <span class="tag t-acc">一句话</span>
+      <p class="lead">一套"让 AI 表达更有情感、更像真人"的<b>推理期情感增强引擎家族</b>（P1~P6）。它在模型生成时<b>回收被丢弃的情感向量 / 重加权采样分布 / 借用模型自身语义地图</b>，把机械的"AI 味"抹平成有温度的表达。</p>
+      <div class="steps mt" style="margin-top:16px">
+        <div class="step"><b>1</b> 回收被丢弃 Token 的隐藏状态 → 情感池</div><span class="arrow">→</span>
+        <div class="step"><b>2</b> 投影 / 重加权 / 只读打分解码</div><span class="arrow">→</span>
+        <div class="step"><b>3</b> logits 注入 × 剂量（λ/β/α）</div>
+      </div>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;gap:12px">
+      <div class="card anim fadeRight grn"><span class="tag t-grn">不做什么</span><ul class="clean"><li>✖ 不修改预训练模型权重</li><li>✖ 不重新训练基座（除 P6 LoRA 外挂）</li><li>✖ 不引入外部知识 / 不上传隐私</li></ul></div>
+      <div class="card anim fadeRight gld"><span class="tag t-gld">做什么</span><ul class="clean"><li>✔ 作用在生成期 / 解码期（推理时增强）</li><li>✔ 可量化：语义熵 / 情感命中率 / 重复率</li><li>✔ 可跨模型迁移（0.5B→7B + 闭源 API）</li></ul></div>
+    </div>
+  </div>
+  <div class="anim zoomIn" style="margin-top:18px">
+    <div class="g4 grid">
+      <div class="card"><div class="stat gld">"记忆+温度"</div><p class="muted" style="font-size:12.5px">陪伴本质 = 记忆 + 温度，且温度可被工程化创造、调节与验证</p></div>
+      <div class="card"><div class="stat blu">0.18→0.52</div><p class="muted" style="font-size:12.5px">LLM-Judge AI vs真人盲评胜率，反超 3B、持平 Qwen3</p></div>
+      <div class="card"><div class="stat grn">&lt;4MB</div><p class="muted" style="font-size:12.5px">显存增量（P3 打分表仅 1.8MB，vs P1 投影 933MB 降 3 个量级）</p></div>
+      <div class="card"><div class="stat vio">六空间</div><p class="muted" style="font-size:12.5px">表示 / 配置 / 概率 / 嵌入 / 注意力 / 全融合正交可叠加</p></div>
+    </div>
+  </div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 4 家族地图 ═══════════════ -->
+<section class="slide dark">
+  <div class="foot"><span class="part">A · 开场总览</span><span class="bar"><i style="width:7%"></i></span><span class="muted">04</span></div>
+  <div class="anim fadeDown kicker">家族地图 · FAMILY MAP</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>P1~P6 六代引擎 · 五空间铺路 + 融合收口</h2></div>
+  <div class="grid g3 mt" style="margin-top:20px">
+    <div class="card anim fadeUp"><span class="tag t-acc">P1 · 表示空间</span><h3>语义回响 SE</h3><p class="muted" style="font-size:12.5px">hidden_state 钩子回响 · 开山之作</p></div>
+    <div class="card anim fadeUp"><span class="tag t-blu">P1.5 · 配置空间</span><h3>通用兼容层 V2</h3><p class="muted" style="font-size:12.5px">自动适配 λ/γ/τ + 兜底 · 调度总开关</p></div>
+    <div class="card anim fadeUp"><span class="tag t-vio">P2.5 · 概率空间</span><h3>情感潮汐 ETD</h3><p class="muted" style="font-size:12.5px">外部 VAD + 采样重加权 · 数学上不可能坍缩</p></div>
+    <div class="card anim fadeUp"><span class="tag t-gld">P3 · 嵌入空间</span><h3>锚点回响 AE</h3><p class="muted" style="font-size:12.5px">词表 embedding 只读投影 · 零权重只读证明</p></div>
+    <div class="card anim fadeUp"><span class="tag t-acc">P4 · 注意力缓存</span><h3>KV 情感共振 KER</h3><p class="muted" style="font-size:12.5px">KV 有界调制 · 让模型"看见"情感</p></div>
+    <div class="card anim fadeUp"><span class="tag t-blu">P5 · 全空间融合</span><h3>超融合解码器 UFD</h3><p class="muted" style="font-size:12.5px">P1×1.5×2.5×3×4 机制级耦合 0.6255</p></div>
+  </div>
+  <div class="row mt" style="margin-top:18px">
+    <div class="card hot anim flipInX" style="flex:1">
+      <span class="tag t-acc">🏆 2026 全家族冠军</span><h3>P6 情感导演 EDD</h3>
+      <p class="muted" style="font-size:12.5px">解码期插件 · TAD + PIS + OQC 情感导演三件套</p>
+      <div class="look" style="margin-top:6px"><span class="big grn">0.7046</span><span class="sub" style="font-size:13px">五大基准综合 · 超 P5 +12.6%</span></div>
+    </div>
+    <div class="card gld anim flipInY" style="flex:1">
+      <span class="tag t-gld">训练态方案</span><h3>P6 LoRA 外挂 × 旁路由</h3>
+      <p class="muted" style="font-size:12.5px">权重+路由 · 训练态写适配器 + 多候选选优</p>
+      <div class="look" style="margin-top:6px"><span class="stat blu">LLM-Judge 0.35</span><span class="sub" style="font-size:13px">达标迭代中 · 目标 ≥0.48</span></div>
+    </div>
+  </div>
+  <div class="anim fadeUp" style="margin-top:14px"><div class="card" style="border-style:dashed"><b class="grn">家族共识：</b><span class="muted" style="font-size:13px">不训练、不改基座权重（除 P6 LoRA）、作用在生成期；共同兜底纪律 = 熵&lt;0.6 自动降强度/归零，杜绝坍缩。</span></div></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 5 核心洞察 ═══════════════ -->
+<section class="slide">
+  <div class="foot"><span class="part">A · 开场总览</span><span class="bar"><i style="width:10%"></i></span><span class="muted">05</span></div>
+  <div class="anim fadeDown kicker">核心洞察 · INSIGHT</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>两大问题 → 一个答案</h2></div>
+  <div class="g2 grid mt" style="margin-top:18px">
+    <div class="card hot anim fadeLeft">
+      <span class="tag t-acc">问题① 概率暴政</span><h3>模型每步丢弃 15 万个被淘汰 Token 的情感</h3>
+      <p class="lead-s" style="font-size:13.5px">以 Qwen2.5-0.5B（词表 151,936）为例，自回归每步只取一个 Token，其余候选的隐藏状态被系统清除——<b>丢弃的不是一个 Token，而是其锚定的整个情感语义子空间结构</b>。"开心"被选中时，"快乐 / 愉悦 / 难过"一并被丢。</p>
+      <div class="anim zoomIn card mt8" style="background:rgba(233,69,96,.1);border-color:rgba(233,69,96,.4)"><b class="acc">洞察：</b><span class="muted" style="font-size:13px">这些被丢弃的向量并非噪声，回收它们 = 恢复被浪费的情感维度。</span></div>
+    </div>
+    <div class="card gld anim fadeRight">
+      <span class="tag t-gld">问题② 情感断层</span><h3>"AI 味"机械腔 + 表达力与参数规模非线性</h3>
+      <p class="lead-s" style="font-size:13.5px">旗舰大模型输出仍带"作为 / 助手 / 请随时找我"等机械腔，图灵测试一测即穿；情感表达能力与参数量<b>并非线性</b>——1.5B 小模型情感潜力远未开发，瓶颈在"表达层"而非"理解层"。</p>
+      <div class="anim zoomIn card mt8" style="background:rgba(46,204,113,.1);border-color:rgba(46,204,113,.4)"><b class="grn">洞察：</b><span class="muted" style="font-size:13px">"AI 没有感觉"——但情感表达是可量化、可调节、可迁移的<b>剂量效应</b>，不是开关。</span></div>
+    </div>
+  </div>
+  <div class="anim bounceIn center mt" style="margin-top:22px"><span class="gld big" style="font-size:26px">答案：</span><span class="lead" style="font-size:20px">在模拟语言规律的旁路上，额外开辟一条<b class="acc">最大化模拟情感规律</b>的旁路通道</span></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 6 总体思路 ═══════════════ -->
+<section class="slide dark">
+  <div class="foot"><span class="part">A · 开场总览</span><span class="bar"><i style="width:12%"></i></span><span class="muted">06</span></div>
+  <div class="anim fadeDown kicker">总体思路 · APPROACH</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>从"记忆"到"陪伴"的四层一体化思路</h2></div>
+  <div class="steps anim fadeUp mt" style="margin-top:20px;justify-content:center">
+    <div class="step"><b>层4</b>情感优化通道</div><span class="arrow">⊕</span>
+    <div class="step"><b>层3</b>深度自适应机制</div><span class="arrow">⊕</span>
+    <div class="step"><b>层2</b>分层记忆体系</div><span class="arrow">⊕</span>
+    <div class="step"><b>层1</b>微调基座（唯一物理底座）</div>
+  </div>
+  <div class="g4 grid mt" style="margin-top:18px">
+    <div class="card anim fadeUp"><span class="tag t-vio">短期记忆 · 语义回响池</span><h3>当前对话的"情绪余韵"</h3><p class="muted" style="font-size:12px">forward hook 捕获 → 回响池质心 → logits 偏置，随生成自动衰减</p></div>
+    <div class="card anim fadeUp"><span class="tag t-blu">中期记忆 · RAG</span><h3>用户资料 / 事实知识</h3><p class="muted" style="font-size:12px">bge-small-zh + FAISS（151条库），按需检索注入 [参考信息]</p></div>
+    <div class="card anim fadeUp"><span class="tag t-gld">长期记忆 · LoRA</span><h3>人格语态适配器</h3><p class="muted" style="font-size:12px">gentle_v2 / emotion_v1 / emotion_7B，跨会话稳定、热插拔</p></div>
+    <div class="card anim fadeUp"><span class="tag t-acc">唯一物理基座</span><h3>Qwen2.5 0.5B~7B</h3><p class="muted" style="font-size:12px">fp16 / 4bit NF4，不改权重，只借"接口"</p></div>
+  </div>
+  <div class="anim fadeUp mt" style="margin-top:16px"><div class="card"><b class="grn">一体化闭环：</b><span class="muted" style="font-size:13px">数据构建 → 智能培训(LoRA) → 推理增强 → 服务部署 → 打标回流，全流程本地、零数据外传。</span></div></div>
+  <div class="anim slideL mt8" style="margin-top:12px"><div class="tbl"><table><tr><th>操作空间</th><th>机制</th><th>权重影响</th><th>记忆定位</th></tr><tr><td class="y">微调基座</td><td>唯一物理基座</td><td>—</td><td>推理底座</td></tr><tr><td class="grn">语义回响 Echo</td><td>推理期旁路注入</td><td>不改权重</td><td class="grn">短期记忆</td></tr><tr><td class="grn">RAG</td><td>向量检索注入</td><td>不改权重</td><td class="grn">中期记忆</td></tr><tr><td class="grn">LoRA</td><td>语态适配器</td><td>仅适配器</td><td class="grn">长期记忆</td></tr></table></div></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 7 P1 概览 ═══════════════ -->
+<section class="slide">
+  <div class="foot"><span class="part">B · 核心方案 / P1</span><span class="bar"><i style="width:14%"></i></span><span class="muted">07</span></div>
+  <div class="anim fadeDown kicker">P1 · 表示空间 · 开山之作</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2><span class="no">P1</span>语义回响 emphasise<span class="acc"> · 每一步都在心里先想好情绪再开口</span></h2></div>
+  <div class="row mt" style="margin-top:18px">
+    <div class="anim fadeLeft" style="flex:1.1">
+      <p class="lead-s">在最后 N 层注册 <b>forward hook</b> 捕获所有隐藏状态，回收被 softmax 淘汰 Token 的情感表征，经<b>随机静态正交投影</b>后注入当前表示空间——这是"上一句话余韵"的工程化实现。</p>
+      <div class="card mt8 anim zoomIn"><b class="grn">一句话：</b><span class="muted" style="font-size:13px">模型先在心里积累"情绪底色"，写正文时叠加注入，表达自然变暖。</span></div>
+    </div>
+    <div class="anim slideR card hot" style="flex:1">
+      <span class="tag t-acc">关键能力</span>
+      <ul class="clean">
+        <li>λ / γ / τ 三大剂量参数，全部可调</li>
+        <li>0.5B 语义熵最高 <b class="grn">+17.9%</b></li>
+        <li>情感筛选把命中率 <b class="gld">0 → 23.25%</b></li>
+        <li>本级经 LoRA 外挂升级为"五层完整架构"</li>
+      </ul>
+    </div>
+  </div>
+  <h3 class="anim fadeUp mt" style="margin-top:18px">原理公式 · 三连</h3>
+  <div class="g3 grid anim fadeUp mt8">
+    <div class="card"><p class="muted" style="font-size:12.5px">① 质心：<b style="color:#fff">c<sub>t</sub> = Σ w<sub>i</sub>·h<sup>(i)</sup> / Σ w<sub>i</sub></b></p><p class="muted" style="font-size:11.5px">按不确定性权重聚合情感池</p></div>
+    <div class="card"><p class="muted" style="font-size:12.5px">② 投影：<b style="color:#fff">p<sub>t</sub> = W<sub>rsp</sub>·c<sub>t</sub></b></p><p class="muted" style="font-size:11.5px">种子42随机静态正交映射</p></div>
+    <div class="card"><p class="muted" style="font-size:12.5px">③ 注入：<b style="color:#fff">h<sup>echo</sup> = h<sub>t</sub> + λ(t)·p<sub>t</sub></b></p><p class="muted" style="font-size:11.5px">λ 按阶段/规模自适应</p></div>
+  </div>
+  <div class="anim fadeUp mt8"><div class="card" style="border-style:dashed"><span class="muted">W<sub>rsp</sub> = 种子固定(42)的随机静态正交投影矩阵；不确定性筛选：仅当 <b style="color:#fff">1−max P &lt; threshold</b> 才入池，避免噪声积累。</span></div></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 8 P1 机制链路 ═══════════════ -->
+<section class="slide dark">
+  <div class="foot"><span class="part">B · 核心方案 / P1</span><span class="bar"><i style="width:16%"></i></span><span class="muted">08</span></div>
+  <div class="anim fadeDown kicker">P1 · 机制链路</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>一步生成的完整链路</h2></div>
+  <div class="anim fadeUp steps mt" style="margin-top:22px;justify-content:center">
+    <div class="step"><b>①</b>注册 Hook · last_n_layers=4</div><span class="arrow">→</span>
+    <div class="step"><b>②</b>捕获 hidden_state 入池</div><span class="arrow">→</span>
+    <div class="step"><b>③</b>加权质心 c</div><span class="arrow">→</span>
+    <div class="step"><b>④</b>随机投影 p</div><span class="arrow">→</span>
+    <div class="step"><b>⑤</b>情感筛选(τ)</div><span class="arrow">→</span>
+    <div class="step"><b>⑥</b>×λ 注入 logits</div>
+  </div>
+  <div class="row mt" style="margin-top:24px">
+    <div class="g2 grid anim slideL" style="flex:1.1;gap:12px">
+      <div class="card blu"><span class="tag t-blu">模型深度 · 多层语义场</span><p class="muted" style="font-size:12.5px">h<sup>avg</sup><sub>t</sub> = (1/N) Σ h<sup>(L−N+i)</sup><sub>t</sub>，深层特征含更抽象语义；对 PeftModel/4bit 循环解包定位钩子。</p></div>
+      <div class="card gld"><span class="tag t-gld">思考/表达分离</span><p class="muted" style="font-size:12.5px">思考阶段 t≤T 保 λ，正文阶段降至 0.5λ 或 0，避免情感偏置干扰推理链。</p></div>
+    </div>
+    <div class="card hot anim fadeRight" style="flex:1">
+      <span class="tag t-acc">复现性内核</span>
+      <ul class="clean">
+        <li>固定随机种子 42，可逐样本复现</li>
+        <li>钩子兼容 PeftModel + bitsandbytes 量化包装</li>
+        <li>归一化基准 hidden_dim = 896</li>
+      </ul>
+    </div>
+  </div>
+  <div class="anim bounceIn center mt" style="margin-top:20px"><span class="lead" style="font-size:18px">效果 = "先想后说"：思考链里带情绪 → 正文叠加情感底色 → <b class="acc">表达自然变暖而不失理智</b></span></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 9 P1 回响池保留策略 ═══════════════ -->
+<section class="slide">
+  <div class="foot"><span class="part">B · 核心方案 / P1</span><span class="bar"><i style="width:18%"></i></span><span class="muted">09</span></div>
+  <div class="anim fadeDown kicker">P1 · 回响池</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>三种保留策略 = 人类"遗忘曲线"的三种工程化</h2></div>
+  <div class="g3 grid mt" style="margin-top:20px">
+    <div class="card grn anim fadeUp"><span class="tag t-grn">🧭 衰减 Decay · 最优</span><h3>w(t)=w·exp(−γ·Δt)</h3><p class="muted" style="font-size:12.5px">连续平滑衰减、保留全部历史——"近期影响强、远期影响弱"的自然遗忘曲线</p></div>
+    <div class="card blu anim fadeUp"><span class="tag t-blu">⏳ 滑动窗口</span><h3>L<sub>window</sub>=3 轮</h3><p class="muted" style="font-size:12.5px">只保留近三轮，硬边界截断、抗矛盾信号最强，但有 λ 依赖性</p></div>
+    <div class="card anim fadeUp"><span class="tag t-acc">📀 全局保留</span><h3>永不淘汰</h3><p class="muted" style="font-size:12.5px">信息最完整，但多情感信号混合会稀释强度</p></div>
+  </div>
+  <div class="anim fadeUp mt" style="margin-top:18px"><h3 class="muted" style="font-size:15px">实证（0.5B · λ=0.5）：衰减 > 滑动窗口 > 全局保留</h3>
+    <div class="tbl mt8"><table><tr><th>实验</th><th>λ</th><th>策略</th><th>语义熵</th><th>变化率</th></tr><tr><td>E7</td><td>0.5</td><td class="grn">衰减</td><td>2.1352</td><td class="grn">基准</td></tr><tr><td>E11</td><td>0.5</td><td>滑动窗口</td><td>2.0832</td><td class="down">−2.44%</td></tr><tr><td>E13</td><td>0.5</td><td>全局保留</td><td>1.9372</td><td class="down">−9.27%</td></tr><tr><td>E8</td><td>1.0</td><td class="grn">衰减</td><td>0.9022</td><td>基准</td></tr><tr><td>E12</td><td>1.0</td><td>滑动窗口</td><td>0.7311</td><td class="down">−18.97%</td></tr></table></div></div>
+  <div class="anim rotateIn mt8"><div class="card gld"><b class="gld">结论：</b><span class="muted" style="font-size:13px">λ 越大，保留策略差异越显著；衰减策略在人味与稳定性上综合最优，成为默认配置。</span></div></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 10 P1 λ 倒U型 ═══════════════ -->
+<section class="slide dark">
+  <div class="foot"><span class="part">B · 核心方案 / P1</span><span class="bar"><i style="width:20%"></i></span><span class="muted">10</span></div>
+  <div class="anim fadeDown kicker">P1 · 剂量主效应</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2><span class="no">E1~E6</span>λ 的倒 U 型效应（0.5B 完整复现）</h2></div>
+  <div class="row mt" style="margin-top:16px">
+    <div class="anim slideL" style="flex:1">
+      <div class="tbl"><table><tr><th>实验</th><th>λ</th><th>配置</th><th>语义熵</th><th>SIR</th></tr><tr><td>E1</td><td>0</td><td>基线 top_p=0.9</td><td>1.8011</td><td>—</td></tr><tr><td class="y">E3</td><td class="y">0.5</td><td>回响 γ=0.05</td><td class="grn"><b>2.1240</b></td><td class="grn"><b>+17.9%</b></td></tr><tr><td>E4</td><td>1.0</td><td>回响 γ=0.1</td><td>0.7199</td><td class="down">−60.0%</td></tr><tr><td>E5</td><td>2.0</td><td>回响 γ=0.5</td><td>0.1914</td><td class="down">−89.4%</td></tr><tr><td>E6</td><td>1.0</td><td>回响 γ=0.01</td><td>0.6921</td><td class="down">−61.6%</td></tr></table></div>
+    </div>
+    <div class="card fadeRight" style="flex:1;display:flex;flex-direction:column">
+      <span class="tag t-gld">倒 U 型曲线</span>
+      <svg viewBox="0 0 300 190" style="flex:1"><defs><linearGradient id="ug" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e94560"/><stop offset=".5" stop-color="#f39c12"/><stop offset="1" stop-color="#2ecc71"/></linearGradient></defs>
+        <rect x="10" y="8" width="280" height="174" rx="10" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.1)"/>
+        <polyline points="30,150 108,42 195,66 275,168" fill="none" stroke="url(#ug)" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="108" cy="42" r="6" fill="#2ecc71"/><text x="88" y="30" fill="#5fe89a" font-size="12" font-weight="700">最优 λ=0.5</text>
+        <text x="30" y="170" fill="#9aa3c0" font-size="11">λ小·无效</text><text x="205" y="180" fill="#ff9aa8" font-size="11">λ大·坍缩成复读机</text>
+        <text x="22" y="30" fill="#9aa3c0" font-size="11">语义熵</text>
+      </svg>
+    </div>
+  </div>
+  <div class="anim rotateIn mt8"><div class="card"><b class="grn">为什么 U 型本身就是证据？</b><span class="muted" style="font-size:13px">λ 过小无效、过大坍缩——这是 <b>注入强度 × 模型规模 × 生成长度</b> 的真实物理过程，而非随机波动。</span></div></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 11 P1 λ 跨尺度归一化 ═══════════════ -->
+<section class="slide">
+  <div class="foot"><span class="part">B · 核心方案 / P1</span><span class="bar"><i style="width:22%"></i></span><span class="muted">11</span></div>
+  <div class="anim fadeDown kicker">P1 · 发现与修复</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2><span class="no">P1</span>跨尺度失配 → λ 归一化修复</h2></div>
+  <div class="g2 grid mt" style="margin-top:16px">
+    <div class="card hot anim fadeLeft">
+      <span class="tag t-acc">发现 · 灾难性重复坍缩</span>
+      <div class="tbl mt8"><table><tr><th>模型</th><th>hidden</th><th>基线 E1</th><th>E3 λ=0.5</th><th>变化</th></tr><tr><td>0.5B</td><td>896</td><td>1.726</td><td>1.954</td><td class="grn">+13.2%</td></tr><tr><td>1.5B</td><td>1536</td><td>1.553</td><td>0.146</td><td class="down">−90.6%</td></tr><tr><td>1.7B</td><td>—</td><td>1.061</td><td>0.018</td><td class="down">−98.3%</td></tr><tr><td>3B</td><td>2048</td><td>1.346</td><td>0.056</td><td class="down">−95.9%</td></tr><tr><td>7B(Q4)</td><td>3584</td><td>1.336</td><td>0.160</td><td class="down">−92.5%</td></tr></table></div>
+      <p class="muted" style="font-size:12px">机理：质心向量能量随模型深度/宽度增大，同一 λ 在更大模型上被放大，softmax 锁定单 Token。</p>
+    </div>
+    <div class="card grn anim fadeRight">
+      <span class="tag t-grn">修复 · λ 归一化</span>
+      <div class="card mt8"><b style="font-size:18px;color:#5fe89a">λ<sub>norm</sub> = λ × 896 / hidden_dim</b></div>
+      <ul class="clean mt8">
+        <li>叠加 repetition_penalty 兜底</li>
+        <li>1.5B 4bit：熵 0.256 → <b class="grn">1.462（+470%）</b></li>
+        <li>熵回升至基线 86%</li>
+      </ul>
+      <div class="tbl mt8"><table><tr><th>模型</th><th>最优λ</th><th>熵</th><th>相比基线</th></tr><tr><td>0.5B</td><td>0.5</td><td>1.70~1.93</td><td class="grn">+8.8~13.2%</td></tr><tr><td class="y">3B Q4</td><td class="y">0.10</td><td>1.8613</td><td class="grn"><b>+41.7%</b></td></tr><tr><td class="y">7B Q4</td><td class="y">0.06</td><td>1.4335</td><td class="grn"><b>+44.5%</b></td></tr></table></div>
+    </div>
+  </div>
+  <div class="anim bounceIn mt8"><div class="card gld">自动公式 <b>λ=0.5×(896/hidden_dim)<sup>1.2</sup></b> —— 最优 λ 与 hidden_dim 负相关："越大越省心的那个，涨得最猛"。</div></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 12 P1 情感筛选 + 指标三角 ═══════════════ -->
+<section class="slide dark">
+  <div class="foot"><span class="part">B · 核心方案 / P1</span><span class="bar"><i style="width:24%"></i></span><span class="muted">12</span></div>
+  <div class="anim fadeDown kicker">P1 · 情感优化</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>情感词库筛选 + 三大客观指标</h2></div>
+  <div class="row mt" style="margin-top:16px">
+    <div class="card anim fadeLeft" style="flex:1.1">
+      <span class="tag t-gld">情感筛选（Sentiment Filter）</span>
+      <p class="lead-s" style="font-size:13px">质心计算前仅保留命中 cnsenti 情感词库（约3万词）的 Token，按强度加权：<br><b style="color:#ffd27f">α<sub>i</sub> = max sentiment<sub>k</sub>(i)</b>；默认 τ=0.1 时每步保留 15%~25% 候选 Token。</p>
+      <ul class="clean mt8"><li>E7 情感命中率：基线 ≈0% → <b class="grn">23.25%</b></li><li>λ=1.0 时筛选带来 <b class="grn">+25.33%</b> 熵恢复</li><li>把"请选择请选择…"修复为连贯有温度的文本</li></ul>
+    </div>
+    <div class="g3 grid anim fadeRight" style="flex:1.2">
+      <div class="card"><span class="tag t-grn">语义熵</span><div class="look"><b class="stat grn">+13~44%</b></div><p class="muted" style="font-size:11.5px">生成分布多样性</p></div>
+      <div class="card gld"><span class="tag t-gld">情感命中率</span><div class="look"><b class="stat gld">0→23.25%</b></div><p class="muted" style="font-size:11.5px">含情感词库的轮次比例</p></div>
+      <div class="card hot"><span class="tag t-acc">重复率</span><div class="look"><b class="stat" style="color:#fff">&lt;0.05</b></div><p class="muted" style="font-size:11.5px">n-gram 自重复健康度</p></div>
+      <div class="card blu" style="grid-column:1/-1"><span class="tag t-blu">服务端深度判断 · 动态策略</span><p class="muted" style="font-size:12px">jieba 情感密度&gt;0.15 → 自动把筛选阈值 τ 降至 0.05、λ +0.02；γ/τ 联合调优比单 λ 增益更大（<b class="grn">+78% vs +42%</b>，最佳 γ=0.08/τ=0.06 → 熵 2.339）。</p></div>
+    </div>
+  </div>
+  <div class="anim rotateIn mt8"><div class="card hot"><b class="acc">一句话结论：</b><span class="muted" style="font-size:13px">AI 没有"感觉"，但本工程证明了——AI 可以拥有可量化、可调节、可跨模型迁移的"情感表达维度"。"情感感"是剂量效应，不是开关。</span></div></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 13 P1.5 概览 ═══════════════ -->
+<section class="slide">
+  <div class="foot"><span class="part">B · 核心方案 / P1.5</span><span class="bar"><i style="width:26%"></i></span><span class="muted">13</span></div>
+  <div class="anim fadeDown kicker">P1.5 · 配置空间 · 调度总开关</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2><span class="no">P1.5</span>通用兼容层 V2 · 换任何模型都自动调好强度</h2></div>
+  <div class="row mt" style="margin-top:18px">
+    <div class="card blu anim fadeLeft" style="flex:1.15">
+      <span class="tag t-blu">角色定位</span>
+      <p class="lead-s" style="font-size:13.5px">不注入任何情感本身，它是一个<b>参数调度器</b>：根据模型的架构族 / hidden_dim / 量化位数，自动计算并注入 <b>λ、γ、τ</b>，并配置兜底，解决"每个模型都要手工调参"的工程难题。</p>
+      <div class="card mt8"><b class="blu">核心公式：</b><b style="color:#fff">λ = 基础值(hidden_dim) × 架构族因子 × 量化因子</b></div>
+    </div>
+    <div class="g4 grid anim fadeRight" style="flex:1">
+      <div class="card"><div class="stat blu">896~3584</div><p class="muted" style="font-size:11.5px">hidden_dim 全档位覆盖</p></div>
+      <div class="card"><div class="stat" style="color:#fff">5</div><p class="muted" style="font-size:11.5px">架构族 · Qwen/Qwen3/Gemma/Phi/SmolLM</p></div>
+      <div class="card gld"><div class="stat gld">×2</div><p class="muted" style="font-size:11.5px">量化 · fp16 / 4bit</p></div>
+      <div class="card grn"><div class="stat grn">25</div><p class="muted" style="font-size:11.5px">组合全可控、不塌房</p></div>
+    </div>
+  </div>
+  <div class="anim bounceIn mt" style="margin-top:18px"><div class="card hot"><b class="acc">一句话价值：</b><span class="muted" style="font-size:13px">从"每换模型就心惊胆战调参" → "内置公式 + 扫描表兜底，任意模型即插即用"。它是整个家族能"跨模型迁移"的地基。</span></div></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 14 P1.5 兜底机制 ═══════════════ -->
+<section class="slide dark">
+  <div class="foot"><span class="part">B · 核心方案 / P1.5</span><span class="bar"><i style="width:28%"></i></span><span class="muted">14</span></div>
+  <div class="anim fadeDown kicker">P1.5 · 兜底机制</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>注册 + 未注册模型都安全：三级兜底</h2></div>
+  <div class="steps anim fadeUp mt" style="margin-top:20px;justify-content:center">
+    <div class="step"><b>1</b>公式推荐 λ</div><span class="arrow">→</span>
+    <div class="step"><b>2</b>扫描表校准</div><span class="arrow">→</span>
+    <div class="step"><b>3</b>未注册→保守 β=0.5 起步</div><span class="arrow">→</span>
+    <div class="step"><b>4</b>熵&lt;0.6 → 自动降强度/归零</div>
+  </div>
+  <div class="row mt" style="margin-top:22px">
+    <div class="card grn anim slideL" style="flex:1">
+      <span class="tag t-grn">已注册模型 · 收益</span>
+      <ul class="clean"><li>Qwen2.5 全系回响：熵 <b class="grn">+40~45%</b></li><li>Qwen3-0.6B/1.7B：通用注入值修复坍缩</li><li>Gemma：情感命中率最高 <b class="grn">0.41</b></li><li>Phi-3.5 中文命中率≈0（语言适配探针）</li></ul>
+    </div>
+    <div class="card hot anim slideR" style="flex:1">
+      <span class="tag t-acc">19+ 配置实测 · 5 轮/配置</span>
+      <ul class="clean"><li>全因子组合：多与其汇总见 Part C</li><li>跨模型对照：Qwen 系 +33~37%</li><li>4bit 量化对回响动力学零干扰</li><li>未注册模型兜底 &lt; 定制但优于裸模型</li></ul>
+    </div>
+  </div>
+  <div class="anim rotateIn mt8"><div class="card gld">它是家族复用的"总开关"——后续 P3 锚点同样在此基础上扩展为<b>五元组 (λ,γ,τ,β,T_anchor)</b> 扫描表。</div></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 15 P2.5 概览 ═══════════════ -->
+<section class="slide">
+  <div class="foot"><span class="part">B · 核心方案 / P2.5</span><span class="bar"><i style="width:30%"></i></span><span class="muted">15</span></div>
+  <div class="anim fadeDown kicker">P2.5 · 概率空间 · 第三套独立方案</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2><span class="no">P2.5</span>情感潮汐解码 ETS · 让分布"往情绪方向涌"</h2></div>
+  <div class="row mt" style="margin-top:16px">
+    <div class="anim fadeLeft" style="flex:1.1">
+      <p class="lead-s" style="font-size:13.5px">在采样阶段对概率分布做<b>乘性重加权</b>，让质量往情感词方向倾斜——<b>数学上有界、不可能坍缩</b>，且<b>无需本地权重，闭源 API 也能用</b>。</p>
+      <div class="card grn mt8"><b class="grn">核心公式：</b><b style="color:#fff;font-size:16px">p'(w) = p(w)<sup>(1−α)</sup> · q<sub>emo</sub>(w)<sup>α</sup></b><br><span class="muted" style="font-size:12px">α∈[0,1] 乘性插值，数学上不可能坍缩</span></div>
+      <div class="card gld mt8"><b class="gld">为什么 3B/7B 不适用也要用它？</b><span class="muted" style="font-size:12.5px">补上"闭源 API 可用"的空白，且与 P1 表示空间注入正交可叠加。</span></div>
+    </div>
+    <div class="card blu anim bounceIn" style="flex:1">
+      <span class="tag t-blu">三层架构 · TAD 心智</span>
+      <ul class="clean"><li><b>感知层</b> 潮汐感知器：文本 → VAD(愉悦/唤醒/支配) 三维 + 会话轨迹</li><li><b>决策层</b> 潮汐决策器：共情目标 + 角色 VAD 基调 + 自适应 α + 词汇密度预算</li><li><b>表达层</b> 潮汐解码器：乘性重加权 + 极性定向 + 在线兜底</li></ul>
+    </div>
+  </div>
+  <div class="anim fadeUp mt8"><div class="card">正交叠加：回响(表示空间情感底色) × 潮汐(概率空间方向密度控制) = <b class="acc">混合注入器</b>，两套互补。</div></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 16 P2.5 机制与评测 ═══════════════ -->
+<section class="slide dark">
+  <div class="foot"><span class="part">B · 核心方案 / P2.5</span><span class="bar"><i style="width:32%"></i></span><span class="muted">16</span></div>
+  <div class="anim fadeDown kicker">P2.5 · 机制与评测</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>为什么不加 logits、而要乘性重加权？</h2></div>
+  <div class="g2 grid mt" style="margin-top:16px">
+    <div class="card hot anim fadeLeft">
+      <span class="tag t-acc">logits 加法的问题</span>
+      <ul class="clean"><li>把偏置强加给每个候选，小模型上易碾压原分布 → 坍缩</li><li>难控制剂量，容易过注入变复读机</li></ul>
+    </div>
+    <div class="card grn anim fadeRight">
+      <span class="tag t-grn">乘性重加权的优势</span>
+      <ul class="clean"><li><b>有界插值</b>（α∈[0,1]），数学上不可能坍缩</li><li>只把概率质量向情感词倾斜，保留原始多样性</li></ul>
+    </div>
+  </div>
+  <div class="row mt" style="margin-top:18px">
+    <div class="tbl anim slideL" style="flex:1"><table><tr><th>LLM-Judge 进化史（30样本/60配对）</th><th>win_rate</th><th>提升</th></tr><tr><td>裸</td><td>0.1833</td><td>—</td></tr><tr><td>潮汐 v3（AI抑制2.0）</td><td>0.2000</td><td class="grn">+9%</td></tr><tr><td>潮汐 v4.1（AI抑制4.0）</td><td>0.2333</td><td class="grn">+27%</td></tr><tr><td class="y"><b>混合 v4.2（λ0.08×倍率6+AI抑制4.0）</b></td><td class="y"><b>0.3500</b></td><td class="grn"><b>+91%</b></td></tr></table></div>
+    <div class="g2 grid anim slideR" style="flex:1">
+      <div class="card gld"><span class="tag t-gld">M5 共情评测</span><div class="look"><b class="stat grn">一致性 0.60→0.75</b></div><p class="muted" style="font-size:11.5px">HEART-BENCH · 共情持平 +一致性提升</p></div>
+      <div class="card vio"><span class="tag t-vio">EMO 保真</span><div class="look"><b class="stat gld">0.795→0.813</b></div><p class="muted" style="font-size:11.5px">EmoCharacter 匹配 fidelity</p></div>
+      <div class="card hot"><span class="tag t-acc">AI 腔抑制</span><div class="look"><b class="stat">3 通道</b></div><p class="muted" style="font-size:11.5px">v4 三通道 AI 腔实时减分</p></div>
+      <div class="card blu"><span class="tag t-blu">无坍缩</span><div class="look"><b class="stat grn">重复率 0</b></div><p class="muted" style="font-size:11.5px">M4 同种子对照<br>熵 +0.053</p></div>
+    </div>
+  </div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 17 P3 概览 ═══════════════ -->
+<section class="slide">
+  <div class="foot"><span class="part">B · 核心方案 / P3</span><span class="bar"><i style="width:34%"></i></span><span class="muted">17</span></div>
+  <div class="anim fadeDown kicker">P3 · 嵌入空间 · 零权重只读证明</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2><span class="no">P3</span>锚点回响 AE · 用模型自己的"情感地图"给词打粉</h2></div>
+  <div class="row mt" style="margin-top:16px">
+    <div class="anim fadeLeft" style="flex:1.15">
+      <p class="lead-s" style="font-size:13.5px"><b>关键洞察：</b><span class="gld">get_input_embeddings() 暴露的 token-embedding W<sub>e</sub> 是一张天然的、稠密的、可解释的情感语义地图</span>——词表每个 token 都与"温柔/开心/难过/愤怒/害怕/平静"六维存在确定的余弦关系。既然模型自己"知道"每个词的情感，为何不用它做注入接口？</p>
+      <div class="card grn mt8"><b class="grn">只读证明：</b><span class="muted" style="font-size:12.5px">打分表基于 W<sub>e</sub>.detach() 只读副本，原始权重 sum=前后均 −9400.0、data_ptr 一致 → 零修改。</span></div>
+      <div class="card hot mt8"><b class="acc">对比 P1：</b><span class="muted" style="font-size:12.5px">打分表 1.8MB vs P1 投影矩阵 933MB，内存下降约 3 个量级；方向可解释。</span></div>
+    </div>
+    <div class="card gld anim bounceIn" style="flex:1">
+      <span class="tag t-gld">机制五件套</span>
+      <ol class="clean" style="list-style:none">
+        <li><b>1. 锚点库</b>：6维×50种子词（含破防/泪目/内耗/扎心），L2归一化 → E∈R<sup>6×d</sup></li>
+        <li><b>2. 打分表</b>：稠密余弦 S∈R<sup>151936×6</sup> ≈ 3.6MB fp32 / 1.8MB fp16</li>
+        <li><b>3. 目标决策器</b>：复用 VAD + 思考链 → 锚点空间映射</li>
+        <li><b>4. 锚点解码器</b>：极性定向 tanh 有界注入 + 在线兜底</li>
+        <li><b>5. 混合锚点器</b>：锚点×回响×潮汐三通道正交叠加</li>
+      </ol>
+    </div>
+  </div>
+  <div class="anim fadeRight mt8"><div class="card vio">补上 P2.5 词库稀疏短板：稠密余弦覆盖词库外近义词 <b class="vio">7/10</b>（扎心/心累/崩溃/泪目/治愈/宠溺/孤寡）</div></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 18 P3 打分+tanh+降级 ═══════════════ -->
+<section class="slide dark">
+  <div class="foot"><span class="part">B · 核心方案 / P3</span><span class="bar"><i style="width:37%"></i></span><span class="muted">18</span></div>
+  <div class="anim fadeDown kicker">P3 · 打分与注入</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>六维稠密打分 + tanh 有界注入</h2></div>
+  <div class="g3 grid mt" style="margin-top:18px">
+    <div class="card anim fadeUp"><span class="tag t-blu">打分</span><b style="color:#fff">S[w,k] = cos(W<sub>e</sub>[w], e<sub>k</sub>)</b><br><span class="muted" style="font-size:12px">全词表对六维锚点的稠密余弦</span></div>
+    <div class="card anim fadeUp"><span class="tag t-gld">极性</span><b style="color:#fff">a(w) = S[w]·v<sub>target</sub></b><br><span class="muted" style="font-size:12px">内积正=朝目标情感方向</span></div>
+    <div class="card anim fadeUp"><span class="tag t-acc">注入</span><b style="color:#fff">logits[w] += β·tanh(a/T)</b><br><span class="muted" style="font-size:12px">有界偏置，杜绝过注入坍缩</span></div>
+  </div>
+  <div class="row mt" style="margin-top:18px">
+    <div class="tbl anim slideL" style="flex:1.1"><table><tr><th>P3 五基准（相对裸）</th><th>结果</th><th>判定</th></tr><tr><td>TuringBench 人似度</td><td class="grn"><b>0.2333→0.7000</b></td><td class="grn">✅ +200% 翻倍</td></tr><tr><td>HeartBench</td><td class="grn"><b>35.90→43.69</b></td><td class="grn">✅ +21.7%</td></tr><tr><td>LLM-Judge +人设</td><td class="grn">0.2667→0.4167</td><td class="grn">✅ +56.25%</td></tr><tr><td>EmoCharacter</td><td class="y">天花板持平</td><td class="y">△ 裸识别率0.90饱和</td></tr><tr><td>HEART-BENCH</td><td class="y">持平</td><td class="y">△ 英文MCQ钝感</td></tr></table></div>
+    <div class="card blu anim slideR" style="flex:1">
+      <span class="tag t-blu">接口降级三级（闭源 API 也能用）</span>
+      <ul class="clean"><li><b>①本地</b> embedding 直读（主路径）</li><li><b>②API logprobs</b> 近似：熵差仅 0.67%，<b class="grn">输出逐字一致</b></li><li><b>③纯黑盒</b> 锚点提示模式：零内部访问（三入口计数全 0）</li></ul>
+      <div class="card mt8"><b>多模型 3/3 可用：</b><span class="muted" style="font-size:12.5px">Qwen3-1.7B +6.91% · gemma-2-2b +28.53%（未注册兜底）· 3B −5.86%（60配对差1胜·方差内）</span></div>
+    </div>
+  </div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 19 P4 概览 ═══════════════ -->
+<section class="slide">
+  <div class="foot"><span class="part">B · 核心方案 / P4</span><span class="bar"><i style="width:40%"></i></span><span class="muted">19</span></div>
+  <div class="anim fadeDown kicker">P4 · 注意力缓存空间</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2><span class="no">P4</span>KV 情感共振 KER · 让模型"盯着你的情绪看"</h2></div>
+  <div class="row mt" style="margin-top:16px">
+    <div class="card blu anim fadeLeft" style="flex:1.2">
+      <span class="tag t-blu">机制</span>
+      <p class="lead-s" style="font-size:13.5px">在<b>注意力 KV 缓存</b>上做有界情感调制：注入情感信号使注意力分布向情绪相关位置<b>共振</b>。操作空间彻底独立于前几代（表示 / 配置 / 概率 / 嵌入），正交可叠加。</p>
+      <div class="card mt8"><b class="blu">一句话：</b><span class="muted" style="font-size:13px">让模型在生成每一词时"看见"并"盯住"当前的情感语境，而非只记得概率分布。</span></div>
+    </div>
+    <div class="card gld anim slideR" style="flex:1">
+      <span class="tag t-gld">特性与地位</span>
+      <ul class="clean"><li>第五大操作空间入口（注意力缓存）</li><li>实现"情绪上下文强化"的注意力级通路</li><li>与 P3 双通道组合可最大化增益</li></ul>
+      <div class="look mt8"><b class="stat grn">P3+P4 双通道 0.2667</b></div>
+      <p class="muted" style="font-size:12px">全场最高 win_rate · 单通道仅 0.1167</p>
+    </div>
+  </div>
+  <div class="anim bounceIn mt8"><div class="card hot"><b class="acc">工程化要点：</b><span class="muted" style="font-size:13px">单通道无效、融合通道有效——这正是"家族集齐碎片才能兑现完整效果"的技术根源，即五层护城河。</span></div></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 20 P5 概览 ═══════════════ -->
+<section class="slide dark">
+  <div class="foot"><span class="part">B · 核心方案 / P5</span><span class="bar"><i style="width:43%"></i></span><span class="muted">20</span></div>
+  <div class="anim fadeDown kicker">P5 · 全空间融合</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2><span class="no">P5</span>超融合解码器 UFD · 五空间机制级耦合</h2></div>
+  <div class="row mt" style="margin-top:16px">
+    <div class="anim fadeLeft" style="flex:1.1">
+      <p class="lead-s" style="font-size:13.5px">把 P1 × P1.5 × P2.5 × P3 × P4 五套机制的<b>增益做机制级耦合</b>，在解码器统一编排、统一兜底，避免"多套同时开"互相冲突。</p>
+      <div class="steps mt" style="margin-top:14px"><div class="step">P1 回响</div><span class="arrow">×</span><div class="step">兼容层</div><span class="arrow">×</span><div class="step">潮汐</div><span class="arrow">×</span><div class="step">锚点</div><span class="arrow">×</span><div class="step">KV共振</div><span class="arrow">=</span><span class="step grn"><b>UFD</b></span></div>
+    </div>
+    <div class="g3 grid anim fadeRight" style="flex:1">
+      <div class="card grn"><span class="tag t-grn">综合跑分</span><div class="look"><b class="stat grn">0.6255</b></div><p class="muted" style="font-size:11px">全家族第二 · 显著超 P1</p></div>
+      <div class="card gld"><span class="tag t-gld">定位</span><div class="look"><b class="stat" style="font-size:22px;color:#fff">合成/收口</b></div><p class="muted" style="font-size:11px">合并前代"最优解"为一体化融合</p></div>
+      <div class="card blu"><span class="tag t-blu">意义</span><div class="look"><b class="stat" style="font-size:22px;color:#fff">承上启下</b></div><p class="muted" style="font-size:11px">验证"多空间协同 &gt; 单空间堆叠"</p></div>
+    </div>
+  </div>
+  <div class="anim rotateIn mt8"><div class="card">UFD 证明：<b>"物尽其用"叠加仍是小模型反超大模型情感水平的可行路径</b>——为 P6 情感导演的诞生铺路。</div></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 21 P6 EDD 概览 ═══════════════ -->
+<section class="slide">
+  <div class="foot"><span class="part">B · 核心方案 / P6</span><span class="bar"><i style="width:47%"></i></span><span class="muted">21</span></div>
+  <div class="anim fadeDown kicker">P6 · 解码期插件 · 2026 全家族冠军</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2><span class="no">P6</span>情感导演 EDD · TAD + PIS + OQC 三件套</h2></div>
+  <div class="row mt" style="margin-top:16px">
+    <div class="card hot anim fadeLeft" style="flex:1.2">
+      <span class="tag t-acc">🏆 综合 0.7046 · 全家族第一</span>
+      <ul class="clean"><li>5 大基准综合 <b class="grn">0.7046</b>，超 P5（0.6255）<b class="grn">+12.6%</b></li><li>解码期插件：挂载在解码器层面，低侵入</li><li>三件套分工：感知词情感 · 注入 · 质量把关</li></ul>
+    </div>
+    <div class="g3 grid anim slideR" style="flex:1.4">
+      <div class="card"><span class="tag t-blu">TAD</span><h3>目标情感感知</h3><p class="muted" style="font-size:11.5px">识别当前应表达的情感目标</p></div>
+      <div class="card gld"><span class="tag t-gld">PIS</span><h3>极性定向注入</h3><p class="muted" style="font-size:11.5px">有界地向目标情感方向抬升</p></div>
+      <div class="card grn"><span class="tag t-grn">OQC</span><h3>在线质量把关</h3><p class="muted" style="font-size:11.5px">熵/重复率监测 → 自动降强度/兜底</p></div>
+    </div>
+  </div>
+  <div class="anim fadeUp mt" style="margin-top:18px"><div class="tbl"><table><tr><th>方案</th><th>跑分</th><th>与上届差距</th></tr><tr><td class="y"><b>P6 情感导演 EDD</b></td><td class="grn"><b>0.7046</b></td><td class="grn">🏆 冠军</td></tr><tr><td>P5 超融合 UFD</td><td>0.6255</td><td class="down">−12.6%</td></tr><tr><td>P1 语义回响</td><td>0.6063</td><td class="down">−14%</td></tr><tr><td>P2.5 潮汐</td><td>0.5878</td><td class="down">−16.6%</td></tr><tr><td>P4 KV</td><td>0.5748</td><td class="down">−18.4%</td></tr><tr><td>P1.5 兼容层</td><td>0.5619</td><td class="down">−20.3%</td></tr><tr><td>P3 锚点</td><td>0.5565</td><td class="down">−21%</td></tr></table></div></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 22 P6 机制 ═══════════════ -->
+<section class="slide dark">
+  <div class="foot"><span class="part">B · 核心方案 / P6</span><span class="bar"><i style="width:50%"></i></span><span class="muted">22</span></div>
+  <div class="anim fadeDown kicker">P6 · 三件套工作机理</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>一位"情感导演"如何指挥每一句输出</h2></div>
+  <div class="steps anim fadeUp mt" style="margin-top:22px;justify-content:center">
+    <div class="step"><b>TAD</b> 读取对话情感状态</div><span class="arrow">→</span>
+    <div class="step"><b>PIS</b> 选定目标情感方向</div><span class="arrow">→</span>
+    <div class="step"><b>注入</b> 有界抬升目标方向 logits</div><span class="arrow">→</span>
+    <div class="step"><b>OQC</b> 在线熵/重复率把关</div><span class="arrow">→</span>
+    <div class="step"><b>兜底</b> 熵&lt;0.6 自动降强度</div>
+  </div>
+  <div class="row mt" style="margin-top:22px">
+    <div class="card anim fadeLeft" style="flex:1">
+      <span class="tag t-gld">与 UFD 的关系</span>
+      <p class="lead-s" style="font-size:13px">P6 不是又加一套空间，而是把前代"导演化"：把参数调优从"工程师调参"变成"解码期自动导演"，因此跑分反超 UFD。</p>
+    </div>
+    <div class="card anim fadeRight" style="flex:1">
+      <span class="tag t-grn">家族纪律传承</span>
+      <ul class="clean"><li>所有注入均<b>有界</b>（tanh / α插值 / 剂量窗口）</li><li>共同兜底阈值一致（熵 0.6 / 重复率 0.6）</li><li>跨模型用 P1.5 五元组扫描表自适应</li></ul>
+    </div>
+  </div>
+  <div class="anim bounceIn center mt" style="margin-top:20px"><span class="gld big" style="font-size:24px">冠军方法论：</span><span class="lead" style="font-size:18px">不是"更强的注入"，而是<b class="acc">更聪明的导演 + 更严的质量纪律</b></span></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 23 P6 LoRA 概览 ═══════════════ -->
+<section class="slide">
+  <div class="foot"><span class="part">B · 核心方案 / P6-LoRA</span><span class="bar"><i style="width:53%"></i></span><span class="muted">23</span></div>
+  <div class="anim fadeDown kicker">P6 · 训练态方案</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2><span class="no">P6</span>LoRA 外挂 × 旁路由 · 家族唯一训练态路线</h2></div>
+  <div class="row mt" style="margin-top:16px">
+    <div class="anim fadeLeft" style="flex:1.2">
+      <p class="lead-s" style="font-size:13.5px">与前六代"作用在生成期"本质不同：<b>训练态写适配器（LoRA）+ 推理期旁路由多候选选优</b>——用 4409 条情感数据沉淀"长期人格语态"，再在解码时从多个候选按"人味评分"选最优。</p>
+      <div class="g3 grid mt8 anim zoomIn" style="margin-top:12px">
+        <div class="card"><span class="tag t-gld">emotion_v1(3B)</span><div class="stat" style="font-size:22px;color:#fff">loss 0.784</div><p class="muted" style="font-size:11px">训练 2 epochs · 518s</p></div>
+        <div class="card"><span class="tag t-blu">emotion_7B</span><div class="stat" style="font-size:22px;color:#fff">loss 0.758</div><p class="muted" style="font-size:11px">训练 2 epochs · 1044s</p></div>
+        <div class="card grn"><span class="tag t-grn">参数量</span><div class="stat" style="font-size:22px;">0.12%</div><p class="muted" style="font-size:11px">仅适配器权重（r=8, α=16）</p></div>
+      </div>
+    </div>
+    <div class="card hot anim fadeRight" style="flex:1">
+      <span class="tag t-acc">当前进度</span>
+      <div class="look"><b class="big gld">0.35</b><span class="sub" style="font-size:14px">LLM-Judge → 目标 ≥0.48</span></div>
+      <p class="muted" style="font-size:12.5px">外挂组稳定性极佳：重复率 0.004、全维度流畅有情感；正通过复合策略向目标冲刺。</p>
+      <div class="card mt8"><b class="grn">组合洞察：</b><span class="muted" style="font-size:12px">外挂+回响在 3B 退化（熵 −23%）→ 归因过注入，修复方向 = 组合场景 λ 降至 0.06–0.08。</span></div>
+    </div>
+  </div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 24 家族方法论小结 ═══════════════ -->
+<section class="slide dark">
+  <div class="foot"><span class="part">B · 核心方案 / 小结</span><span class="bar"><i style="width:55%"></i></span><span class="muted">24</span></div>
+  <div class="anim fadeDown kicker">六代方案 · 方法论小结</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>从"表示空间"到"训练态"的完整拼图</h2></div>
+  <div class="transition" style="margin-top:16px">
+    <div class="g5 grid" style="grid-auto-rows:1fr">
+      <div class="card anim bounceIn"><span class="tag t-acc">P1</span><div class="stat" style="font-size:19px">表示空间</div><p class="muted" style="font-size:11px">情感向量注入 开山</p></div>
+      <div class="card anim bounceIn"><span class="tag t-blu">P1.5</span><div class="stat" style="font-size:19px">配置空间</div><p class="muted" style="font-size:11px">全模型自动调参</p></div>
+      <div class="card anim bounceIn"><span class="tag t-vio">P2.5</span><div class="stat" style="font-size:19px">概率空间</div><p class="muted" style="font-size:11px">乘性重加权 不坍缩</p></div>
+      <div class="card anim bounceIn"><span class="tag t-gld">P3</span><div class="stat" style="font-size:19px">嵌入空间</div><p class="muted" style="font-size:11px">只读情感地图 API可用</p></div>
+      <div class="card anim bounceIn"><span class="tag t-acc">P4</span><div class="stat" style="font-size:19px">注意力缓存</div><p class="muted" style="font-size:11px">KV 情感共振</p></div>
+      <div class="card anim bounceIn"><span class="tag t-blu">P5</span><div class="stat" style="font-size:19px">全空间融合</div><p class="muted" style="font-size:11px">UFD 机制级耦合</p></div>
+      <div class="card grn anim bounceIn"><span class="tag t-grn">P6·EDD</span><div class="stat" style="font-size:19px">解码期导演</div><p class="muted" style="font-size:11px">冠军 TAD+PIS+OQC</p></div>
+      <div class="card gld anim bounceIn"><span class="tag t-gld">P6·LoRA</span><div class="stat" style="font-size:19px">训练态外挂</div><p class="muted" style="font-size:11px">旁路由选优</p></div>
+    </div>
+  </div>
+  <div class="row mt" style="margin-top:22px">
+    <div class="card anim fadeLeft" style="flex:1"><span class="tag t-grn">五层护城河</span><p class="muted" style="font-size:13px">对方要替代需在五个完全不同操作空间同时找到替代品——现实不存在。</p></div>
+    <div class="card anim fadeRight" style="flex:1"><span class="tag t-acc">正交可叠加</span><p class="muted" style="font-size:13px">锚点×回响×潮汐三通道全开已验证，本地7B +55.6%、deepseek-v4-pro +100%，无坍缩。</p></div>
+  </div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 25 五大基准 ═══════════════ -->
+<section class="slide">
+  <div class="foot"><span class="part">C · 评测体系 / 基准</span><span class="bar"><i style="width:58%"></i></span><span class="muted">25</span></div>
+  <div class="anim fadeDown kicker">C · 评测体系与实验数据</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>五大图灵类基准 · 全家族统一口径</h2></div>
+  <div class="g5 grid mt" style="margin-top:22px">
+    <div class="card anim flipInX"><span class="tag t-blu">LLM-Judge</span><h3 style="font-size:14px">AI vs 真人盲评</h3><p class="muted" style="font-size:11.5px">win_rate 胜率 · Qwen2.5-7B AB配对×2</p></div>
+    <div class="card anim flipInY"><span class="tag t-grn">HeartBench</span><h3 style="font-size:14px">情感/共情 rubric</h3><p class="muted" style="font-size:11.5px">官方 norm_score/100</p></div>
+    <div class="card anim flipInX"><span class="tag t-vio">Heart-Bench(FEEL)</span><h3 style="font-size:14px">共情一致性决策</h3><p class="muted" style="font-size:11.5px">共情/一致性/有效决策率</p></div>
+    <div class="card anim flipInY"><span class="tag t-gld">TuringBench</span><h3 style="font-size:14px">人似度</h3><p class="muted" style="font-size:11.5px">TF-IDF+LR 检测器 · 1−被判AI</p></div>
+    <div class="card anim flipInX"><span class="tag t-acc">EmoCharacter</span><h3 style="font-size:14px">角色匹配保真</h3><p class="muted" style="font-size:11.5px">(fidelity+consistency)/2</p></div>
+  </div>
+  <div class="anim fadeUp mt" style="margin-top:18px"><div class="card gld">
+    <b class="gld">统一评测协议（保证可比性）：</b><span class="muted" style="font-size:13px">30 条样本（含真人 girl 回复）· 种子 2026 · Qwen2.5-1.5B fp16 主模型 · temp=1.0 / top_p=0.9 / top_k=50 / rep_pen=1.05 / max_new=128 · 零前奏修改。</span>
+  </div></div>
+  <div class="g4 grid anim rotateIn mt8" style="margin-top:14px">
+    <div class="card grn"><div class="stat grn">31/31</div><p class="muted" style="font-size:11.5px">单元+集成测试全通过</p></div>
+    <div class="card blu"><div class="stat blu">164 组</div><p class="muted" style="font-size:11.5px">全因子 CODA 实测（有效148）</p></div>
+    <div class="card gld"><div class="stat gld">4/5</div><p class="muted" style="font-size:11.5px">1.5B 五项基准反超裸模型</p></div>
+    <div class="card vio"><div class="stat vio">&lt;18%</div><p class="muted" style="font-size:11.5px">4bit 量化对回响零干扰偏差</p></div>
+  </div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 26 基准对比 ═══════════════ -->
+<section class="slide dark">
+  <div class="foot"><span class="part">C · 评测体系 / 对比</span><span class="bar"><i style="width:61%"></i></span><span class="muted">26</span></div>
+  <div class="anim fadeDown kicker">C · 大厂基准对比</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>1.5B 原版基座 · 唯一变量 = 是否挂载引擎</h2></div>
+  <div class="anim fadeUp mt" style="margin-top:18px"><div class="tbl"><table>
+    <tr><th>基准</th><th>裸 1.5B</th><th>语义回响(P1)</th><th>变化(P1)</th><th>P3 锚点(相对裸)</th><th>判定(P3)</th></tr>
+    <tr><td>TuringBench</td><td>0.2333</td><td>0.4667</td><td class="grn">+0.2334</td><td class="grn">+200%→0.7000</td><td class="grn">✅ 翻倍</td></tr>
+    <tr><td>EmoCharacter</td><td>0.8750</td><td>0.8863</td><td class="grn">+0.0113</td><td class="y">天花板持平</td><td class="y">△ 识别率0.90饱和</td></tr>
+    <tr><td>HeartBench</td><td>0.4055</td><td>0.4130</td><td class="grn">+0.0075</td><td class="grn">+21.7%→43.69</td><td class="grn">✅ 显著反超</td></tr>
+    <tr><td>Heart-Bench</td><td>0.4884</td><td>0.5367</td><td class="grn">+0.0483</td><td class="y">持平(一致性+8.3%)</td><td class="y">△ 英文MCQ钝感</td></tr>
+    <tr><td>LLM-Judge</td><td>0.6900</td><td>0.6333</td><td class="down">−0.0567</td><td class="grn">+人设 +56.25%</td><td class="grn">✅ +人设</td></tr>
+  </table></div></div>
+  <div class="g4 grid anim rotateIn mt8" style="margin-top:16px">
+    <div class="card gld"><span class="tag t-gld">关键结论</span><div class="stat" style="font-size:19px;color:#fff">4/5 反超</div><p class="muted" style="font-size:11.5px">P1 即可反超裸模型</p></div>
+    <div class="card grn"><span class="tag t-grn">P3 强势项</span><div class="stat grn">+200% / +21.7%</div><p class="muted" style="font-size:11.5px">TuringBench / HeartBench</p></div>
+    <div class="card blu"><span class="tag t-blu">人设关键</span><div class="stat blu">+56.25%</div><p class="muted" style="font-size:11.5px">LLM-Judge 需叠加人设提示</p></div>
+    <div class="card vio"><span class="tag t-vio">诚实边界</span><div class="stat" style="font-size:19px;color:#fff">1 瓶颈</div><p class="muted" style="font-size:11.5px">EmoCharacter 受模板天花板限制</p></div>
+  </div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 27 多模型对照 ═══════════════ -->
+<section class="slide">
+  <div class="foot"><span class="part">C · 评测体系 / 多模型</span><span class="bar"><i style="width:64%"></i></span><span class="muted">27</span></div>
+  <div class="anim fadeDown kicker">C · 多模型泛化</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>从 0.5B 到 7B：跨模型可迁移</h2></div>
+  <div class="row mt" style="margin-top:16px">
+    <div class="anim fadeLeft" style="flex:1.15"><div class="tbl"><table><tr><th>模型</th><th>E1 基线</th><th>E3 回响</th><th>最优熵对比</th></tr><tr><td>0.5B</td><td>1.726</td><td>1.954</td><td class="grn">+13.2% (λ0.5)</td></tr><tr><td>1.5B</td><td>1.553</td><td>0.146→修复</td><td class="grn">λn+惩罚 +470%</td></tr><tr><td>1.7B</td><td>1.061</td><td>0.018→修复</td><td class="grn">通用注入值修复</td></tr><tr><td>3B Q4</td><td>1.346</td><td>0.056→修复</td><td class="grn">+41.7% (λ0.10)</td></tr><tr><td>7B Q4</td><td>1.336</td><td>0.160→修复</td><td class="grn">+44.5% (λ0.06)</td></tr></table></div></div>
+    <div class="g2 grid anim fadeRight" style="flex:1">
+      <div class="card grn"><span class="tag t-grn">Qwen 系泛化</span><p class="muted" style="font-size:12px">Qwen2.5 全系回响有效，熵 <b class="grn">+40~45%</b></p></div>
+      <div class="card blu"><span class="tag t-blu">Gemma 优势</span><p class="muted" style="font-size:12px">情感命中率最高 <b class="blu">0.41</b></p></div>
+      <div class="card vio"><span class="tag t-vio">Phi 探针</span><p class="muted" style="font-size:12px">中文命中率≈0，语言适配探针</p></div>
+      <div class="card gld"><span class="tag t-gld">SmolLM</span><p class="muted" style="font-size:12px">架构族因子通用兼容</p></div>
+    </div>
+  </div>
+  <div class="anim fadeUp mt8" style="margin-top:14px"><div class="card hot">结论：同一引擎靠 <b>P1.5 兼容层 × λ归一化 × P3 锚点</b> 三者组合，即可在 5 个架构族 / 6 个规模 / 3 种量化上稳定生效。这才是"可跨模型迁移"的工程根基。</div></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 28 泛化与量化 ═══════════════ -->
+<section class="slide dark">
+  <div class="foot"><span class="part">C · 评测体系 / 泛化量化</span><span class="bar"><i style="width:67%"></i></span><span class="muted">28</span></div>
+  <div class="anim fadeDown kicker">C · 4bit 量化与 RAG/LoRA 协同</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>量化零干扰 · 记忆体系正交共存</h2></div>
+  <div class="g2 grid mt" style="margin-top:18px">
+    <div class="card grn anim fadeLeft">
+      <span class="tag t-grn">4bit 量化 → 回响动力学零干扰</span>
+      <p class="muted" style="font-size:12.5px">1.5B 4bit 全量 E1–E13 与 fp16 偏差均 <b class="grn">&lt;±18%</b>，无系统性偏移；7B 4bit 全链路峰值 <b>7415MB</b>（16GB 卡 45%）。</p>
+      <p class="muted" style="font-size:12px;margin-top:6px">2048 token 特测：4bit 模型长文本自身即退化复读机（重复率 0.99+），与回响无关。</p>
+    </div>
+    <div class="card blu anim fadeRight">
+      <span class="tag t-blu">RAG 信噪比验证（1.5B）</span>
+      <div class="tbl mt8"><table><tr><th>组</th><th>配置</th><th>熵</th><th>变化</th></tr><tr><td>A</td><td>纯回响 λ0.5</td><td>0.3228</td><td>—</td></tr><tr><td>B</td><td>+RAG中性</td><td>0.5101</td><td class="grn">+58.0%</td></tr><tr><td>C</td><td>+RAG情感</td><td>0.4120</td><td class="grn">+27.6%</td></tr></table></div>
+      <p class="muted" style="font-size:12px;margin-top:6px">判定通过 · RAG 事实上下文与回响情感底色<b>正交共存</b></p>
+    </div>
+  </div>
+  <div class="row mt" style="margin-top:16px">
+    <div class="card gld anim slideL" style="flex:1"><span class="tag t-gld">LoRA 协同（gentle_v2 · 1.5B 4bit）</span><p class="muted" style="font-size:12.5px">热加载/卸载 20 次循环显存零泄漏（首尾差 0.0MB）；温柔命中率归零根因是 λ 跨尺度坍缩(P1)，非适配器损坏。</p></div>
+    <div class="card anim slideR" style="flex:1"><span class="tag t-acc">上下文窗口效应</span><p class="muted" style="font-size:12.5px">低上下文性能正常；随长度累积存在坍缩（剂量窗口），256→2048 熵 1.85→0.30 → 列为长期攻坚点（见未来规划）。</p></div>
+  </div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 29 全因子矩阵 ═══════════════ -->
+<section class="slide">
+  <div class="foot"><span class="part">C · 评测体系 / 全因子</span><span class="bar"><i style="width:70%"></i></span><span class="muted">29</span></div>
+  <div class="anim fadeDown kicker">C · CODA 全因子矩阵</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>164 组合的全因子验证 · 工程可落地性</h2></div>
+  <div class="steps anim fadeUp mt" style="margin-top:16px;justify-content:center">
+    <div class="step">模型 ×4</div><span class="arrow">×</span><div class="step">量化 Q2~Q4/fp16</div><span class="arrow">×</span><div class="step">上下文 256~4096</div><span class="arrow">×</span><div class="step">回响 开/关</div><span class="arrow">×</span><div class="step">RAG</div><span class="arrow">×</span><div class="step">LoRA</div>
+  </div>
+  <div class="g4 grid mt" style="margin-top:22px">
+    <div class="card grn anim bounceIn"><span class="tag t-grn">最优配置</span><div class="stat" style="font-size:19px;color:#fff">ID 7</div><p class="muted" style="font-size:11.5px">0.5B fp16 ctx256 E+R · 熵1.929 重复率0.164</p></div>
+    <div class="card blu anim bounceIn"><span class="tag t-blu">最快配置</span><div class="stat" style="font-size:19px;color:#fff">7.0s</div><p class="muted" style="font-size:11.5px">1.5B Q2 ctx256 基线+RAG</p></div>
+    <div class="card vio anim bounceIn"><span class="tag t-vio">最省显存</span><div class="stat" style="font-size:19px;color:#fff">2595MB</div><p class="muted" style="font-size:11.5px">3B Q2 ctx256 峰值</p></div>
+    <div class="card gld anim bounceIn"><span class="tag t-gld">量化结论</span><div class="stat" style="font-size:19px;color:#fff">Q2 可安全用</div><p class="muted" style="font-size:11.5px">Q2~Q4 对熵影响 &lt;0.1</p></div>
+  </div>
+  <div class="anim fadeLeft mt" style="margin-top:20px"><div class="card hot"><b class="acc">工程结论：</b><span class="muted" style="font-size:13px">164 组合验证了引擎在<b>不同规模 × 不同量化 × 不同上下文</b>下的可行性边界；Q2 可安全用于 1.5B/3B 省显存；长上下文坍缩为唯一系统性缺口（未来规划重点攻坚）。</span></div></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 30 压力测试 ═══════════════ -->
+<section class="slide dark">
+  <div class="foot"><span class="part">C · 评测体系 / 工程压测</span><span class="bar"><i style="width:73%"></i></span><span class="muted">30</span></div>
+  <div class="anim fadeDown kicker">C · 压力与鲁棒性</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>压测 / 模糊测试 / 复现性</h2></div>
+  <div class="row mt" style="margin-top:20px">
+    <div class="card grn anim fadeUp" style="flex:1"><span class="tag t-grn">集成压测</span><div class="stat">103 / 0 失败</div><p class="muted" style="font-size:12px">1.5B fp16 四层同载 · 均13.51s/轮 · 峰值3943.7MB</p></div>
+    <div class="card blu anim fadeUp" style="flex:1"><span class="tag t-blu">7B 四层全开</span><div class="stat">100% 成功</div><p class="muted" style="font-size:12px">100 轮 · 峰值6388MB · 泄漏0MB · 均14.38s/轮</p></div>
+    <div class="card vio anim fadeUp" style="flex:1"><span class="tag t-vio">模糊测试</span><div class="stat">399 轮 P0=0</div><p class="muted" style="font-size:12px">修复 PeftModel+4bit 钩子定位：947 P0 → 0</p></div>
+  </div>
+  <div class="row mt" style="margin-top:18px">
+    <div class="card gld anim fadeLeft" style="flex:1"><span class="tag t-gld">复现性复查</span><p class="muted" style="font-size:13px">E3/E7/E9 全新上下文重跑，E9 偏差仅 <b class="grn">3.1%</b>——数据可复现、无随机噪声。</p></div>
+    <div class="card hot anim fadeRight" style="flex:1"><span class="tag t-acc">裁判工程</span><p class="muted" style="font-size:13px">16GB 内存机手动加载 7B 裁判：meta建模→to_empty→分片 load_state_dict（CPU 峰值仅单分片），并重算 rope 旋转编码 buffer。</p></div>
+  </div>
+  <div class="anim bounceIn mt8 center" style="margin-top:16px"><span class="lead" style="font-size:18px">"生产可用不是宣传语，是 <b class="grn">0 失败 / 0 泄漏 / P0=0</b> 的实测"</span></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 31 质量目标达成 ═══════════════ -->
+<section class="slide">
+  <div class="foot"><span class="part">C · 评测体系 / 目标</span><span class="bar"><i style="width:76%"></i></span><span class="muted">31</span></div>
+  <div class="anim fadeDown kicker">C · 质量目标达成情况</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>核心指标：目标 vs 实测</h2></div>
+  <div class="anim fadeUp mt" style="margin-top:18px"><div class="tbl"><table>
+    <tr><th>指标</th><th>目标</th><th>实测</th><th>状态</th></tr>
+    <tr><td>语义熵提升</td><td>&gt;10%</td><td class="grn">3B +41.7% · 7B +44.5%</td><td class="grn">✅</td></tr>
+    <tr><td>重复率</td><td>&lt;0.3</td><td class="grn">3B 0.040 · 7B 0.019</td><td class="grn">✅</td></tr>
+    <tr><td>情感命中率</td><td>&gt;15%</td><td class="grn">3B 0.199 · 7B 0.171</td><td class="grn">✅</td></tr>
+    <tr><td>显存占用</td><td>&lt;14GB</td><td class="grn">7B Q4 四层 6388MB</td><td class="grn">✅</td></tr>
+    <tr><td>成功率</td><td>&gt;95%</td><td class="grn">100%（103+100轮）</td><td class="grn">✅</td></tr>
+    <tr><td>跨尺寸适配</td><td>0.5B~7B</td><td class="grn">框架自动适配验证</td><td class="grn">✅</td></tr>
+    <tr><td>长上下文稳定</td><td>&lt;15% 熵降</td><td class="down">512+ 坍缩</td><td class="down">❌ 待改进</td></tr>
+    <tr><td>动态策略增益</td><td>+5-10%</td><td class="y">参数需校准</td><td class="y">⚠️</td></tr>
+  </table></div></div>
+  <div class="anim rotateIn mt8"><div class="card hot"><b class="acc">6/8 达成：</b><span class="muted" style="font-size:13px">两项待办——长上下文稳定、动态策略校准，已进入未来规划 0-6 个月攻坚清单。</span></div></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 32 四层记忆协同 ═══════════════ -->
+<section class="slide dark">
+  <div class="foot"><span class="part">D · 工程落地 / 记忆</span><span class="bar"><i style="width:79%"></i></span><span class="muted">32</span></div>
+  <div class="anim fadeDown kicker">D · 工程落地 / 分层记忆</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>陪伴的本质 = 记忆 + 温度</h2></div>
+  <div class="g3 grid mt" style="margin-top:20px">
+    <div class="card vio anim fadeUp"><span class="tag t-vio">短期 · 语义回响池</span><h3>当前对话情绪余韵</h3><p class="muted" style="font-size:12px">w(t)=w·exp(−γΔt) 衰减 · 对应"最后一句话的回音"</p></div>
+    <div class="card blu anim fadeUp"><span class="tag t-blu">中期 · RAG</span><h3>用户资料 / 事实知识</h3><p class="muted" style="font-size:12px">bge-small-zh + FAISS 151 条库，按需检索注入，永不污染回响池</p></div>
+    <div class="card gld anim fadeUp"><span class="tag t-gld">长期 · LoRA</span><h3>人格语态适配器</h3><p class="muted" style="font-size:12px">gentle_v2 / emotion_v1 / emotion_7B，跨会话稳定、热插拔切换</p></div>
+  </div>
+  <h3 class="anim fadeUp mt" style="margin-top:18px">三者作用位置互不冲突：</h3>
+  <div class="g3 grid anim slideL mt8">
+    <div class="card"><span class="tag t-blu">关注点</span><b class="blu">注意力权重层</b></div>
+    <div class="card"><span class="tag t-gld">上下文</span><b class="gld">上下文前缀</b></div>
+    <div class="card"><span class="tag t-vio">输出端</span><b class="vio">logits 偏置</b></div>
+  </div>
+  <div class="anim fadeUp mt8"><div class="card grn"><b class="grn">协同推理：</b><span class="muted" style="font-size:13px">三层记忆职责分离 → 一体化协同 → 服务化部署，构成"从短期到长期、从事实到情感"的完整连续体。</span></div></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 33 一体化流程 + API ═══════════════ -->
+<section class="slide">
+  <div class="foot"><span class="part">D · 工程落地 / 服务</span><span class="bar"><i style="width:82%"></i></span><span class="muted">33</span></div>
+  <div class="anim fadeDown kicker">D · 一体化推理与 API</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>generate(prompt) 的一体化编排</h2></div>
+  <div class="row mt" style="margin-top:18px">
+    <div class="card blu anim fadeLeft" style="flex:1.1">
+      <span class="tag t-blu">SemanticEchoFramework · 统一生成接口</span>
+      <div class="card mt8"><pre style="font-size:12px;line-height:1.7;color:#cdd5ee;background:rgba(255,255,255,.03);padding:10px;border-radius:8px;font-family:ui-monospace,Menlo,monospace">generate(prompt)
+  ├ 1. 动态策略：情感密度 → τ/λ 决策
+  ├ 2. RAG：检索注入 [参考信息] 前缀
+  ├ 3. 情感筛选：τ 阈值包装的情感过滤器
+  ├ 4. LoRA：PeftModel 适配器启用/禁用
+  └ 5. 回响：λ/γ 自动计算 + 归一化基准</pre></div>
+    </div>
+    <div class="g2 grid anim fadeRight" style="flex:1">
+      <div class="card grn"><span class="tag t-grn">FastAPI 端点</span><ul class="clean"><li>/generate 四层协同生成</li><li>/load_lora · /unload_lora 热插拔</li><li>/reset_echo 短期记忆重置</li><li>/status 显存/池/RAG 状态</li></ul></div>
+      <div class="card gld"><span class="tag t-gld">合规底线</span><ul class="clean"><li>全链路本地推理、零数据外传</li><li>4bit 默认支持（1.5B1102MB / 7B5300MB）</li><li>分级部署指南齐备</li></ul></div>
+    </div>
+  </div>
+  <div class="anim rotateIn mt8"><div class="card">控制面板 + OpenAPI 兼容 + 打标闭环：一套引擎，既面向研发复现，也面向生产部署。</div></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 34 分级部署与成本 ═══════════════ -->
+<section class="slide dark">
+  <div class="foot"><span class="part">D · 工程落地 / 部署成本</span><span class="bar"><i style="width:85%"></i></span><span class="muted">34</span></div>
+  <div class="anim fadeDown kicker">D · 部署与成本优势</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>1.5B 小模型 = 成本降一个数量级</h2></div>
+  <div class="g3 grid mt" style="margin-top:20px">
+    <div class="card grn anim bounceIn"><span class="tag t-grn">显存需求</span><div class="stat" style="font-size:22px;color:#fff">1.3GB</div><p class="muted" style="font-size:11.5px">1.5B 4bit 加载 · 消费级显卡可跑</p></div>
+    <div class="card blu anim bounceIn"><span class="tag t-blu">逐级扩展</span><div class="stat" style="font-size:22px;color:#fff">0.5B→7B</div><p class="muted" style="font-size:11.5px">分级部署指南 · RTX3080 即可</p></div>
+    <div class="card gld anim bounceIn"><span class="tag t-gld">成本优势</span><div class="stat gld" style="font-size:22px">1/30~1/300</div><p class="muted" style="font-size:11.5px">情感陪伴成本 vs 大模型API（估算示意）</p></div>
+  </div>
+  <div class="row mt" style="margin-top:18px">
+    <div class="card anim fadeLeft" style="flex:1"><span class="tag t-acc">推理成本对比（示意）</span><p class="muted" style="font-size:12.5px">百万 token <b class="grn">¥2~12</b>（本地小模型） vs 大厂 API <b class="down">数十元及以上</b> —— 同样情感质量，成本差一个数量级。</p></div>
+    <div class="card anim fadeRight" style="flex:1"><span class="tag t-gld">产品形态</span><ul class="clean"><li>API 后处理增强（挂载即用）</li><li>MIC 推理 / 边缘 / 私有化</li><li>SDK / 插件 / 服务端引擎</li></ul></div>
+  </div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 35 市场宏图 ═══════════════ -->
+<section class="slide">
+  <div class="foot"><span class="part">E · 市场与商业 / 图景</span><span class="bar"><i style="width:88%"></i></span><span class="muted">35</span></div>
+  <div class="anim fadeDown kicker">E · 市场宏大图景</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>情绪经济：万亿级新消费周期</h2></div>
+  <div class="g3 grid mt" style="margin-top:20px">
+    <div class="card gld anim bounceIn"><span class="tag t-gld">情绪经济规模</span><div class="stat gld">2.72万亿→4.5万亿</div><p class="muted" style="font-size:11.5px">2025 → 2029E · CAGR 18.6%</p></div>
+    <div class="card blu anim bounceIn"><span class="tag t-blu">数字地基</span><div class="stat blu">11.25亿 网民</div><p class="muted" style="font-size:11.5px">普及率 80.1% · AI 用户 6.02亿(+141.7%)</p></div>
+    <div class="card vio anim bounceIn"><span class="tag t-vio">政策背书</span><div class="stat vio">首次入国办</div><p class="muted" style="font-size:11.5px">2026-01 国家层面提"情绪/体验式服务"</p></div>
+    <div class="card grn anim bounceIn"><span class="tag t-grn">人群需求</span><div class="stat grn">2.4~2.5亿</div><p class="muted" style="font-size:11.5px">单身人口 · 独居1.8亿+ · 银发3.2亿</p></div>
+    <div class="card anim bounceIn"><span class="tag t-acc">消费意愿</span><div class="stat">37.6%</div><p class="muted" style="font-size:11.5px">愿为 AI 陪伴月付 · Z世代情绪月消费949元</p></div>
+    <div class="card gld anim bounceIn"><span class="tag t-gld">范式转移</span><div class="stat" style="font-size:22px;color:#fff">性价比→心价比</div><p class="muted" style="font-size:11.5px">居民服务消费占比 46.15% 创新高</p></div>
+  </div>
+  <div class="anim fadeUp mt" style="margin-top:18px"><div class="card hot"><b class="acc">一句话：</b><span class="muted" style="font-size:13px">情感陪伴不是小众需求——是 2.7 万亿情绪经济里<b>增速最快、数字化程度最低</b>的一块，且政策首次背书。</span></div></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 36 AI陪伴细分 ═══════════════ -->
+<section class="slide dark">
+  <div class="foot"><span class="part">E · 市场与商业 / 细分</span><span class="bar"><i style="width:91%"></i></span><span class="muted">36</span></div>
+  <div class="anim fadeDown kicker">E · AI 陪伴细分市场</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>多口径越拆越大 · 千亿级独立品类</h2></div>
+  <div class="g3 grid mt" style="margin-top:18px">
+    <div class="card anim fadeUp"><span class="tag t-blu">AI 陪伴（全球）</span><div class="stat" style="font-size:21px;color:#fff">367.9→3179.6亿美元</div><p class="muted" style="font-size:11.5px">2025→2033E · CAGR 31% · 全球月活4.21亿(+217%)</p></div>
+    <div class="card anim fadeUp"><span class="tag t-grn">AI 陪伴（中国）</span><div class="stat" style="font-size:21px;color:#fff">543.5亿软件 +20%</div><p class="muted" style="font-size:11.5px">AI社交活跃8700万 · 付费率18.7% · 机器人796亿</p></div>
+    <div class="card anim fadeUp"><span class="tag t-vio">数字人/虚拟偶像</span><div class="stat" style="font-size:21px;color:#fff">480亿→带动6400亿</div><p class="muted" style="font-size:11.5px">核心用户1.86亿 · ARPU 327元</p></div>
+    <div class="card anim fadeUp"><span class="tag t-gld">心理/情感服务</span><div class="stat" style="font-size:21px;color:#fff">1041.5亿</div><p class="muted" style="font-size:11.5px">心理亚健康1.9亿+ · AI心理127亿</p></div>
+    <div class="card anim fadeUp"><span class="tag t-acc">游戏/乙女</span><div class="stat" style="font-size:21px;color:#fff">3507.89亿 +124%</div><p class="muted" style="font-size:11.5px">乙女 2024 +124% · 87% 玩家目的=情感陪伴</p></div>
+    <div class="card anim fadeUp"><span class="tag t-blu">语音陪伴</span><div class="stat" style="font-size:21px;color:#fff">680亿 · 增速第一</div><p class="muted" style="font-size:11.5px">语音社交占在线交友27% · 用户3.82亿</p></div>
+  </div>
+  <div class="row mt" style="margin-top:18px">
+    <div class="card gld anim fadeLeft" style="flex:1"><span class="tag t-gld">标杆 · Soul</span><div class="stat" style="font-size:20px;color:#fff">2024营收22.11亿 · 毛利83.7%</div><p class="muted" style="font-size:11.5px">AI情绪价值收入占九成 · ARPPU 104.4元</p></div>
+    <div class="card grn anim fadeRight" style="flex:1"><span class="tag t-grn">付费意愿</span><div class="stat" style="font-size:20px;color:#fff">37.6% 愿月付</div><p class="muted" style="font-size:11.5px">豆包已收费(68/200/500元/月) · AI社交付费率18.7%</p></div>
+  </div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 37 监管窗口 ═══════════════ -->
+<section class="slide">
+  <div class="foot"><span class="part">E · 市场与商业 / 窗口</span><span class="bar"><i style="width:93%"></i></span><span class="muted">37</span></div>
+  <div class="anim fadeDown kicker">E · 2026 监管"暂停键" = 反超窗口</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>巨头离场 · 赛道洗牌 · 后发反超窗口</h2></div>
+  <div class="g2 grid mt" style="margin-top:16px">
+    <div class="card hot anim fadeLeft">
+      <span class="tag t-acc">行业按下暂停键</span>
+      <div class="tbl mt8"><table><tr><th>事件</th><th>细节</th></tr><tr><td>豆包</td><td class="down">下线全部自建智能体（800万+个、2600万MAU）</td></tr><tr><td>千问/元宝</td><td class="down">同日/先后下线，数据删除</td></tr><tr><td>监管清扫</td><td class="down">上海下架1.4万违规智能体</td></tr><tr><td>玩家截流</td><td class="grn">星野/筑梦岛"一键搬家"下载量齐升</td></tr></table></div>
+    </div>
+    <div class="card grn anim fadeRight">
+      <span class="tag t-grn">新规要点（2026-07-15 施行 · 全球首部）</span>
+      <ul class="clean"><li>显著标识"人工智能"，禁真人照片头像</li><li>防情感操纵：连续使用超2小时须提醒</li><li>未成年人禁虚拟伴侣/亲属亲密服务</li><li>极端情绪强制安抚引导 · 百万注册须安全评估</li></ul>
+    </div>
+  </div>
+  <div class="g3 grid anim rotateIn mt8" style="margin-top:16px">
+    <div class="card"><span class="tag t-gld">① 让出战场</span><p class="muted" style="font-size:12px">流量最大三入口主动退出自建，把战场让给"合规+技术"玩家</p></div>
+    <div class="card"><span class="tag t-blu">② 合规=技术门槛</span><p class="muted" style="font-size:12px">极限情绪识别/安抚/防沉迷 => 底层都是情感计算，恰好是本引擎能力</p></div>
+    <div class="card hot"><span class="tag t-acc">③ 买的是时机</span><p class="muted" style="font-size:12px">窗口有限，现在获得"窗口期独占权"</p></div>
+  </div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 38 一致性+OOC 行业空白 ═══════════════ -->
+<section class="slide dark">
+  <div class="foot"><span class="part">E · 市场与商业 / 制胜点</span><span class="bar"><i style="width:95%"></i></span><span class="muted">38</span></div>
+  <div class="anim fadeDown kicker">E · 行业空白 = 制胜点</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>一致性 + OOC 控制 = 公认行业空白</h2></div>
+  <div class="row mt" style="margin-top:18px">
+    <div class="card blu anim fadeLeft" style="flex:1.15">
+      <span class="tag t-blu">被权威评测证实</span>
+      <ul class="clean"><li>CompanionBench（2026-08）：角色扮演模型排名靠后，<b>行业共同弱点 = 情绪调节与实质关系支持</b></li><li>主流失败模式 = 用表面温暖替代实质关系支持</li><li>ETrajEval：专做角色扮演的模型 ≤ 通用 LLM</li></ul>
+      <div class="card mt8"><b class="blu">流失根因：</b><span class="muted" style="font-size:12.5px">记忆断档 + OOC（出戏）是用户流失主因（星野+Talkie 月流失约 60%）；猫箱对话轮数 = 豆包 <b>50倍</b> → 深度情感需求真实旺盛。</span></div>
+    </div>
+    <div class="card gld anim bouncIn" style="flex:1">
+      <span class="tag t-gld">我们的引擎正好补齐</span>
+      <p class="lead-s" style="font-size:13px">推理期情感增强 = <b>情感状态跟踪 + 极性定向引导 + 人格一致性保持 + 身份/AI腔硬拦截</b>，直接命中"一致性与 OOC 控制"。</p>
+      <div class="card grn mt8"><b class="grn">一句话卖点：</b><span class="muted" style="font-size:12.5px">"能拿出一致性稳定、OOC可控、还像真人的引擎，谁就拿下这个空白——我们现在就拿着它。"</span></div>
+    </div>
+  </div>
+  <div class="anim bounceIn center mt" style="margin-top:18px"><span class="gld big" style="font-size:22px">商业价值：</span><span class="lead" style="font-size:17px">全行业 MaaS 情感缺口 → <b class="acc">接口层方案直接补齐，无需动基座、无需重训练，挂载即用</b></span></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 39 商业授权 ═══════════════ -->
+<section class="slide">
+  <div class="foot"><span class="part">E · 市场与商业 / 授权</span><span class="bar"><i style="width:97%"></i></span><span class="muted">39</span></div>
+  <div class="anim fadeDown kicker">E · 商业授权模式 · SemanticEcho-Hub</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>五级授权 · 从年费到永久买断</h2></div>
+  <div class="anim fadeUp mt" style="margin-top:18px"><div class="tbl"><table>
+    <tr><th>授权类型</th><th>定位</th><th>费用</th></tr>
+    <tr><td>大厂年费</td><td>年收入≥100亿</td><td class="gld">500 万+/年</td></tr>
+    <tr><td>中厂年费</td><td>10~100亿</td><td class="gld">200~500 万/年</td></tr>
+    <tr><td>小厂年费</td><td>&lt;10亿</td><td class="gld">10~50 万/年</td></tr>
+    <tr><td>永久非独占</td><td>一次性</td><td class="gld">1,500 万起</td></tr>
+    <tr><td>独家授权(年)</td><td>年度</td><td class="gld">1,000 万/年</td></tr>
+    <tr><td class="y"><b>永久独家买断</b></td><td>彻底锁定</td><td class="gld"><b>1 亿~10 亿</b></td></tr>
+  </table></div></div>
+  <div class="row mt" style="margin-top:18px">
+    <div class="card grn anim fadeLeft" style="flex:1"><span class="tag t-grn">免费学术</span><p class="muted" style="font-size:13px">学术研究 / 学习不受限 · 开源仓库 CC BY-NC-SA 4.0</p></div>
+    <div class="card gld anim fadeRight" style="flex:1"><span class="tag t-gld">联系</span><p class="muted" style="font-size:13px">DYPUBG2025@QQ.COM · 阿里云实习减免 10 万</p></div>
+  </div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 40 商业化五路线 ═══════════════ -->
+<section class="slide dark">
+  <div class="foot"><span class="part">E · 市场与商业 / 路线</span><span class="bar"><i style="width:99%"></i></span><span class="muted">40</span></div>
+  <div class="anim fadeDown kicker">E · 五种商业化路线</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>开源架构 → 商业化全路径</h2></div>
+  <div class="g5 grid mt" style="margin-top:20px">
+    <div class="card anim bounceIn"><span class="tag t-acc">①年费SaaS</span><h3 style="font-size:13.5px">500万+/年</h3><p class="muted" style="font-size:11px">云厂/大厂按年续约</p></div>
+    <div class="card anim bounceIn"><span class="tag t-gld">②买断</span><h3 style="font-size:13.5px">1500万起~10亿</h3><p class="muted" style="font-size:11px">想彻底锁定的巨头</p></div>
+    <div class="card anim bounceIn"><span class="tag t-blu">③接口API</span><h3 style="font-size:13.5px">按量计费</h3><p class="muted" style="font-size:11px">百炼/方舟 · 复利</p></div>
+    <div class="card anim bounceIn"><span class="tag t-vio">④人物训练</span><h3 style="font-size:13.5px">角色/项目计费</h3><p class="muted" style="font-size:11px">角色训练+引擎定制</p></div>
+    <div class="card anim bounceIn"><span class="tag t-grn">⑤开源增值</span><h3 style="font-size:13.5px">转化率驱动</h3><p class="muted" style="font-size:11px">开源示例→企业付费</p></div>
+  </div>
+  <div class="row mt" style="margin-top:22px">
+    <div class="card grn anim fadeLeft" style="flex:1"><span class="tag t-grn">三个"增加"</span><ul class="clean"><li>增加用户粘性（Character.AI日60分 · 猫箱50倍轮数）</li><li>增加年度收入（付费率18.7% · ARPU28-35元 · Soul ARPPU104）</li><li>降低模型成本（1.5B达大模型水平 · 成本降一个数量级）</li></ul></div>
+    <div class="card gld anim fadeRight" style="flex:1"><span class="tag t-gld">开源双轨</span><p class="muted" style="font-size:13px">基座(Qwen)Apache2.0 开源 → 引擎作为"独立原创资产的一层增值能力"售卖，不违反任何开源协议；开源示例/论文引流 → 授权/定制付费。</p></div>
+  </div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 41 分厂商场景 ═══════════════ -->
+<section class="slide">
+  <div class="foot"><span class="part">E · 市场与商业 / 厂商</span><span class="bar"><i style="width:100%"></i></span><span class="muted">41</span></div>
+  <div class="anim fadeDown kicker">E · 分厂商应用场景</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>七大厂商，一套情感底座</h2></div>
+  <div class="g3 grid mt" style="margin-top:18px">
+    <div class="card blu anim fadeUp"><span class="tag t-blu">阿里云</span><p class="muted" style="font-size:12px">百炼上架"情感增强接口" · 千问+插件="会共情的千问" · 随100万企业分发</p></div>
+    <div class="card anim fadeUp"><span class="tag t-acc">字节</span><p class="muted" style="font-size:12px">猫箱(ARPU35元)情感供给方 · 扣子插件上架 · 火山方舟后处理 · 抖音数字人</p></div>
+    <div class="card grn anim fadeUp"><span class="tag t-grn">腾讯</span><p class="muted" style="font-size:12px">游戏AI队友(和平精英1.1亿) · 混元MaaS体验差异化 · 元宝内测</p></div>
+    <div class="card gld anim fadeUp"><span class="tag t-gld">华为</span><p class="muted" style="font-size:12px">小艺共情推理 · 鸿蒙座舱陪伴 · 昇腾原生适配 · 信创私有化</p></div>
+    <div class="card vio anim fadeUp"><span class="tag t-vio">小米</span><p class="muted" style="font-size:12px">小爱1.69亿MAU · 车机陪伴 · 端侧4B · 机器人，一处部署多端复用</p></div>
+    <div class="card anim fadeUp"><span class="tag t-acc">米哈游</span><p class="muted" style="font-size:12px">帕姆帮帮千万级游戏内情感互动 · 角色更像角色、IP情感资产升值</p></div>
+  </div>
+  <div class="anim rotateIn mt8"><div class="card hot">DeepSeek：官方不做陪伴应用，引擎作为开放情感层赋能其 <b>210 万开发者生态</b>。</div></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 42 未来规划总览 ═══════════════ -->
+<section class="slide dark">
+  <div class="foot"><span class="part">F · 未来规划 / 总览</span><span class="bar"><i style="width:10%"></i></span><span class="muted">42</span></div>
+  <div class="anim fadeDown kicker">F · 未来项目规划 ★</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>从技术攻坚到情感基座的路线图</h2></div>
+  <div class="steps anim fadeUp mt" style="margin-top:18px;justify-content:center">
+    <div class="step grn"><b>0-6月</b> 技术攻坚+产品化</div><span class="arrow">→</span>
+    <div class="step gld"><b>6-18月</b> 商业化落地</div><span class="arrow">→</span>
+    <div class="step acc"><b>18-36月</b> 情感基座+生态</div>
+  </div>
+  <div class="g3 grid mt" style="margin-top:22px">
+    <div class="card grn anim bounceIn"><span class="tag t-grn">Phase 1 · 攻坚</span><h3 style="font-size:15px">补短板 → 可商用</h3><ul class="clean"><li>长上下文坍缩修复</li><li>P6 LoRA 达标（≥0.48）</li><li>产品化 MVP + API</li></ul></div>
+    <div class="card gld anim bounceIn"><span class="tag t-gld">Phase 2 · 放量</span><h3 style="font-size:15px">单点 → 规模化</h3><ul class="clean"><li>13B+ 规模扩展</li><li>多语言 / 多领域</li><li>授权放量 + 接口上架</li></ul></div>
+    <div class="card hot anim bounceIn"><span class="tag t-acc">Phase 3 · 定义</span><h3 style="font-size:15px">工具 → 基座</h3><ul class="clean"><li>第0层训练期改造</li><li>超级智能体陪伴基座</li><li>定义合规情感赛道</li></ul></div>
+  </div>
+  <div class="anim rotateIn mt8"><div class="card"><b class="gld">北极星目标：</b><span class="muted" style="font-size:13px">三年内，从一个开源引擎家族成长为"全行业情感计算的首选底座"，在 2.7 万亿情绪经济中占据数字化程度最低、增速最快的那一块。</span></div></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 43 里程碑全景 ═══════════════ -->
+<section class="slide">
+  <div class="foot"><span class="part">F · 未来规划 / 里程碑</span><span class="bar"><i style="width:12%"></i></span><span class="muted">43</span></div>
+  <div class="anim fadeDown kicker">F · 36 个月里程碑全景</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>Roadmap · 端到端时间表</h2></div>
+  <div class="anim fadeUp mt" style="margin-top:20px">
+    <svg viewBox="0 0 1180 470" style="width:100%;font-family:inherit">
+      <defs><linearGradient id="roadg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2ecc71"/><stop offset=".5" stop-color="#f39c12"/><stop offset="1" stop-color="#e94560"/></linearGradient></defs>
+      <line x1="40" y1="235" x2="1140" y2="235" stroke="url(#roadg)" stroke-width="6" stroke-linecap="round"/>
+      <!-- Phase1 -->
+      <circle cx="150" cy="235" r="9" fill="#2ecc71"/><text x="150" y="200" text-anchor="middle" fill="#eef2ff" font-size="15" font-weight="700">0-6月 · 攻坚</text>
+      <rect x="90" y="70" width="120" height="120" fill="rgba(46,204,113,.1)" stroke="rgba(46,204,113,.5)" rx="12"/><text x="150" y="100" text-anchor="middle" fill="#5fe89a" font-size="13" font-weight="700">技术补短</text><text x="98" y="125" fill="#c6cdea" font-size="11">长上下文稳定</text><text x="98" y="145" fill="#c6cdea" font-size="11">P6 LoRA ≥0.48</text><text x="98" y="165" fill="#c6cdea" font-size="11">动态策略校准</text>
+      <rect x="90" y="330" width="120" height="120" fill="rgba(77,107,254,.12)" stroke="rgba(77,107,254,.5)" rx="12"/><text x="150" y="360" text-anchor="middle" fill="#7aa2ff" font-size="13" font-weight="700">产品化MVP</text><text x="98" y="385" fill="#c6cdea" font-size="11">SaaS/API/MIC</text><text x="98" y="405" fill="#c6cdea" font-size="11">控制台+打标</text>
+      <!-- Phase2 -->
+      <circle cx="540" cy="235" r="9" fill="#f39c12"/><text x="540" y="200" text-anchor="middle" fill="#eef2ff" font-size="15" font-weight="700">6-18月 · 放量</text>
+      <rect x="470" y="70" width="150" height="120" fill="rgba(243,156,18,.1)" stroke="rgba(243,156,18,.5)" rx="12"/><text x="545" y="100" text-anchor="middle" fill="#ffd27f" font-size="13" font-weight="700">规模/语言扩展</text><text x="478" y="125" fill="#c6cdea" font-size="11">13B+ 泛化</text><text x="478" y="145" fill="#c6cdea" font-size="11">多语言/多领域</text><text x="478" y="165" fill="#c6cdea" font-size="11">英文MCQ适配</text>
+      <rect x="470" y="330" width="150" height="120" fill="rgba(167,139,250,.12)" stroke="rgba(167,139,250,.5)" rx="12"/><text x="545" y="360" text-anchor="middle" fill="#cba6ff" font-size="13" font-weight="700">商业化放量</text><text x="478" y="385" fill="#c6cdea" font-size="11">授权签约</text><text x="478" y="405" fill="#c6cdea" font-size="11">百炼/方舟上架</text><text x="478" y="425" fill="#c6cdea" font-size="11">角色工厂</text>
+      <!-- Phase3 -->
+      <circle cx="930" cy="235" r="9" fill="#e94560"/><text x="930" y="200" text-anchor="middle" fill="#eef2ff" font-size="15" font-weight="700">18-36月 · 定义</text>
+      <rect x="850" y="70" width="160" height="120" fill="rgba(233,69,96,.1)" stroke="rgba(233,69,96,.5)" rx="12"/><text x="930" y="100" text-anchor="middle" fill="#ff9aa8" font-size="13" font-weight="700">情感基座</text><text x="858" y="125" fill="#c6cdea" font-size="11">第0层训练期改造</text><text x="858" y="145" fill="#c6cdea" font-size="11">超级智能体陪伴基座</text><text x="858" y="165" fill="#c6cdea" font-size="11">P7+ 迭代</text>
+      <rect x="850" y="330" width="160" height="120" fill="rgba(233,69,96,.12)" stroke="rgba(233,69,96,.5)" rx="12"/><text x="930" y="360" text-anchor="middle" fill="#ff9aa8" font-size="13" font-weight="700">生态定义</text><text x="858" y="385" fill="#c6cdea" font-size="11">合规引擎标准</text><text x="858" y="405" fill="#c6cdea" font-size="11">开发者平台</text><text x="858" y="425" fill="#c6cdea" font-size="11">行业榜单</text>
+    </svg>
+  </div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 44 短期·技术攻坚 ═══════════════ -->
+<section class="slide dark">
+  <div class="foot"><span class="part">F · 未来规划 / 短期</span><span class="bar"><i style="width:16%"></i></span><span class="muted">44</span></div>
+  <div class="anim fadeDown kicker">F · Phase 1 · 技术攻坚（0-6 月）</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>四大硬骨头 → 全部可量化攻坚</h2></div>
+  <div class="g2 grid mt" style="margin-top:18px">
+    <div class="card hot anim fadeLeft"><span class="tag t-acc">① 长上下文坍缩（最高优先）</span><ul class="clean"><li>λ 随步数衰减：前256步 λ=0.10 → 线性降至 0.03</li><li>必要时提高 γ，或分段重置回响池</li><li>目标：512+ token 熵降 &lt;15%（当前坍缩）</li></ul></div>
+    <div class="card grn anim fadeRight"><span class="tag t-grn">② P6 LoRA 达标</span><ul class="clean"><li>LLM-Judge 0.35 → 目标 ≥0.48</li><li>人物训练一体化复合策略</li><li>外挂+回响组合 λ → 0.06–0.08 复测</li></ul></div>
+    <div class="card blu anim fadeLeft"><span class="tag t-blu">③ 最优 λ 公式精修</span><ul class="clean"><li>指数 1.2 → 1.5（3B→0.139 / 7B→0.072，更接近实测最优）</li><li>或扫描表全覆盖 + 兜底</li><li>目标：0.5B~7B 一键达最优</li></ul></div>
+    <div class="card gld anim fadeRight"><span class="tag t-gld">④ 动态策略校准</span><ul class="clean"><li>情感密度阈值 / λ增量 / γτ联合网格扫描</li><li>目标：+5~10% 稳定增益（当前 ⚠️ 待校准）</li><li>产出可复用的自动调参规则</li></ul></div>
+  </div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 45 短期·产品化MVP ═══════════════ -->
+<section class="slide">
+  <div class="foot"><span class="part">F · 未来规划 / 短期</span><span class="bar"><i style="width:20%"></i></span><span class="muted">45</span></div>
+  <div class="anim fadeDown kicker">F · Phase 1 · 产品化 MVP（0-6 月）</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>把引擎变成可用产品</h2></div>
+  <div class="g3 grid mt" style="margin-top:20px">
+    <div class="card blu anim bounceIn"><span class="tag t-blu">SaaS 平台</span><ul class="clean"><li>在线引擎控制台</li><li>角色/语态模板市场</li><li>可视化评测面板</li></ul></div>
+    <div class="card grn anim bounceIn"><span class="tag t-grn">API 服务</span><ul class="clean"><li>标准 REST + OpenAI 兼容</li><li>按 Token / 调用计费</li><li>多模型一键切换</li></ul></div>
+    <div class="card gld anim bounceIn"><span class="tag t-gld">MIC / Edge</span><ul class="clean"><li>端侧 4B 推理</li><li>移动 / 车机集成</li><li>离线可用</li></ul></div>
+  </div>
+  <div class="row mt" style="margin-top:18px">
+    <div class="card anim fadeLeft" style="flex:1"><span class="tag t-acc">打磨关键体验</span><ul class="clean"><li>身份/AI腔硬拦截上线（产线级）</li><li>极端情绪识别 + 安抚 + 防沉迷（对齐新规）</li><li>显著标识合规组件</li></ul></div>
+    <div class="card anim fadeRight" style="flex:1"><span class="tag t-vio">Demo 场景</span><ul class="clean"><li>AI 陪伴（角色像人）</li><li>情感客服（安抚型）</li><li>游戏 NPC（N人格一致性）</li><li>心理支持（合规共情）</li></ul></div>
+  </div>
+  <div class="anim rotateIn mt8"><div class="card hot"><b class="acc">验收标准：</b><span class="muted" style="font-size:13px">一个非技术用户可 5 分钟内搭建并体验一个"有温度的陪伴角色"。</span></div></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 46 短期·评测体系完善 ═══════════════ -->
+<section class="slide dark">
+  <div class="foot"><span class="part">F · 未来规划 / 短期</span><span class="bar"><i style="width:24%"></i></span><span class="muted">46</span></div>
+  <div class="anim fadeDown kicker">F · Phase 1 · 评测体系完善</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>让"人味"变得可测、可比、可复现</h2></div>
+  <div class="g3 grid mt" style="margin-top:20px">
+    <div class="card gld anim bounceIn"><span class="tag t-gld">样本多元化</span><p class="muted" style="font-size:12.5px">从 30~60 条脚本化样本，扩展到真实用户分布 / 更长对话 / 复杂情感混合场景。</p></div>
+    <div class="card blu anim bounceIn"><span class="tag t-blu">多语言</span><p class="muted" style="font-size:12.5px">覆盖英文 Heart-Bench MCQ（当前钝感）、日语 / 韩语泛化验证，补上语言适配探针。</p></div>
+    <div class="card grn anim bounceIn"><span class="tag t-grn">多维度</span><p class="muted" style="font-size:12.5px">新增 OOC 检测、情感一致性随轮衰减、长记忆保持专项基准。</p></div>
+  </div>
+  <div class="row mt" style="margin-top:18px">
+    <div class="card anim fadeLeft" style="flex:1"><span class="tag t-vio">统一评测平台</span><ul class="clean"><li>一键跑全家族 + 各厂家专项</li><li>回归看板：是否回退要一眼可见</li><li>双裁判 + 云/本地方向对齐</li></ul></div>
+    <div class="card anim fadeRight" style="flex:1"><span class="tag t-acc">数据闭环</span><ul class="clean"><li>打标回流（工程已就绪）</li><li>真实会话标注 → 反哺情感数据集</li><li>持续训练 / 持续评测（CT/CE）</li></ul></div>
+  </div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 47 中期·商业化落地 ═══════════════ -->
+<section class="slide">
+  <div class="foot"><span class="part">F · 未来规划 / 中期</span><span class="bar"><i style="width:28%"></i></span><span class="muted">47</span></div>
+  <div class="anim fadeDown kicker">F · Phase 2 · 商业化落地（6-18 月）</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>把技术优势变成收入曲线</h2></div>
+  <div class="g3 grid mt" style="margin-top:20px">
+    <div class="card grn anim bounceIn"><span class="tag t-grn">① 授权放量</span><ul class="clean"><li>跟进头部厂家专项（阿里/字节/腾讯…）</li><li>年费 / 独家 / 买断多档报价落地</li><li>标杆案例背书 → 转介绍</li></ul></div>
+    <div class="card blu anim bounceIn"><span class="tag t-blu">② 接口上架</span><ul class="clean"><li>百炼/火山方舟上架情感增强接口</li><li>按量计费（复利模式）</li><li>随云平台企业客户分发</li></ul></div>
+    <div class="card gld anim bounceIn"><span class="tag t-gld">③ 人物训练一体化</span><ul class="clean"><li>第0层 + LoRA + 引擎整体方案</li><li>按角色 / 模型 / 场景计费</li><li>双重一致性 = 更高溢价</li></ul></div>
+  </div>
+  <div class="anim fadeUp mt" style="margin-top:18px"><div class="card hot"><b class="acc">商业化阶段目标（示意）：</b><span class="muted" style="font-size:13px">6-12 月：1~3 家标杆签约；12-18 月：接口上架开始产生按量收入；里程碑与 KPIs 详见表 54。</span></div></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 48 中期·规模与泛化 ═══════════════ -->
+<section class="slide dark">
+  <div class="foot"><span class="part">F · 未来规划 / 中期</span><span class="bar"><i style="width:32%"></i></span><span class="muted">48</span></div>
+  <div class="anim fadeDown kicker">F · Phase 2 · 规模与泛化</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>从 7B 走向更大 + 更通用</h2></div>
+  <div class="row mt" style="margin-top:18px">
+    <div class="card blu anim fadeLeft" style="flex:1.1"><span class="tag t-blu">规模扩展 13B+</span><ul class="clean"><li>回响 / 锚点 / 导演在更大基座验证</li><li>补全更大 hidden_dim 扫描表</li><li>目标：把 1.5B 反超大模型的结论上探到"更大仍有效"</li></ul></div>
+    <div class="card grn anim slideR" style="flex:1"><span class="tag t-grn">多领域泛化</span><ul class="clean"><li>情感客服 / 心理支持 / 游戏NPC / 陪伴</li><li>垂直领域情感词库 + 语态适配</li><li>从单点 demo → 行业方案</li></ul></div>
+  </div>
+  <div class="g3 grid anim rotateIn mt" style="margin-top:18px">
+    <div class="card gld"><span class="tag t-gld">语言</span><div class="stat" style="font-size:20px;color:#fff">中→英日韩</div><p class="muted" style="font-size:11.5px">多语种锚点词库与评测</p></div>
+    <div class="card vio"><span class="tag t-vio">模态</span><div class="stat" style="font-size:20px;color:#fff">文本→语音</div><p class="muted" style="font-size:11.5px">对接 TTS / 语音陪伴（680亿市场）</p></div>
+    <div class="card hot"><span class="tag t-acc">形态</span><div class="stat" style="font-size:20px;color:#fff">云端→端侧</div><p class="muted" style="font-size:11.5px">车机/手机/机器人一处部署多端复用</p></div>
+  </div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 49 中期·人物训练一体化 ═══════════════ -->
+<section class="slide">
+  <div class="foot"><span class="part">F · 未来规划 / 中期</span><span class="bar"><i style="width:36%"></i></span><span class="muted">49</span></div>
+  <div class="anim fadeDown kicker">F · Phase 2 · 人物训练一体化</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>从"引擎"到"角色工厂"</h2></div>
+  <div class="row mt" style="margin-top:18px">
+    <div class="card gld anim fadeLeft" style="flex:1.1">
+      <span class="tag t-gld">核心产品：角色训练 + 推理增强整体方案</span>
+      <ul class="clean"><li>第0层底层改造（让模型"就是"这个角色）</li><li>LoRA 语态微调（人格稳定）</li><li>推理期情感增强（表达有温度）→ 双重一致性</li></ul>
+    </div>
+    <div class="g3 grid anim fadeRight" style="flex:1">
+      <div class="card grn"><span class="tag t-grn">游戏</span><p class="muted" style="font-size:12px">N 角色 N 人格 · IP 情感资产升值</p></div>
+      <div class="card blu"><span class="tag t-blu">陪伴平台</span><p class="muted" style="font-size:12px">一键生成"走心"角色 · OOC 可控</p></div>
+      <div class="card vio"><span class="tag t-vio">品牌虚拟人</span><p class="muted" style="font-size:12px">数字人"像真人" · 情绪一致性稳定</p></div>
+    </div>
+  </div>
+  <div class="anim rotateIn mt8"><div class="card hot"><b class="acc">商业模式：</b><span class="muted" style="font-size:13px">按角色 / 按模型 / 按场景计费 —— 比单卖引擎多一层收入，且技术绑定更深入、更不易被替代。</span></div></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 50 长期·第0层改造 ═══════════════ -->
+<section class="slide dark">
+  <div class="foot"><span class="part">F · 未来规划 / 长期</span><span class="bar"><i style="width:40%"></i></span><span class="muted">50</span></div>
+  <div class="anim fadeDown kicker">F · Phase 3 · 第0层训练期改造</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>从"模拟情感"到"底层就是情感角色"</h2></div>
+  <div class="row mt" style="margin-top:18px">
+    <div class="card hot anim fadeLeft" style="flex:1.15">
+      <span class="tag t-acc">核心创新（第0层）</span>
+      <ul class="clean"><li><b>角色风格预训练</b>：用角色语料把说话风格写入权重</li><li><b>灾难性遗忘优化</b>：把"主动遗忘 AI 身份知识"作为工程手段</li><li><b>身世内化</b>：背景/世界观合并微调，对话前就"记得"过去</li><li>让模型从底层就是角色，而非扮演角色</li></ul>
+    </div>
+    <div class="card gld anim fadeRight" style="flex:1">
+      <span class="tag t-gld">为什么要做</span>
+      <p class="lead-s" style="font-size:13px">当前解码期引导只能缩小差距、无法抹平 1.5B 表达力硬瓶颈；要"全绿"需回响架构专属定制模型——这正是第0层要解决的。</p>
+      <div class="card mt8"><b class="grn">结合轨迹：</b><span class="muted" style="font-size:12.5px">P6 LoRA（训练态先行验证）→ 第0层完整训练改造 → 首发"回响定制基座"。</span></div>
+    </div>
+  </div>
+  <div class="anim bounceIn center mt" style="margin-top:18px"><span class="lead" style="font-size:18px">目标：打造一个<b class="acc">底层自带情感表达结构</b>的超级智能体陪伴基座</span></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 51 长期·超级智能体陪伴基座 ═══════════════ -->
+<section class="slide">
+  <div class="foot"><span class="part">F · 未来规划 / 长期</span><span class="bar"><i style="width:44%"></i></span><span class="muted">51</span></div>
+  <div class="anim fadeDown kicker">F · Phase 3 · 超级智能体陪伴基座</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>最终形态：一体化陪伴推理框架</h2></div>
+  <div class="g4 grid mt" style="margin-top:20px">
+    <div class="card grn anim bounceIn"><span class="tag t-grn">记忆</span><h3 style="font-size:14px">短/中/长三层</h3><p class="muted" style="font-size:11.5px">回响池+RAG+LoRA 连续体</p></div>
+    <div class="card blu anim bounceIn"><span class="tag t-blu">情感</span><h3 style="font-size:14px">六空间引擎</h3><p class="muted" style="font-size:11.5px">P1~P6 全家族协同注入</p></div>
+    <div class="card gld anim bounceIn"><span class="tag t-gld">身份</span><h3 style="font-size:14px">角色内化</h3><p class="muted" style="font-size:11.5px">第0层定制基座</p></div>
+    <div class="card vio anim bounceIn"><span class="tag t-vio">合规</span><h3 style="font-size:14px">引擎内建</h3><p class="muted" style="font-size:11.5px">安抚/防沉迷/显著标识</p></div>
+  </div>
+  <div class="anim fadeUp mt" style="margin-top:20px"><div class="card gld">
+    <b class="gld">定位矩阵：</b><span class="muted" style="font-size:13.5px">从"给大模型的情感后处理插件" → "端到端可开箱即用的<b>超级智能体陪伴基座</b>"（记忆 + 情感 + 身份 + 合规四合一），向上支撑 AI 伴侣 / 数字人 / 情感客服 / 游戏NPC 全场景。</span>
+  </div></div>
+  <div class="row mt" style="margin-top:16px">
+    <div class="card anim fadeLeft" style="flex:1"><span class="tag t-acc">商业模式升级</span><p class="muted" style="font-size:12.5px">从卖"接口"到卖"基座 + 二次分发权 + 改名权"，构建全球唯一合法转手这套技术的地位。</p></div>
+    <div class="card anim fadeRight" style="flex:1"><span class="tag t-grn">护城河</span><p class="muted" style="font-size:12.5px">别人要替代需要在六大操作空间 + 记忆体系 + 第0层训练同时找到替代品——现实几乎不存在。</p></div>
+  </div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 52 长期·合规引擎定义赛道 ═══════════════ -->
+<section class="slide dark">
+  <div class="foot"><span class="part">F · 未来规划 / 长期</span><span class="bar"><i style="width:48%"></i></span><span class="muted">52</span></div>
+  <div class="anim fadeDown kicker">F · Phase 3 · 合规引擎定义赛道</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>谁先拿出"合规且像真人"的引擎，谁定义新赛道</h2></div>
+  <div class="g2 grid mt" style="margin-top:18px">
+    <div class="card grn anim fadeLeft"><span class="tag t-grn">合规能力 = 情感计算</span><ul class="clean"><li>极端情绪识别 → 强制安抚引导</li><li>情感依赖防护 → 沉迷检测</li><li>未成年人保护 → 亲密服务拦截</li></ul><p class="muted" style="font-size:12px">这些底层都是<b>情感状态跟踪与情绪计算</b>——恰好是本引擎的看家能力。</p></div>
+    <div class="card blu anim fadeRight"><span class="tag t-blu">行业标准话语权</span><ul class="clean"><li>共建"情感表达 / 一致性 / OOC"评测基准</li><li>把家族五基准推广为业界对照口径</li><li>成为合规情感引擎的代名词</li></ul></div>
+  </div>
+  <div class="anim bounceIn center mt" style="margin-top:20px"><span class="gld big" style="font-size:24px">"窗口期独占权"</span><span class="lead" style="font-size:17px">—— 巨头离场时第一批完成<b class="acc">合规 + 技术</b>完整交付的引擎，将拿走定义权。</span></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 53 版本与技术迭代 ═══════════════ -->
+<section class="slide">
+  <div class="foot"><span class="part">F · 未来规划 / 版本</span><span class="bar"><i style="width:52%"></i></span><span class="muted">53</span></div>
+  <div class="anim fadeDown kicker">F · 版本与技术迭代</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>沿已有步伐持续迭代</h2></div>
+  <div class="row mt" style="margin-top:18px">
+    <div class="card viol anim fadeLeft" style="flex:1.1"><span class="tag t-vio">已走完</span><div class="steps mt8"><div class="step">M0-M5 从0到1</div><div class="step">v3→v8 定向优化</div><div class="step">P4批次0-6</div><div class="step gcd"><b>P6 EDD 冠军</b></div></div></div>
+    <div class="card grn anim fadeRight" style="flex:1"><span class="tag t-grn">下一步</span><div class="steps mt8" style="flex-direction:column;align-items:flex-start"><div class="step"><b>v9</b> 长上下文稳定版</div><div class="step"><b>v10</b> 多语言 + 13B</div><div class="step"><b>P7 预习</b> 记忆增强解码</div><div class="step"><b>Base0</b> 第0层定制基座</div></div></div>
+  </div>
+  <div class="g3 grid anim rotateIn mt" style="margin-top:18px">
+    <div class="card"><span class="tag t-acc">工程</span><p class="muted" style="font-size:12px">蒸馏小模型 / 缓存推理加速 / 更省显存</p></div>
+    <div class="card"><span class="tag t-blu">算法</span><p class="muted" style="font-size:12px">记忆增强解码 / 情感-事实联合建模</p></div>
+    <div class="card"><span class="tag t-gld">体验</span><p class="muted" style="font-size:12px">延迟 &lt;300ms · 自适应人味档位</p></div>
+  </div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 54 商业化 KPIs ═══════════════ -->
+<section class="slide dark">
+  <div class="foot"><span class="part">F · 未来规划 / 里程碑</span><span class="bar"><i style="width:56%"></i></span><span class="muted">54</span></div>
+  <div class="anim fadeDown kicker">F · 里程碑与关键指标（示意）</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>把目标分解成可度量</h2></div>
+  <div class="anim fadeUp mt" style="margin-top:18px"><div class="tbl"><table><tr><th>阶段</th><th>里程碑</th><th>度量指标</th></tr>
+    <tr><td class="grn">0-6月</td><td>技术短板清零</td><td>长上下文 &lt;15%熵降 · P6 LoRA ≥0.48 · 动态策略 +5~10%</td></tr>
+    <tr><td class="grn">0-6月</td><td>产品 MVP 上线</td><td>SaaS+API 可用 · 5分钟搭角色 · 评测看板</td></tr>
+    <tr><td class="gld">6-12月</td><td>标杆签约</td><td>1~3 家头部厂商授权（年费 500万+）</td></tr>
+    <tr><td class="gld">12-18月</td><td>接口计费</td><td>百炼/方舟上架 · 按量收入启动</td></tr>
+    <tr><td class="gld">6-18月</td><td>规模泛化</td><td>13B+ 整仓验证 · 中/英/日/韩</td></tr>
+    <tr><td class="acc">18-36月</td><td>基座落地</td><td>第0层定制基座发布 · 二次分发/改名权交付</td></tr>
+    <tr><td class="acc">18-36月</td><td>生态标准</td><td>情感评测标准推广 · 开发者生态</td></tr>
+  </table></div></div>
+  <div class="anim rotateIn mt8"><div class="card"><span class="muted" style="font-size:13px">注：市场/收入类数字为<b class="gld">规划目标示意</b>，依据情绪经济与授权价目表设定，实际以签约/上架为准。</span></div></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 55 团队与资源 ═══════════════ -->
+<section class="slide">
+  <div class="foot"><span class="part">F · 未来规划 / 团队</span><span class="bar"><i style="width:60%"></i></span><span class="muted">55</span></div>
+  <div class="anim fadeDown kicker">F · 团队与资源需求</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>什么在推动这一切</h2></div>
+  <div class="row mt" style="margin-top:18px">
+    <div class="card gld anim fadeLeft" style="flex:1"><span class="tag t-gld">核心发起</span><div class="stat" style="font-size:20px;color:#fff">邓同学</div><p class="muted" style="font-size:12.5px">项目主导 · 核心概念 / 技术路线 / 实验设计 · 论文作者（AI 辅助编程与写作）</p></div>
+    <div class="card blu anim fadeRight" style="flex:1"><span class="tag t-blu">AI 协作工具</span><p class="muted" style="font-size:12.5px">DeepSeek V2/V4 · Trae AI IDE · 魔搭/图灵开源社区协同，全流程本地零外传。</p></div>
+  </div>
+  <h3 class="anim fadeUp mt" style="margin-top:18px">关键资源需求（面向规模化）</h3>
+  <div class="g3 grid anim slideL mt8">
+    <div class="card"><span class="tag t-acc">算力</span><div class="stat" style="font-size:20px;color:#fff">16GB 卡起步</div><p class="muted" style="font-size:11.5px">13B+ 需多卡 / 云端调度</p></div>
+    <div class="card"><span class="tag t-grn">数据</span><div class="stat" style="font-size:20px;color:#fff">情感语料扩容</div><p class="muted" style="font-size:11.5px">多语言/多领域 细语料采集</p></div>
+    <div class="card"><span class="tag t-vio">人才</span><div class="stat" style="font-size:20px;color:#fff">算法/工程/商务</div><p class="muted" style="font-size:11.5px">产品化 + 商业化落地</p></div>
+  </div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 56 风险与对策 ═══════════════ -->
+<section class="slide dark">
+  <div class="foot"><span class="part">F · 未来规划 / 风险</span><span class="bar"><i style="width:64%"></i></span><span class="muted">56</span></div>
+  <div class="anim fadeDown kicker">F · 风险与对策</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>诚实面对不确定性</h2></div>
+  <div class="g2 grid mt" style="margin-top:18px">
+    <div class="card hot anim fadeLeft"><span class="tag t-acc">技术风险</span><ul class="clean"><li>长上下文坍缩未根治 → λ衰减/分段重置攻坚</li><li>更大模型公式需重校准 → 扫描表 + 兜底</li><li>情感命中率跨领域有限 → 垂直词库</li></ul></div>
+    <div class="card gld anim fadeRight"><span class="tag t-gld">市场风险</span><ul class="clean"><li>窗口期有限（巨头可能合规回归）→ 加速签约</li><li>监管趋严 → 合规组件前置内建</li><li>付费意愿波动 → 多档定价 + 免费学术</li></ul></div>
+    <div class="card blu anim fadeLeft"><span class="tag t-blu">工程风险</span><ul class="clean"><li>16GB 内存加载大模型限制 → 手动加载方案（已存）</li><li>评测风格敏感 → 谨慎设计测试协议 + 多样化样本</li><li>多套机制冲突 → UFD 统一编排 + 兜底纪律</li></ul></div>
+    <div class="card vio anim fadeRight"><span class="tag t-vio">伦理合规</span><ul class="clean"><li>防情感操纵 → 显著标识 + 超时提醒</li><li>未成年人保护 → 亲密服务拦截</li><li>"AI 没有感觉" → 诚实边界声明贯穿始终</li></ul></div>
+  </div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 57 外部合作 ═══════════════ -->
+<section class="slide">
+  <div class="foot"><span class="part">F · 未来规划 / 合作</span><span class="bar"><i style="width:68%"></i></span><span class="muted">57</span></div>
+  <div class="anim fadeDown kicker">F · 关键依赖与外部合作</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>单点无法抵达，生态一起走</h2></div>
+  <div class="g3 grid mt" style="margin-top:20px">
+    <div class="card blu anim bounceIn"><span class="tag t-blu">云厂商</span><p class="muted" style="font-size:12px">阿里云/火山方舟 接口上架 · 企业客户分发 · 算力支持</p></div>
+    <div class="card gld anim bounceIn"><span class="tag t-gld">应用方</span><p class="muted" style="font-size:12px">陪伴平台/游戏/客服/心理 场景共建 · 真实数据回流</p></div>
+    <div class="card grn anim bounceIn"><span class="tag t-grn">开源社区</span><p class="muted" style="font-size:12px">魔搭/图灵/创作者 复现与二次开发 · 反向哺育数据集</p></div>
+  </div>
+  <div class="row mt" style="margin-top:18px">
+    <div class="card anim fadeLeft" style="flex:1"><span class="tag t-acc">模型底座生态</span><ul class="clean"><li>Qwen / DeepSeek / Gemma 多底座兼容（P1.5 兜底已证明）</li><li>跟进新一代开源模型 → 引擎即时适配</li></ul></div>
+    <div class="card anim fadeRight" style="flex:1"><span class="tag t-vio">数据与合作</span><ul class="clean"><li>合法合规获取情感语料</li><li>与高校/机构共建情感评测基准</li></ul></div>
+  </div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 58 下一步行动 ═══════════════ -->
+<section class="slide dark">
+  <div class="foot"><span class="part">F · 未来规划 / 行动</span><span class="bar"><i style="width:72%"></i></span><span class="muted">58</span></div>
+  <div class="anim fadeDown kicker">F · 90 天快速行动清单</div>
+  <div class="anim fadeLeft" style="margin-top:10px"><h2>先把球踢起来</h2></div>
+  <div class="g3 grid mt" style="margin-top:20px">
+    <div class="card grn anim bounceIn"><span class="tag t-grn">第 1 个月</span><ul class="clean"><li>长上下文 λ 衰减原型</li><li>动态策略网格扫描</li><li>P6 LoRA 复合策略复测</li></ul></div>
+    <div class="card gld anim bounceIn"><span class="tag t-gld">第 2 个月</span><ul class="clean"><li>评测看板 / 回归 CI</li><li>SaaS 控制台 MVP 骨架</li><li>英文 Heart-Bench 适配探针</li></ul></div>
+    <div class="card hot anim bounceIn"><span class="tag t-acc">第 3 个月</span><ul class="clean"><li>首个厂商专项报告更新</li><li>标接待测产品包</li><li>统一评测平台对外 beta</li></ul></div>
+  </div>
+  <div class="steps anim fadeUp mt" style="margin-top:24px;justify-content:center">
+    <div class="step"><b>今天</b> 对齐路线图与资源</div><span class="arrow">→</span>
+    <div class="step"><b>本周</b> 成立攻坚小组</div><span class="arrow">→</span>
+    <div class="step"><b>季度</b> 验收四大硬骨头</div><span class="arrow">→</span>
+    <div class="step"><b>半年</b> MVP 上线 + 首签</div>
+  </div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 59 愿景 ═══════════════ -->
+<section class="slide">
+  <div class="foot"><span class="part">F · 未来规划 / 愿景</span><span class="bar"><i style="width:76%"></i></span><span class="muted">59</span></div>
+  <div class="anim fadeDown part">VISION</div>
+  <div class="anim zoomIn" style="margin-top:70px"><h1 class="hlbg">我们不是在制造一个产品，<br>是在搭建一座桥</h1></div>
+  <div class="anim slideL lead" style="margin-top:24px;max-width:900px">让 AI 在思考的终点，能够触碰到<b class="acc">情感的起点</b>。三年后，我们希望每一个需要"温度"的 AI —— 伴侣、客服、NPC、数字人、心理支持 —— 底层都跑着同一套语义回响。</div>
+  <div class="anim pulse" style="margin-top:40px"><div class="g3 grid">
+    <div class="card grn"><div class="stat grn">1.5B 反超大模型</div><p class="muted" style="font-size:12px">曾经被认为"做不到"</p></div>
+    <div class="card gld"><div class="stat gld">0.7046 冠军</div><p class="muted" style="font-size:12px">六代引擎持续兑现</p></div>
+    <div class="card blu"><div class="stat blu">2.7万亿 情绪经济</div><p class="muted" style="font-size:12px">增速最快的那一块交给温度</p></div>
+  </div></div>
+  <div class="anim fadeUp lead" style="margin-top:34px">合规是我们的底线：<span class="grn">本地部署 · 不上传隐私 · 不模拟生命 —— 但我们模拟温度。</span></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- ═══════════════ 60 结束 ═══════════════ -->
+<section class="slide dark">
+  <div class="foot"><span class="part">END</span><span class="bar"><i style="width:100%"></i></span><span class="muted">60</span></div>
+  <div class="anim fadeDown part" style="margin-top:140px">THANK YOU · 谢谢聆听</div>
+  <div class="anim zoomIn" style="margin-top:18px"><h1>让 AI 表达 <span class="hlbg">更有情感</span></h1></div>
+  <div class="anim slideL lead" style="margin-top:20px">语义回响家族 · Semantic Echo Family · P1~P6</div>
+  <div class="anim fadeUp" style="margin-top:44px"><div class="g3 grid">
+    <div class="card"><span class="tag t-acc">联系</span><div class="stat" style="font-size:20px;color:#fff">DYPUBG2025@QQ.COM</div><p class="muted" style="font-size:12px">授权 / 合作 / 学术复现</p></div>
+    <div class="card gld"><span class="tag t-gld">开源</span><div class="stat" style="font-size:20px;color:#fff">GitHub · 091635Aa</div><p class="muted" style="font-size:12px">SemanticEcho 家族仓库 · CC BY-NC-SA 4.0</p></div>
+    <div class="card grn"><span class="tag t-grn">致谢</span><div class="stat" style="font-size:20px;color:#fff">DeepSeek · Trae · 魔搭</div><p class="muted" style="font-size:12px">Qwen / cnsenti / bge 等开源贡献</p></div>
+  </div></div>
+  <div class="anim switch" style="margin-top:36px"><span class="muted" style="font-size:13px">© 2026 邓同学 · 数据来自 2026 年真实实验 · 本项目信息密度目标 ≥80% 达成</span></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- SLIDES_END -->
+
+</div></div>
+
+<script>
+  const slides=[...document.querySelectorAll('.slide')];
+  const ctl=document.getElementById('ctl');
+  const deck=document.getElementById('deck');
+  const indexEl=document.getElementById('index');
+  const progressTop=document.getElementById('progressTop');
+  let cur=0; let progress=[].fill?0:0;
+  // 进度点：每页一个
+  slides.forEach((s,i)=>{const b=document.createElement('button');b.title=(i+1)+'/'+slides.length;b.addEventListener('click',()=>go(i));ctl.appendChild(b);if(s.dataset.sec)b.classList.add('section');});
+  const dots=[...ctl.children];
+  function fit(){
+    const s=Math.min(innerWidth/1280,innerHeight/720);
+    deck.style.transform='scale('+s+')';
+  }
+  function go(i){
+    if(i<0||i>=slides.length)return;
+    slides.forEach((s,k)=>s.classList.toggle('on',k===i));
+    cur=i; dots.forEach((d,k)=>d.classList.toggle('on',k===i));
+    indexEl.textContent=( (i+1)+' / '+slides.length );
+    fit(); const bar=slides[i].querySelector('.foot .bar i'); if(bar)bar.style.width=((i+1)/slides.length*100)+'%';
+    progressTop.style.width=((cur+1)/slides.length*100)+'%';
+  }
+  function next(){go(cur+1)} function prev(){go(cur-1)}
+  onresize=fit;
+  addEventListener('keydown',e=>{
+    if(['ArrowDown','ArrowRight',' ','PageDown'].includes(e.key)){next();e.preventDefault();}
+    else if(['ArrowUp','ArrowLeft','PageUp'].includes(e.key)){prev();e.preventDefault();}
+    else if(e.key==='Home')go(0);
+    else if(e.key==='End')go(slides.length-1);
+  });
+  document.getElementById('next').onclick=next;
+  document.getElementById('prev').onclick=prev;
+  go(0);
+</script>
+</body>
+</html>
