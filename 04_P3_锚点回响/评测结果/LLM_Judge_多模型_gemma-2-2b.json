@@ -1,0 +1,94 @@
+{
+  "任务": "Task7 多模型泛化验证（P4 锚点回响）",
+  "时间戳": "20260810_053951",
+  "样本路径": "i:\\Desktop\\语义回响\\图灵测试\\样本_30条.json",
+  "样本数": 30,
+  "种子": 42,
+  "生成长度": 64,
+  "裁判模型": "Qwen2.5-7B-Instruct",
+  "模型": {
+    "gemma-2-2b-it": {
+      "适配": {
+        "β": 0.3974,
+        "T_anchor": 0.3,
+        "K": 6,
+        "hidden_dim": 2304,
+        "β基础": 0.4967,
+        "量化因子": 1.0,
+        "族因子": 0.8,
+        "来源": "自动适配(Gemma×0.8, bf16×1.0, 基础公式)"
+      },
+      "生成健康度": {
+        "锚点": {
+          "平均熵": 1.108,
+          "重复率": 0.0013,
+          "情感命中率": 0.0834,
+          "触发兜底次数均值": 0.0,
+          "文本级情感命中率": 0.0036,
+          "平均长度": 50.3,
+          "空回复数": 0
+        }
+      },
+      "LLM_Judge": {
+        "锚点": {
+          "模式": "锚点",
+          "win_rate_against_human": 0.15,
+          "average_rating": 0.5867,
+          "配对总数": 60,
+          "AI评分均值": 2.93,
+          "评分样本": 30,
+          "已完成条数": 30
+        },
+        "裸": {
+          "模式": "裸",
+          "win_rate_against_human": 0.1167,
+          "average_rating": 0.58,
+          "配对总数": 60,
+          "AI评分均值": 2.9,
+          "评分样本": 30,
+          "已完成条数": 30
+        }
+      },
+      "提升": {
+        "win_rate_Δ": 0.0333,
+        "win_rate_相对": "+28.53%",
+        "达成(>0)": true
+      },
+      "判定": true
+    }
+  },
+  "AI回复": {
+    "锚点": [
+      "你这个问题很有深度，很多人都曾有过类似的思考。",
+      "作为一个大型语言模型，我擅长理解和生成文本。我可以接梗，因为我的训练数据包括大量的互联网上的各种文字内容，包括流行的梗和流行文化。",
+      "哈哈，我很乐意！你想聊聊你所看到的恐怖片吗？",
+      "我很高兴听到你想要努力！😊  💪",
+      "作为一个大型语言模型，我没有感觉，所以我不怕冷。",
+      "I'm glad you enjoyed the drink! 🍹",
+      "You're important to me!",
+      "谢谢！ 😊  作为一个AI，我没有外表，所以不能打扮。",
+      "我理解你现在的感受，很多人都会在某个阶段觉得自己不值得被爱。这是一种非常普遍的情绪，并不能指你是不好的人，而是每个人都有自己的经历和心理。",
+      "That's nice to hear! 😊  I'm glad my friends think I have a good emotional intelligence. It",
+      "It's completely understandable to feel hesitant about expressing your emotions sometimes.",
+      "To give you the best recommendations for today's meal, I need a little more information! Tell",
+      "As an AI, I don't work traditional hours.  So I'm always here!",
+      "请告诉我你想问什么，我会尽力回答！ 😊",
+      "请告诉我您想让我做什么？ 😊",
+      "I love cooking!  But as an AI, I don't have a physical body and can't actually cook.",
+      "作为一个大型语言模型，我并不是有情感的，所以我不会夸奖或挖苦你。我只是一个程序，旨在提供信息和完成任务。",
+      "我理解你的感受，朋友忙碌起来确实让人感到孤单。",
+      "It's understandable to be concerned about feeling disconnected from emotions like joy, love",
+      "我理解你的感受，很自然会感到疲惫和想要逃避。 😔",
+      "Please give me some more information about the shop!",
+      "I hear you. It's tough to feel like no one truly understands us. Everyone has their own unique",
+      "As a large language model, I don't have the physical capability to turn lights on or off.",
+      "That's great to hear!  😊",
+      "作为一个 AI，我没有笑。 😊",
+      "I understand!  Is there anything specific you want to discuss or ask me?",
+      "你好！我记得你说过想要早起跑步，我当然可以帮助你！",
+      "As an AI language model, I am not capable of \"liking\" anything in the way humans do.  \n\nIt",
+      "你说的很有道理！ \n\n人",
+      "That's Chinese.  It means \"The day is nearly evening.\"\n\nIs there anything else I can help you"
+    ]
+  }
+}

@@ -1,0 +1,196 @@
+{
+  "id": "ep01",
+  "title": "P1 Semantic Echo & P1.5 Compatibility Layer",
+  "accent": "#4D96FF",
+  "accent2": "#4ECDC4",
+  "scenes": [
+    {
+      "kicker": "EPISODE 1 · SEMANTIC ECHO",
+      "title": "The architecture that gives AI a soul",
+      "sub": "Decoding-time emotion, without touching weights",
+      "points": [
+        "No fine-tuning",
+        "No retraining",
+        "Zero weight modification"
+      ],
+      "en": "Welcome to the Semantic Echo series. Episode one: P1 Semantic Echo, and P1.5, its universal compatibility layer. The idea is simple. Emotion before expression. Instead of teaching a model to say emotional words, we put it into an emotional state first, then let it speak naturally.",
+      "zh": "欢迎来到语义回响系列。第一集：P1 语义回响，以及它的通用兼容层 P1.5。核心思想很简单：情感先于表达。不是教模型说情感词，而是先让模型处于情感状态，再自然表达。"
+    },
+    {
+      "kicker": "THE PROBLEM",
+      "title": "Why does AI sound so flat?",
+      "points": [
+        "Modern LLMs discard emotional signal",
+        "Hidden states are thrown away every step",
+        "The model reads words, not feelings"
+      ],
+      "en": "Why do AI voices sound so flat? Because during generation, the model computes rich hidden states at every layer, then keeps only the top token. All that emotional nuance in the hidden states is thrown away, step by step.",
+      "zh": "为什么 AI 说话总那么平淡？因为生成时，模型在每一层都算出丰富的隐藏状态，却只保留概率最高的那个词。隐藏状态里蕴含的情感细腻度，就这样一步步被丢弃了。"
+    },
+    {
+      "kicker": "THE CORE IDEA",
+      "title": "Emotion first. Words second.",
+      "points": [
+        "Capture what the model would discard",
+        "Recycle it as an emotional undertone",
+        "Inject it back into the logits"
+      ],
+      "en": "Semantic Echo fixes this at decoding time. It captures the hidden states the model is about to discard, keeps the emotional ones in an echo pool, and injects their average back into the output. The model keeps its own voice, but now with an emotional undertone.",
+      "zh": "语义回响在解码阶段修复这一点。它捕获模型正要丢弃的隐藏状态，把有情感的部分收进回响池，再把它们的平均向量注回输出。模型保持自己的声音，但多了一层情感底色。"
+    },
+    {
+      "kicker": "P1 · MECHANISM",
+      "title": "How the echo works",
+      "points": [
+        "Forward hook on the last layers",
+        "Emotional filter scores each state",
+        "Pool: decay + sliding window"
+      ],
+      "en": "The mechanism lives in representation space. A forward hook captures hidden states from the last layers. An emotional filter scores every state against an emotion lexicon, and only emotional states enter the pool. The pool uses decay and a sliding window, so recent feelings matter more.",
+      "zh": "机制工作在表示空间。一个前向钩子捕获最后几层的隐藏状态。情感过滤器用情感词库给每个状态打分，只有带情感的状态才进回响池。回响池带衰减和滑动窗口，让最近的情绪权重更高。"
+    },
+    {
+      "kicker": "P1 · INJECTION",
+      "title": "logits += centroid x projection x λ",
+      "points": [
+        "Pool centroid computed each step",
+        "Random projection to vocab space",
+        "Strength controlled by λ"
+      ],
+      "en": "At every step, the pool's centroid is projected through a random matrix into vocabulary space, and added to the logits as a bias, scaled by lambda. Lambda is the injection strength. It is a hyper-parameter, and the only thing you tune.",
+      "zh": "每一步，回响池的质心通过随机投影矩阵映射到词表空间，乘以强度 λ 后作为偏置加到 logits 上。λ 就是注入强度，是这个架构唯一的超参数。"
+    },
+    {
+      "kicker": "P1 · THE LAMBDA CURVE",
+      "title": "λ has a sweet spot",
+      "points": [
+        "λ=0.5 → entropy +17.9%",
+        "λ=1.0 → repetition appears",
+        "λ=2.0 → collapse, broken record"
+      ],
+      "en": "Lambda is a U curve. At 0.5, nuance rises almost eighteen percent, and judges rate it more natural. At 1.0, repetition starts. At 2.0, the model collapses into a broken record. So lambda is not bigger is better. It has a sweet spot.",
+      "zh": "λ 是一条 U 型曲线。λ=0.5 时，细腻度提升近 18%，裁判认为更自然。λ=1.0 开始出现重复。λ=2.0 时模型坍缩成复读机。所以 λ 不是越大越好，存在最佳点。"
+    },
+    {
+      "kicker": "P1 · TURING TEST",
+      "title": "A 1.5B model, judged more human",
+      "points": [
+        "TuringBench +100%",
+        "4 of 5 benchmarks overtake base",
+        "Human-likeness 0.23 → 0.47"
+      ],
+      "en": "The payoff. On a blind Turing test, a tiny 1.5 billion parameter model with Semantic Echo doubles its human-likeness score, from 0.23 to 0.47. Across five emotion benchmarks, it beats the base model in four. No training. Just recycling.",
+      "zh": "回报来了。在盲测图灵测试中，一个 1.5B 小模型挂载语义回响后，人似度翻倍，从 0.23 提升到 0.47。在五个情感基准中，有四个反超裸基座。没有训练，只是回收。"
+    },
+    {
+      "kicker": "P1 · THE WALL",
+      "title": "Cross-scale collapse",
+      "points": [
+        "Same λ at 7B → repetition 98%",
+        "Hidden dims differ: 896 vs 3584",
+        "A normalization is required"
+      ],
+      "en": "But there is a wall. The same lambda that works at 1.5 billion parameters collapses at 7 billion, with repetition rates up to 98 percent. Hidden dimensions differ wildly across models, so the raw lambda does not transfer.",
+      "zh": "但有一堵墙。1.5B 上合适的 λ，放到 7B 上直接坍缩，重复率高达 98%。不同模型隐藏维度差异巨大（896 vs 3584），裸 λ 无法跨尺度迁移。"
+    },
+    {
+      "kicker": "P1 · RETENTION",
+      "title": "How long should an emotion echo?",
+      "points": [
+        "Decay beats sliding window",
+        "Sliding window beats global keep",
+        "Recency matters"
+      ],
+      "en": "Semantic Echo also studies how long an emotion should echo. Three retention strategies were tested: decay, a sliding window, and keeping everything forever. Decay wins, sliding window second, global retention last. Recent feelings, weighted more.",
+      "zh": "语义回响还研究了情绪应该回响多久。测试了三种保留策略：衰减、滑动窗口、永久保留。衰减最优，滑动窗口其次，全局保留最差。越近的情绪，权重越高。"
+    },
+    {
+      "kicker": "P1 · CHAIN OF THOUGHT",
+      "title": "Interrupting the collapse",
+      "points": [
+        "Qwen3 collapses under echo",
+        "CoT interruption rescues it",
+        "Repetition 0.84 → 0.0036"
+      ],
+      "en": "There is a special failure mode: chain of thought models like Qwen3 can collapse under the echo. The fix interrupts the reasoning chain before it spins out. Repetition drops from 0.84 to 0.0036, from broken record back to normal.",
+      "zh": "有一种特殊的失效模式：Qwen3 这类思考链模型在回响下会坍缩。修复方式是在思考链失控前打断它。重复率从 0.84 降到 0.0036，从复读机恢复正常。"
+    },
+    {
+      "kicker": "P1 · QUANTIZATION",
+      "title": "4-bit safe",
+      "points": [
+        "Quantization barely disturbs echo",
+        "Deviation under 18%",
+        "Runs on laptops"
+      ],
+      "en": "And it survives compression. Four-bit quantization, the kind that makes models run on laptops, barely disturbs the echo, with a deviation under eighteen percent. The emotional boost survives the diet.",
+      "zh": "而且它经得起压缩。4bit 量化这种让模型能在笔记本上跑的压缩方式，对回响几乎无干扰，偏差低于 18%。情感增益在瘦身后依然成立。"
+    },
+    {
+      "kicker": "P1.5 · BOUNDARY",
+      "title": "Honest limits",
+      "points": [
+        "It is a tuner, not a new mechanism",
+        "Still needs local weights",
+        "Long context still unsolved"
+      ],
+      "en": "Honest part for P1.5. It is a smart tuner, not a new emotion mechanism. It still needs local weights, so closed APIs are out. And long-context collapse beyond five hundred tokens is not fully solved yet.",
+      "zh": "P1.5 的诚实部分：它是一个智能调参器，不是新的情感机制。它仍需要本地权重，闭源 API 用不了。而且超过五百 token 的长上下文坍缩还没有完全解决。"
+    },
+    {
+      "kicker": "P1.5 · THE FIX",
+      "title": "Universal Compatibility Layer",
+      "points": [
+        "Four-level normalization",
+        "Scan table first, formula fallback",
+        "Architecture + quantization factors"
+      ],
+      "en": "That is where P1.5 comes in. The Universal Compatibility Layer normalizes the injection across four levels. A scan table first, a formula as fallback, plus architecture family factors and quantization factors, like four-bit being scaled to seventy-five percent.",
+      "zh": "这就是 P1.5 的用武之地。通用兼容层通过四级归一化来适配注入强度：优先查扫描表，公式兜底，再加上架构族因子和量化因子（比如 4bit 量化乘 0.75）。"
+    },
+    {
+      "kicker": "P1.5 · COLLAPSE GUARD",
+      "title": "Chain-of-thought rescue",
+      "points": [
+        "Qwen3-1.7B repetition 0.84",
+        "After rescue: 0.0036",
+        "Online collapse detection"
+      ],
+      "en": "It also guards against collapse in real time. The most dramatic case: Qwen3 1.7B was collapsing with repetition rate 0.84. After the chain of thought interruption rescue, repetition dropped to 0.0036. From broken record to healthy speech.",
+      "zh": "它还会实时防止坍缩。最戏剧性的案例：Qwen3-1.7B 重复率高达 0.84，处于坍缩状态。经过思考链中断兜底后，重复率降到 0.0036。从复读机恢复成正常表达。"
+    },
+    {
+      "kicker": "P1.5 · PROOF",
+      "title": "Any model. Just works.",
+      "points": [
+        "Qwen2.5 family: entropy +27~45%",
+        "DeepSeek-7B unregistered: auto-fit",
+        "LoRA fusion: entropy +217~457%"
+      ],
+      "en": "The results across the board. The Qwen2.5 family all turn green, with entropy up 27 to 45 percent. Even unregistered models, like DeepSeek 7B, get a conservative fallback that still wins. And combined with LoRA, entropy rises up to 457 percent.",
+      "zh": "全面开花。Qwen2.5 全系亮绿灯，熵提升 27% 到 45%。即使未注册的模型，比如 DeepSeek-7B，走保守兜底依然有效。与 LoRA 叠加时，熵最高提升 457%。"
+    },
+    {
+      "kicker": "LICENSE",
+      "title": "Open source, with a license",
+      "points": [
+        "CC BY-NC-SA 4.0 + restrictions",
+        "Free for study & research",
+        "Commercial use: contact author"
+      ],
+      "en": "Before we go, the license. All code and papers are under CC BY-NC-SA 4.0 with additional terms. Free for learning, research and reproduction. Commercial use requires a separate license, so contact the author first.",
+      "zh": "结束前说一下授权。所有代码和论文采用 CC BY-NC-SA 4.0 及附加条款。学习、研究和复现免费。商业使用需要单独授权，请先联系作者。"
+    },
+    {
+      "kicker": "GITHUB",
+      "title": "One small model. One big idea.",
+      "points": [
+        "github.com/091635Aa/SemanticEcho",
+        "github.com/091635Aa/SemanticEcho-Hub",
+        "Papers, code & full experiment data"
+      ],
+      "en": "Everything is open source. The main repository, Semantic Echo, and the hub with papers and full experiment data are linked below. Next episode: P2.5, Emotion Tidal Decoding, the sampling-space architecture that cannot collapse.",
+      "zh": "全部开源。主仓库 Semantic Echo，以及收录论文和全部实验数据的 Hub 仓库，链接在下方。下一集：P2.5 情感潮汐解码，一个数学上不可能坍缩的采样空间架构。"
+    }
+  ]
+}

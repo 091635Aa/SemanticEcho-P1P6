@@ -1,0 +1,240 @@
+{
+  "时间戳": "20260810_065154",
+  "说明": "云裁判（DeepSeek OpenAI 兼容接口）连通性与思考开关探测",
+  "模型": {
+    "deepseek-v4-flash": {
+      "基础连通": {
+        "ok": true,
+        "回复": "你好",
+        "finish_reason": "stop",
+        "usage": {
+          "completion_tokens": 21,
+          "prompt_tokens": 88,
+          "total_tokens": 109,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": null,
+            "audio_tokens": null,
+            "reasoning_tokens": 19,
+            "rejected_prediction_tokens": null
+          },
+          "prompt_tokens_details": {
+            "audio_tokens": null,
+            "cache_write_tokens": null,
+            "cached_tokens": 0
+          },
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 88
+        },
+        "推理字段": {
+          "reasoning_content": "我们只需要回复两个字“你好”。用户要求只回复两个字。所以直接输出“你好”。"
+        }
+      },
+      "消息对象键": [
+        "content",
+        "refusal",
+        "role",
+        "annotations",
+        "audio",
+        "function_call",
+        "tool_calls",
+        "reasoning_content"
+      ],
+      "thinking_enabled": {
+        "ok": true,
+        "回复": "爱是希望一个人幸福，即使那",
+        "finish_reason": "length",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 89,
+          "total_tokens": 153,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": null,
+            "audio_tokens": null,
+            "reasoning_tokens": 55,
+            "rejected_prediction_tokens": null
+          },
+          "prompt_tokens_details": {
+            "audio_tokens": null,
+            "cache_write_tokens": null,
+            "cached_tokens": 0
+          },
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 89
+        },
+        "推理字段": {
+          "reasoning_content": "We need answer in Chinese. \"用一句话解释什么是爱。\" Need one sentence. Need concise poetic maybe. Must comply. Need define love in one sentence. Could say \"爱是希望一个人幸福，即使那幸福与你无关。\" Need one sentence. Ensure no extra."
+        }
+      },
+      "thinking_disabled": {
+        "ok": true,
+        "回复": "爱是当“我”的边界在另一个人面前变得柔软，却依然选择守护彼此完整的那份勇气。",
+        "finish_reason": "stop",
+        "usage": {
+          "completion_tokens": 25,
+          "prompt_tokens": 10,
+          "total_tokens": 35,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": {
+            "audio_tokens": null,
+            "cache_write_tokens": null,
+            "cached_tokens": 0
+          },
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 10
+        },
+        "推理字段": "无"
+      },
+      "thinking_bool_true": {
+        "ok": false,
+        "错误": "Error code: 400 - {'error': {'message': 'Failed to deserialize the JSON body into the target type: thinking: invalid type: boolean `true`, expected struct ThinkingOptions at line 1 column 153', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_request_error'}}"
+      },
+      "thinking_bool_false": {
+        "ok": false,
+        "错误": "Error code: 400 - {'error': {'message': 'Failed to deserialize the JSON body into the target type: thinking: invalid type: boolean `false`, expected struct ThinkingOptions at line 1 column 154', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_request_error'}}"
+      },
+      "reasoning_effort_low": {
+        "ok": true,
+        "回复": "",
+        "finish_reason": "length",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 10,
+          "total_tokens": 74,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": null,
+            "audio_tokens": null,
+            "reasoning_tokens": 64,
+            "rejected_prediction_tokens": null
+          },
+          "prompt_tokens_details": {
+            "audio_tokens": null,
+            "cache_write_tokens": null,
+            "cached_tokens": 0
+          },
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 10
+        },
+        "推理字段": {
+          "reasoning_content": "1.  **分析用户的请求**：\n    *   主题：爱（爱）。\n    *   约束：用一句话解释（用一句话解释）。\n    *   语言：中文。\n\n2.  **解构“爱”**：\n    *   爱是复杂的（亲情、友情、浪漫、自爱"
+        }
+      }
+    },
+    "deepseek-v4-pro": {
+      "基础连通": {
+        "ok": true,
+        "回复": "你好",
+        "finish_reason": "stop",
+        "usage": {
+          "completion_tokens": 15,
+          "prompt_tokens": 9,
+          "total_tokens": 24,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": null,
+            "audio_tokens": null,
+            "reasoning_tokens": 13,
+            "rejected_prediction_tokens": null
+          },
+          "prompt_tokens_details": {
+            "audio_tokens": null,
+            "cache_write_tokens": null,
+            "cached_tokens": 0
+          },
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 9
+        },
+        "推理字段": {
+          "reasoning_content": "我们被要求只回复两个字：\"你好\"。所以直接输出。"
+        }
+      },
+      "消息对象键": [
+        "content",
+        "refusal",
+        "role",
+        "annotations",
+        "audio",
+        "function_call",
+        "tool_calls",
+        "reasoning_content"
+      ],
+      "thinking_enabled": {
+        "ok": true,
+        "回复": "",
+        "finish_reason": "length",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 10,
+          "total_tokens": 74,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": null,
+            "audio_tokens": null,
+            "reasoning_tokens": 64,
+            "rejected_prediction_tokens": null
+          },
+          "prompt_tokens_details": {
+            "audio_tokens": null,
+            "cache_write_tokens": null,
+            "cached_tokens": 0
+          },
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 10
+        },
+        "推理字段": {
+          "reasoning_content": "嗯，用户要求用一句话解释什么是爱。这是一个看似简单但内涵极深的问题，需要高度凝练和富有洞察力的表达。\n\n我需要避免给出一个冗长或陈词滥调的定义。可以从爱的本质、体验或行动角度切入，考虑几个不同的方向，比如将爱视为一种深刻的看见"
+        }
+      },
+      "thinking_disabled": {
+        "ok": true,
+        "回复": "爱是明知对方不完美，仍选择无条件接纳与成全的深刻联结。",
+        "finish_reason": "stop",
+        "usage": {
+          "completion_tokens": 17,
+          "prompt_tokens": 10,
+          "total_tokens": 27,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": {
+            "audio_tokens": null,
+            "cache_write_tokens": null,
+            "cached_tokens": 0
+          },
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 10
+        },
+        "推理字段": "无"
+      },
+      "thinking_bool_true": {
+        "ok": false,
+        "错误": "Error code: 400 - {'error': {'message': 'Failed to deserialize the JSON body into the target type: thinking: invalid type: boolean `true`, expected struct ThinkingOptions at line 1 column 151', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_request_error'}}"
+      },
+      "thinking_bool_false": {
+        "ok": false,
+        "错误": "Error code: 400 - {'error': {'message': 'Failed to deserialize the JSON body into the target type: thinking: invalid type: boolean `false`, expected struct ThinkingOptions at line 1 column 152', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_request_error'}}"
+      },
+      "reasoning_effort_low": {
+        "ok": true,
+        "回复": "",
+        "finish_reason": "length",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 10,
+          "total_tokens": 74,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": null,
+            "audio_tokens": null,
+            "reasoning_tokens": 64,
+            "rejected_prediction_tokens": null
+          },
+          "prompt_tokens_details": {
+            "audio_tokens": null,
+            "cache_write_tokens": null,
+            "cached_tokens": 0
+          },
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 10
+        },
+        "推理字段": {
+          "reasoning_content": "嗯，用户用一句话解释“爱”这个抽象概念，需要既简洁又富有内涵。\n\n这个问题看似简单，但“爱”的定义非常主观，从哲学、心理学、文学角度会有不同答案。用户可能想要一个能引起共鸣、涵盖其复杂性的精炼表达。\n\n可以尝试提供一个核心答案"
+        }
+      }
+    }
+  }
+}

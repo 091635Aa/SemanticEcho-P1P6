@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Semantic Echo · P1-P6 · 95s Showreel</title>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/TextPlugin.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; background: #000; overflow: hidden;
+    font-family: "Space Grotesk", "Inter", "Segoe UI", system-ui, sans-serif; }
+  .composition { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #04060d; }
+
+  /* ---------- global chrome ---------- */
+  #topbar { position: absolute; top: 0; left: 0; right: 0; height: 8px; background: rgba(255,255,255,0.06); z-index: 90; }
+  #topbar-fill { height: 100%; width: 0%; background: linear-gradient(90deg,#4ECDC4,#4D96FF,#A06BE0,#FF5D8F); }
+  #brand { position: absolute; top: 42px; left: 60px; z-index: 90; font-weight: 700; letter-spacing: 4px; font-size: 26px; color: rgba(255,255,255,0.85); }
+  #brand span { color: #4ECDC4; }
+  #ticker { position: absolute; top: 46px; right: 60px; z-index: 90; font-size: 22px; color: rgba(255,255,255,0.4); letter-spacing: 2px; }
+  #caption-rail { position: absolute; left: 60px; right: 60px; bottom: 70px; z-index: 80;
+    min-height: 90px; display: flex; align-items: center;
+    border-left: 4px solid #4ECDC4; padding-left: 26px; }
+  #caption-text { font-size: 40px; font-weight: 600; color: #fff; line-height: 1.35; text-shadow: 0 4px 24px rgba(0,0,0,0.6); }
+  #caption-text em { font-style: normal; color: #FFD93D; }
+
+  /* ---------- scenes ---------- */
+  .act { position: absolute; inset: 0; background: #04060d; }
+  .kicker { font-size: 30px; letter-spacing: 8px; font-weight: 700; text-transform: uppercase; }
+  .big-title { font-size: 92px; font-weight: 800; line-height: 1.06; letter-spacing: -1px; }
+  .stat-num { font-size: 200px; font-weight: 800; line-height: 0.95; letter-spacing: -4px; }
+  .stat-lab { font-size: 40px; font-weight: 600; }
+  .card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.13); border-radius: 26px;
+    backdrop-filter: blur(14px); box-shadow: 0 30px 80px rgba(0,0,0,0.5); }
+  .chip { display: inline-block; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 999px; padding: 16px 30px; font-size: 32px; font-weight: 700; color: #fff; }
+  .grid-bg { position: absolute; inset: 0; opacity: 0.5;
+    background-image: linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px);
+    background-size: 90px 90px; }
+  .glow { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.5; }
+
+  .g-cyan  { color: #4ECDC4; }
+  .g-blue  { color: #4D96FF; }
+  .g-green { color: #5BE49B; }
+  .g-purple{ color: #A06BE0; }
+  .g-pink  { color: #FF5D8F; }
+  .g-gold  { color: #FFD93D; }
+  .g-amber { color: #FF9F43; }
+  .grad-num { background: linear-gradient(120deg,#4ECDC4,#4D96FF,#A06BE0); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .grad-num.pink { background: linear-gradient(120deg,#FFD93D,#FF9F43,#FF5D8F); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+
+  /* s03 wave */
+  #wave-svg { position: absolute; left: 260px; top: 300px; width: 1400px; height: 260px; }
+  #wave-line { stroke: #4ECDC4; stroke-width: 5; fill: none; stroke-linecap: round; filter: drop-shadow(0 0 18px rgba(78,205,196,0.8)); }
+  #wave-fill { fill: rgba(78,205,196,0.12); }
+
+  /* s05 kv rows */
+  .kv-row { height: 56px; border-radius: 10px; background: rgba(255,255,255,0.07); }
+  .kv-row .hot { display: inline-block; height: 100%; border-radius: 10px;
+    background: linear-gradient(90deg,#FF5D8F,#FFD93D); box-shadow: 0 0 24px rgba(255,93,143,0.7); }
+
+  /* s06 fusion */
+  .fx-card { width: 300px; height: 190px; border-radius: 24px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.14); }
+  .fx-tag { font-size: 26px; color: rgba(255,255,255,0.55); letter-spacing: 2px; }
+  .fx-name { font-size: 42px; font-weight: 800; }
+
+  /* s09 repo cards */
+  .repo { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.13); border-radius: 20px;
+    padding: 22px 28px; font-size: 28px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 18px; }
+  .repo .git { width: 40px; height: 40px; border-radius: 50%; background: #fff; color: #000; font-weight: 900;
+    display: flex; align-items: center; justify-content: center; font-size: 26px; flex-shrink: 0; }
+  .repo small { display: block; font-size: 18px; font-weight: 500; color: rgba(255,255,255,0.5); margin-top: 4px; }
+</style>
+</head>
+<body>
+<div class="composition" data-composition-id="promo-video" data-duration="95.05">
+
+  <!-- global chrome -->
+  <div class="grid-bg" id="grid-global"></div>
+  <div id="topbar"><div id="topbar-fill"></div></div>
+  <div id="brand">SEMANTIC<span>&nbsp;ECHO</span></div>
+  <div id="ticker">DECODING-TIME AI · P1–P6</div>
+  <div id="caption-rail"><div id="caption-text"></div></div>
+
+  <!-- ================= SCENE 0 · HOOK ================= -->
+  <div class="act clip" id="act0" data-start="0" data-duration="10.323" data-track-index="0">
+    <div class="glow" id="s0-glow1" style="left:150px;top:180px;width:520px;height:520px;background:#4ECDC4;"></div>
+    <div class="glow" id="s0-glow2" style="right:160px;bottom:120px;width:480px;height:480px;background:#4D96FF;"></div>
+    <div style="position:absolute;left:140px;top:210px;" class="kicker g-cyan">THE QUESTION</div>
+    <div class="big-title" id="s0-t1" style="position:absolute;left:140px;top:270px;width:1640px;color:#fff;">
+      What if a <span class="g-cyan">1.5B model</span> sounded
+    </div>
+    <div class="big-title" id="s0-t2" style="position:absolute;left:140px;top:396px;width:1640px;color:#fff;">
+      more human than models <span class="g-gold">1000&times; bigger</span>?
+    </div>
+    <div style="position:absolute;left:140px;top:600px;">
+      <span class="chip" id="s0-c1">No fine-tuning</span>
+      <span class="chip" id="s0-c2" style="margin-left:24px;">No retraining</span>
+      <span class="chip" id="s0-c3" style="margin-left:24px;">Decoding-time only</span>
+    </div>
+  </div>
+
+  <!-- ================= SCENE 1 · FAMILY + P1 ================= -->
+  <div class="act clip" id="act1" data-start="10.323" data-duration="13.425" data-track-index="1">
+    <div class="glow" id="s1-glow1" style="right:80px;top:140px;width:600px;height:600px;background:#4D96FF;"></div>
+    <div style="position:absolute;left:140px;top:130px;" class="kicker g-blue">MEET SEMANTIC ECHO</div>
+    <div class="big-title" id="s1-t1" style="position:absolute;left:140px;top:200px;width:900px;color:#fff;">
+      Decoding-time<br>architectures that make AI <span class="g-blue">feel</span>
+    </div>
+    <div class="card" id="s1-card" style="position:absolute;right:120px;top:200px;width:660px;height:620px;padding:44px;">
+      <div style="font-size:28px;letter-spacing:4px;color:rgba(255,255,255,0.5);">P1 · SEMANTIC ECHO</div>
+      <div style="margin-top:26px;font-size:32px;line-height:1.45;color:rgba(255,255,255,0.85);">
+        Recycle the hidden states the model would <span style="color:#FF5D8F;font-weight:700;">throw away</span>,<br>
+        feed them back as <span style="color:#4ECDC4;font-weight:700;">emotion</span>.
+      </div>
+      <div id="s1-stat" style="margin-top:40px;display:flex;align-items:baseline;gap:16px;">
+        <span class="stat-num grad-num" id="s1-num" style="font-size:150px;">+0%</span>
+        <span class="stat-lab" style="font-size:32px;color:rgba(255,255,255,0.7);">semantic entropy</span>
+      </div>
+    </div>
+    <div id="s1-tag" style="position:absolute;left:140px;top:560px;font-size:38px;color:rgba(255,255,255,0.65);">
+      More nuance. More warmth. <span class="g-blue">Zero weights touched.</span>
+    </div>
+  </div>
+
+  <!-- ================= SCENE 2 · P1.5 COMPAT ================= -->
+  <div class="act clip" id="act2" data-start="23.748" data-duration="8.546" data-track-index="2">
+    <div class="glow" id="s2-glow1" style="left:-100px;top:120px;width:560px;height:560px;background:#5BE49B;"></div>
+    <div style="position:absolute;left:140px;top:150px;" class="kicker g-green">P1.5 · UNIVERSAL COMPATIBILITY</div>
+    <div class="big-title" id="s2-t1" style="position:absolute;left:140px;top:230px;width:1640px;color:#fff;">
+      Any model. Any size. <span class="g-green">Plug in &amp; go.</span>
+    </div>
+    <div style="position:absolute;left:140px;top:520px;">
+      <span class="chip" id="s2-m1" style="background:rgba(77,150,255,0.16);border-color:rgba(77,150,255,0.5);">Qwen</span>
+      <span class="chip" id="s2-m2" style="margin-left:22px;background:rgba(255,93,143,0.16);border-color:rgba(255,93,143,0.5);">Phi</span>
+      <span class="chip" id="s2-m3" style="margin-left:22px;background:rgba(160,107,224,0.16);border-color:rgba(160,107,224,0.5);">Gemma</span>
+      <span class="chip" id="s2-m4" style="margin-left:22px;background:rgba(94,228,155,0.16);border-color:rgba(94,228,155,0.5);">DeepSeek</span>
+      <span class="chip" id="s2-m5" style="margin-left:22px;color:rgba(255,255,255,0.6);border-style:dashed;">…10+ more</span>
+    </div>
+    <div id="s2-tag" style="position:absolute;left:140px;top:660px;font-size:36px;color:rgba(255,255,255,0.6);">
+      Auto-tuned injection strength &middot; any quantization &middot; 4-bit OK
+    </div>
+  </div>
+
+  <!-- ================= SCENE 3 · P2.5 ETD ================= -->
+  <div class="act clip" id="act3" data-start="32.294" data-duration="10.146" data-track-index="3">
+    <div class="glow" id="s3-glow1" style="left:50px;bottom:60px;width:640px;height:640px;background:#4ECDC4;"></div>
+    <div style="position:absolute;left:140px;top:130px;" class="kicker g-cyan">P2.5 · EMOTION TIDAL DECODING</div>
+    <div class="big-title" id="s3-t1" style="position:absolute;left:140px;top:205px;width:1640px;color:#fff;">
+      Measure the <span class="g-cyan">emotional tide</span> of the conversation
+    </div>
+    <svg id="wave-svg" viewBox="0 0 1400 260">
+      <path id="wave-fill" d="M0,130 C100,30 200,30 300,130 S500,230 600,130 S800,30 900,130 S1100,230 1200,130 S1350,40 1400,110 L1400,260 L0,260 Z"/>
+      <path id="wave-line" d="M0,130 C100,30 200,30 300,130 S500,230 600,130 S800,30 900,130 S1100,230 1200,130 S1350,40 1400,110"/>
+    </svg>
+    <div id="s3-stat" style="position:absolute;right:120px;top:560px;text-align:right;">
+      <span class="stat-num grad-num" id="s3-num">+0%</span>
+      <div class="stat-lab" style="color:rgba(255,255,255,0.7);">more human — blind judges</div>
+    </div>
+    <div id="s3-tag" style="position:absolute;left:140px;top:640px;font-size:36px;color:rgba(255,255,255,0.6);">
+      Re-weights the sampling distribution &middot; <span class="g-cyan">impossible to collapse</span>
+    </div>
+  </div>
+
+  <!-- ================= SCENE 4 · P3 ANCHOR ================= -->
+  <div class="act clip" id="act4" data-start="42.440" data-duration="8.788" data-track-index="4">
+    <div class="glow" id="s4-glow1" style="right:80px;top:100px;width:600px;height:600px;background:#A06BE0;"></div>
+    <div style="position:absolute;left:140px;top:140px;" class="kicker g-purple">P3 · ANCHOR ECHO</div>
+    <div class="big-title" id="s4-t1" style="position:absolute;left:140px;top:215px;width:1100px;color:#fff;">
+      Score every token against <span class="g-purple">emotional anchors</span>
+    </div>
+    <div id="s4-stat" style="position:absolute;left:140px;top:520px;display:flex;align-items:baseline;gap:20px;">
+      <span class="stat-num grad-num pink" id="s4-num">+0%</span>
+      <div>
+        <div class="stat-lab" style="color:#fff;">TuringBench human-likeness</div>
+        <div style="font-size:28px;color:rgba(255,255,255,0.55);">0.23 → 0.70</div>
+      </div>
+    </div>
+    <div class="card" id="s4-card" style="position:absolute;right:120px;top:420px;width:420px;padding:40px;">
+      <div style="font-size:34px;font-weight:800;color:#fff;">Read-only</div>
+      <div style="font-size:26px;color:rgba(255,255,255,0.6);margin-top:10px;">Zero weights modified.</div>
+    </div>
+  </div>
+
+  <!-- ================= SCENE 5 · P4 KV ================= -->
+  <div class="act clip" id="act5" data-start="51.228" data-duration="8.245" data-track-index="5">
+    <div class="glow" id="s5-glow1" style="left:60px;top:200px;width:520px;height:520px;background:#FF5D8F;"></div>
+    <div style="position:absolute;left:140px;top:140px;" class="kicker g-pink">P4 · KV RESONANCE</div>
+    <div class="big-title" id="s5-t1" style="position:absolute;left:140px;top:215px;width:1600px;color:#fff;">
+      Make the model <span class="g-pink">actually look at</span> the emotion
+    </div>
+    <div id="s5-kv" style="position:absolute;left:140px;top:480px;width:760px;">
+      <div class="kv-row" id="kv1" style="width:640px;"><span class="hot" style="width:18%;opacity:0.9;"></span></div>
+      <div class="kv-row" id="kv2" style="width:700px;margin-top:18px;"><span class="hot" style="width:42%;opacity:0.95;"></span></div>
+      <div class="kv-row" id="kv3" style="width:660px;margin-top:18px;"><span class="hot" style="width:70%;opacity:1;"></span></div>
+      <div class="kv-row" id="kv4" style="width:580px;margin-top:18px;"><span class="hot" style="width:30%;opacity:0.9;"></span></div>
+    </div>
+    <div id="s5-tag" style="position:absolute;left:920px;top:520px;font-size:40px;line-height:1.5;color:#fff;">
+      Attention cache<br>resonance.<br><span class="g-green" style="font-size:52px;font-weight:800;">Near-zero memory.</span>
+    </div>
+  </div>
+
+  <!-- ================= SCENE 6 · P5 FUSION ================= -->
+  <div class="act clip" id="act6" data-start="59.473" data-duration="8.123" data-track-index="6">
+    <div class="glow" id="s6-glow1" style="left:300px;top:260px;width:900px;height:500px;background:#A06BE0;"></div>
+    <div style="position:absolute;left:140px;top:120px;" class="kicker" style="background:linear-gradient(120deg,#4ECDC4,#4D96FF,#A06BE0,#FF5D8F);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">P5 · ULTRA FUSION DECODER</div>
+    <div style="position:absolute;left:140px;top:540px;width:1640px;text-align:center;">
+      <div class="fx-card" id="fx1" style="display:inline-flex;"><div class="fx-tag">P1</div><div class="fx-name g-blue">Echo</div></div>
+      <div class="fx-card" id="fx2" style="display:inline-flex;margin-left:30px;"><div class="fx-tag">P2</div><div class="fx-name g-green">Tide</div></div>
+      <div class="fx-card" id="fx3" style="display:inline-flex;margin-left:30px;"><div class="fx-tag">P3</div><div class="fx-name g-purple">Anchor</div></div>
+      <div class="fx-card" id="fx4" style="display:inline-flex;margin-left:30px;"><div class="fx-tag">P4</div><div class="fx-name g-pink">Resonate</div></div>
+      <span id="fx-plus" style="font-size:60px;color:#fff;margin-left:30px;font-weight:800;">&#8594;</span>
+      <div class="fx-card" id="fx5" style="display:inline-flex;margin-left:30px;background:rgba(255,217,61,0.12);border-color:rgba(255,217,61,0.6);">
+        <div class="fx-tag">ONE</div><div class="fx-name g-gold">Pipeline</div>
+      </div>
+    </div>
+    <div id="s6-tag" style="position:absolute;left:140px;top:870px;width:1640px;text-align:center;font-size:38px;color:rgba(255,255,255,0.65);">
+      Four architectures &middot; one chain &middot; <span class="g-gold">no collapse</span>
+    </div>
+  </div>
+
+  <!-- ================= SCENE 7 · HONEST ================= -->
+  <div class="act clip" id="act7" data-start="67.596" data-duration="9.284" data-track-index="7">
+    <div class="glow" id="s7-glow1" style="left:180px;top:180px;width:560px;height:560px;background:#FF9F43;"></div>
+    <div style="position:absolute;left:140px;top:140px;" class="kicker g-amber">THE HONEST PART</div>
+    <div class="big-title" id="s7-t1" style="position:absolute;left:140px;top:220px;width:1640px;color:#fff;">
+      A small base model <span class="g-amber">has a ceiling</span>
+    </div>
+    <div id="s7-list" style="position:absolute;left:140px;top:470px;font-size:42px;line-height:1.6;color:rgba(255,255,255,0.8);width:1600px;">
+      &bull; Steering <b>narrows the gap</b> — it can&rsquo;t break the base model&rsquo;s limits.<br>
+      &bull; These gains are about <b class="g-gold">emotion</b>, not general intelligence.<br>
+      &bull; Every scheme ships an <b class="g-green">online safety net</b> — no collapse, ever.
+    </div>
+  </div>
+
+  <!-- ================= SCENE 8 · USE CASES ================= -->
+  <div class="act clip" id="act8" data-start="76.880" data-duration="8.611" data-track-index="8">
+    <div class="glow" id="s8-glow1" style="right:80px;top:140px;width:600px;height:600px;background:#5BE49B;"></div>
+    <div style="position:absolute;left:140px;top:140px;" class="kicker g-green">WHAT CAN YOU BUILD?</div>
+    <div class="card" id="u1" style="position:absolute;left:140px;top:280px;width:500px;height:380px;padding:48px;">
+      <div style="font-size:52px;">&#128170;</div>
+      <div style="font-size:42px;font-weight:800;color:#fff;margin-top:26px;">Companions</div>
+      <div style="font-size:30px;color:rgba(255,255,255,0.6);margin-top:12px;">that actually feel</div>
+    </div>
+    <div class="card" id="u2" style="position:absolute;left:710px;top:280px;width:500px;height:380px;padding:48px;">
+      <div style="font-size:52px;">&#127918;</div>
+      <div style="font-size:42px;font-weight:800;color:#fff;margin-top:26px;">Game characters</div>
+      <div style="font-size:30px;color:rgba(255,255,255,0.6);margin-top:12px;">that remember moods</div>
+    </div>
+    <div class="card" id="u3" style="position:absolute;left:1280px;top:280px;width:500px;height:380px;padding:48px;">
+      <div style="font-size:52px;">&#128274;</div>
+      <div style="font-size:42px;font-weight:800;color:#fff;margin-top:26px;">Private local AI</div>
+      <div style="font-size:30px;color:rgba(255,255,255,0.6);margin-top:12px;">human touch, your GPU</div>
+    </div>
+    <div id="s8-tag" style="position:absolute;left:140px;top:730px;font-size:38px;color:rgba(255,255,255,0.65);">
+      On-device. <span class="g-green">No cloud required.</span>
+    </div>
+  </div>
+
+  <!-- ================= SCENE 9 · GITHUB ================= -->
+  <div class="act clip" id="act9" data-start="85.491" data-duration="9.560" data-track-index="9">
+    <div class="glow" id="s9-glow1" style="left:200px;top:120px;width:700px;height:700px;background:#FFD93D;"></div>
+    <div style="position:absolute;left:140px;top:120px;" class="kicker g-gold">OPEN SOURCE · ALL OF IT</div>
+    <div class="big-title" id="s9-t1" style="position:absolute;left:140px;top:190px;width:1500px;color:#fff;">
+      One small model. <span class="g-gold">One big idea.</span>
+    </div>
+    <div id="s9-repos" style="position:absolute;left:180px;right:180px;top:400px;display:flex;gap:40px;">
+      <div style="flex:1;">
+        <div class="repo" id="r1"><span class="git">&#9733;</span> SemanticEcho<small>github.com/091635Aa/SemanticEcho</small></div>
+        <div class="repo" id="r2" style="margin-top:20px;"><span class="git">&#9733;</span> SemanticEcho-ETD-OpenSource<small>github.com/091635Aa/SemanticEcho-ETD-OpenSource</small></div>
+        <div class="repo" id="r3" style="margin-top:20px;"><span class="git">&#9733;</span> SemanticEcho-AnchorEcho<small>github.com/091635Aa/SemanticEcho-AnchorEcho</small></div>
+      </div>
+      <div style="flex:1;">
+        <div class="repo" id="r4"><span class="git">&#9733;</span> SemanticEcho-KVResonance<small>github.com/091635Aa/SemanticEcho-KVResonance</small></div>
+        <div class="repo" id="r5" style="margin-top:20px;"><span class="git">&#9733;</span> SemanticEcho-Hub<small>github.com/091635Aa/SemanticEcho-Hub · home</small></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  gsap.registerPlugin(TextPlugin);
+  window.__timelines = window.__timelines || {};
+  const tl = gsap.timeline({ paused: true });
+  const DUR = 95.05;
+
+  /* progress bar driver */
+  tl.to("#topbar-fill", { width: "100%", duration: DUR, ease: "none" }, 0);
+
+  /* caption rail driver */
+  const CAPS = [
+    ["What if a <em>1.5B model</em> sounded more human than models <em>1000&times; bigger</em>?", 0, 10.323],
+    ["Semantic Echo &mdash; decoding-time architectures. P1: recycle hidden states into <em>emotion</em>.", 10.323, 23.748],
+    ["P1.5 &mdash; Universal Compatibility. Any model. Any size. <em>Plug in &amp; go.</em>", 23.748, 32.294],
+    ["P2.5 &mdash; Emotion Tidal Decoding. Re-weights sampling by the <em>emotional tide</em>.", 32.294, 42.440],
+    ["P3 &mdash; Anchor Echo. Read-only token scoring. TuringBench <em>+200%</em>.", 42.440, 51.228],
+    ["P4 &mdash; KV Resonance. Makes the model <em>look at</em> emotion. Near-zero memory.", 51.228, 59.473],
+    ["P5 &mdash; Ultra Fusion Decoder. All four, <em>one chain</em>. No collapse.", 59.473, 67.596],
+    ["Honest part: small bases have a ceiling. Emotion &ne; <em>general intelligence</em>.", 67.596, 76.880],
+    ["Companions that feel. Game characters that remember. <em>Private AI</em> on your GPU.", 76.880, 85.491],
+    ["Open source everywhere. Links below. <em>One small model, one big idea.</em>", 85.491, 95.051],
+  ];
+  CAPS.forEach((c, i) => {
+    tl.call(() => {
+      document.getElementById("caption-text").innerHTML = c[0];
+    }, [], c[1] + 0.1);
+  });
+  tl.call(() => { document.getElementById("caption-text").innerHTML = ""; }, [], 94.8);
+
+  function countNum(id, to, at, dur, fmt) {
+    const o = { v: 0 };
+    tl.to(o, { v: to, duration: dur, ease: "power2.out", onUpdate: () => {
+      const el = document.getElementById(id); if (el) el.textContent = fmt(o.v);
+    } }, at);
+  }
+  const pct = (v) => "+" + Math.round(v) + "%";
+
+  /* ============ scene transitions (circle wipe) ============ */
+  ["act1","act2","act3","act4","act5","act6","act7","act8","act9"].forEach((id) => {
+    tl.set("#" + id, { clipPath: "circle(0% at 50% 50%)" }, 0);
+  });
+  const ACTS = [
+    ["act0", 0], ["act1", 10.323], ["act2", 23.748], ["act3", 32.294], ["act4", 42.440],
+    ["act5", 51.228], ["act6", 59.473], ["act7", 67.596], ["act8", 76.880], ["act9", 85.491],
+  ];
+  ACTS.slice(1).forEach(([id, t]) => {
+    tl.fromTo("#" + id, { clipPath: "circle(0% at 50% 50%)" },
+      { clipPath: "circle(150% at 50% 50%)", duration: 0.7, ease: "power3.inOut" }, t - 0.45);
+  });
+
+  /* ============ scene 0 · hook ============ */
+  tl.fromTo("#s0-t1", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power4.out" }, 0.25);
+  tl.fromTo("#s0-t2", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power4.out" }, 0.75);
+  tl.fromTo("#s0-c1", { y: 40, opacity: 0, scale: 0.9 }, { y: 0, opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2)" }, 2.2);
+  tl.fromTo("#s0-c2", { y: 40, opacity: 0, scale: 0.9 }, { y: 0, opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2)" }, 2.7);
+  tl.fromTo("#s0-c3", { y: 40, opacity: 0, scale: 0.9 }, { y: 0, opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2)" }, 3.2);
+  tl.fromTo("#s0-glow1", { scale: 0.8, opacity: 0.3 }, { scale: 1.15, opacity: 0.6, duration: 9, ease: "sine.inOut", yoyo: true, repeat: 1 }, 0);
+  tl.fromTo("#s0-glow2", { scale: 0.8, opacity: 0.3 }, { scale: 1.2, opacity: 0.55, duration: 8, ease: "sine.inOut", yoyo: true, repeat: 1 }, 0.5);
+
+  /* ============ scene 1 · family + P1 ============ */
+  tl.fromTo("#s1-t1", { x: -60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power4.out" }, 10.65);
+  tl.fromTo("#s1-card", { x: 80, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power4.out" }, 11.1);
+  tl.fromTo("#s1-card", { boxShadow: "0 30px 80px rgba(0,0,0,0.5)" },
+    { boxShadow: "0 40px 120px rgba(77,150,255,0.35)", duration: 1.2, ease: "sine.inOut", yoyo: true, repeat: 1 }, 11.4);
+  countNum("s1-num", 45, 11.6, 1.4, pct);
+  tl.fromTo("#s1-tag", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 12.4);
+
+  /* ============ scene 2 · P1.5 ============ */
+  tl.fromTo("#s2-t1", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power4.out" }, 24.0);
+  [[2.3,"#s2-m1"],[2.9,"#s2-m2"],[3.5,"#s2-m3"],[4.1,"#s2-m4"],[4.7,"#s2-m5"]].forEach(([d, sel]) => {
+    tl.fromTo(sel, { y: 36, opacity: 0, scale: 0.85 }, { y: 0, opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2)" }, 23.748 + d);
+  });
+  tl.fromTo("#s2-tag", { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 27.6);
+
+  /* ============ scene 3 · P2.5 ETD ============ */
+  tl.fromTo("#s3-t1", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power4.out" }, 32.6);
+  tl.fromTo("#wave-line", { strokeDasharray: 0, strokeDashoffset: 0 },
+    { strokeDasharray: 1500, strokeDashoffset: 1500, duration: 1.0, ease: "none" }, 33.0);
+  tl.fromTo("#wave-line", { opacity: 0.3 }, { opacity: 1, duration: 1, ease: "none" }, 33.0);
+  tl.fromTo("#wave-fill", { opacity: 0 }, { opacity: 1, duration: 1.2, ease: "none" }, 33.2);
+  tl.to("#wave-line", { strokeDashoffset: 0, duration: 3.2, ease: "sine.inOut" }, 35.0);
+  tl.to("#wave-svg", { y: -18, duration: 1.6, ease: "sine.inOut", yoyo: true, repeat: 2 }, 34.5);
+  countNum("s3-num", 91, 33.6, 1.5, pct);
+  tl.fromTo("#s3-stat", { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(2)" }, 33.6);
+  tl.fromTo("#s3-tag", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 37.5);
+
+  /* ============ scene 4 · P3 ============ */
+  tl.fromTo("#s4-t1", { x: -60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power4.out" }, 42.75);
+  countNum("s4-num", 200, 43.1, 1.3, pct);
+  tl.fromTo("#s4-stat", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 43.1);
+  tl.fromTo("#s4-card", { x: 60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.55, ease: "power4.out" }, 44.0);
+  tl.fromTo("#s4-card", { scale: 1 }, { scale: 1.04, duration: 0.9, ease: "sine.inOut", yoyo: true, repeat: 1 }, 44.3);
+
+  /* ============ scene 5 · P4 ============ */
+  tl.fromTo("#s5-t1", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power4.out" }, 51.55);
+  [[0.6,"#kv1"],[0.95,"#kv2"],[1.3,"#kv3"],[1.65,"#kv4"]].forEach(([d, sel]) => {
+    tl.fromTo(sel, { scaleX: 0.3, opacity: 0 }, { scaleX: 1, opacity: 1, duration: 0.4, ease: "power3.out" }, 51.228 + d);
+  });
+  tl.fromTo("#s5-tag", { x: 60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: "power4.out" }, 53.0);
+  tl.fromTo("#kv2 .hot", { scaleX: 0.5 }, { scaleX: 1.2, duration: 1.2, ease: "sine.inOut", yoyo: true, repeat: 1 }, 52.2);
+  tl.fromTo("#kv3 .hot", { scaleX: 0.6 }, { scaleX: 1.15, duration: 1.1, ease: "sine.inOut", yoyo: true, repeat: 1 }, 52.5);
+
+  /* ============ scene 6 · P5 fusion ============ */
+  tl.fromTo("#fx1", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "back.out(1.8)" }, 59.85);
+  tl.fromTo("#fx2", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "back.out(1.8)" }, 60.25);
+  tl.fromTo("#fx3", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "back.out(1.8)" }, 60.65);
+  tl.fromTo("#fx4", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "back.out(1.8)" }, 61.05);
+  tl.fromTo("#fx-plus", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(2.5)" }, 61.6);
+  tl.fromTo("#fx5", { y: 60, opacity: 0, scale: 0.8 }, { y: 0, opacity: 1, scale: 1, duration: 0.55, ease: "back.out(1.8)" }, 62.0);
+  tl.fromTo("#fx5", { boxShadow: "0 0 0 rgba(255,217,61,0)" }, { boxShadow: "0 0 60px rgba(255,217,61,0.5)", duration: 1.0, ease: "sine.inOut", yoyo: true, repeat: 1 }, 62.4);
+  tl.fromTo("#s6-tag", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 63.5);
+
+  /* ============ scene 7 · honest ============ */
+  tl.fromTo("#s7-t1", { x: -60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power4.out" }, 67.95);
+  tl.fromTo("#s7-t1 span", { opacity: 0.4 }, { opacity: 1, duration: 1.2, ease: "sine.inOut", yoyo: true, repeat: 1 }, 68.2);
+  tl.fromTo("#s7-t1 span", { scale: 1 }, { scale: 1.05, duration: 1.0, ease: "sine.inOut", yoyo: true, repeat: 1 }, 68.4);
+  tl.fromTo("#s7-t1", { color: "#fff" }, { color: "#FFD9A0", duration: 2.5, ease: "sine.inOut" }, 68.0);
+  tl.fromTo("#s7-list", { y: 36, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, 69.2);
+
+  /* ============ scene 8 · use cases ============ */
+  tl.fromTo("#u1", { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "back.out(1.6)" }, 77.3);
+  tl.fromTo("#u2", { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "back.out(1.6)" }, 77.8);
+  tl.fromTo("#u3", { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "back.out(1.6)" }, 78.3);
+  tl.fromTo("#s8-tag", { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 79.5);
+
+  /* ============ scene 9 · github ============ */
+  tl.fromTo("#s9-t1", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power4.out" }, 85.85);
+  [[0.7,"#r1"],[1.15,"#r2"],[1.6,"#r3"],[2.05,"#r4"],[2.5,"#r5"]].forEach(([d, sel]) => {
+    tl.fromTo(sel, { x: -70, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: "power4.out" }, 85.491 + d);
+  });
+  tl.fromTo("#s9-repos", { y: 0 }, { y: -10, duration: 1.4, ease: "sine.inOut", yoyo: true, repeat: 1 }, 88.5);
+
+  window.__timelines["promo-video"] = tl;
+</script>
+</body>
+</html>

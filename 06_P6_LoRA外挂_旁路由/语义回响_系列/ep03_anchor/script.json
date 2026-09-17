@@ -1,0 +1,119 @@
+{
+  "id": "ep03",
+  "title": "P3 Anchor Echo",
+  "accent": "#A06BE0",
+  "accent2": "#FFD93D",
+  "scenes": [
+    {
+      "kicker": "EPISODE 3 · ANCHOR ECHO",
+      "title": "Read-only emotion steering",
+      "sub": "Embedding space · token scoring · zero writes",
+      "points": [
+        "Reads embeddings, never writes",
+        "6-D emotional anchors",
+        "TuringBench +200%"
+      ],
+      "en": "Episode three: P3, Anchor Echo. The headline is simple: it never modifies the model. It reads the model's own embedding weights, completely read-only, and steers generation toward emotional anchors.",
+      "zh": "第三集：P3 锚点回响。标题就是一句话：它从不修改模型。它只读模型自己的嵌入权重，完全只读，然后把生成向情感锚点引导。"
+    },
+    {
+      "kicker": "ANCHORS",
+      "title": "Six emotional directions",
+      "points": [
+        "joy · sadness · fear · anger · disgust · surprise",
+        "Centroid from embedding weights",
+        "Read-only proof: checksums unchanged"
+      ],
+      "en": "The architecture defines six emotional anchors, joy, sadness, fear, anger, disgust and surprise. Each anchor is a centroid computed from the model's own embedding weights. And it is provably read-only: checksums and pointers stay identical after the run.",
+      "zh": "架构定义六个情感锚点：喜、悲、惧、怒、恶、惊。每个锚点由模型自身的嵌入权重计算质心得到。而且这是可证明的只读：运行前后校验和、指针完全不变。"
+    },
+    {
+      "kicker": "SCORING",
+      "title": "Every token vs. every anchor",
+      "points": [
+        "Cosine similarity S[w,k] = cos(W_e[w], e_k)",
+        "3.6 MB score table",
+        "Full-vocabulary coverage"
+      ],
+      "en": "Here is the key trick. Every token in the vocabulary is scored against every anchor using cosine similarity, producing a dense score table. The table is only 3.6 megabytes, yet it covers the entire vocabulary. P1's random projection was 933 megabytes. P3 shrinks that to almost nothing.",
+      "zh": "关键技巧在这里。词表中每个 token 都用余弦相似度对每个锚点打分，得到一张稠密打分表。表只有 3.6MB，却覆盖整个词表。P1 的随机投影是 933MB，P3 把它压缩到几乎为零。"
+    },
+    {
+      "kicker": "INJECTION",
+      "title": "logits += β · tanh(S·v / T)",
+      "points": [
+        "Target vector v from emotion",
+        "Temperature T sharpens focus",
+        "Tanh keeps it bounded"
+      ],
+      "en": "To steer, a target emotional vector v is chosen, and the score table is projected onto it. After a tanh activation and a temperature, the result is added to the logits as a bias. Tanh guarantees the injection is bounded, so it cannot explode.",
+      "zh": "引导方式是：选一个目标情感向量 v，把打分表投影到 v 上，经过 tanh 激活和温度调节后，作为偏置加到 logits 上。tanh 保证注入有界，不可能爆炸。"
+    },
+    {
+      "kicker": "RESULTS",
+      "title": "+200% human-likeness",
+      "points": [
+        "TuringBench 0.23 → 0.70",
+        "HeartBench +21.7%",
+        "LLM-Judge +56.25% with persona"
+      ],
+      "en": "The results are the strongest of the family so far. TuringBench human-likeness jumps from 0.23 to 0.70, a 200 percent increase. HeartBench improves 21.7 percent. With a persona prompt, blind judge wins rise 56 percent.",
+      "zh": "这是目前家族里最强的结果。TuringBench 人似度从 0.23 飙升到 0.70，提升 200%。HeartBench 提升 21.7%。加上人设提示后，盲评胜率提升 56%。"
+    },
+    {
+      "kicker": "P3 · ORTHOGONAL",
+      "title": "Three channels, stackable",
+      "points": [
+        "Anchor x Echo x Tide",
+        "Independent injection paths",
+        "Local 7B full stack +55.6%"
+      ],
+      "en": "P3 is also stackable. The mixed anchor fuses anchor, echo and tide on three orthogonal channels. On a local 7 billion judge, the full stack beats baseline by 55.6 percent, with two independent judges agreeing on direction.",
+      "zh": "P3 还可以叠加。混合锚点把锚点、回响、潮汐放在三条正交通道上融合。本地 7B 裁判下，全开比基线提升 55.6%，两个独立裁判方向一致。"
+    },
+    {
+      "kicker": "P3 · DEPLOY",
+      "title": "Degrades gracefully",
+      "points": [
+        "Local embeddings: main path",
+        "Logprobs-only: cloud fallback",
+        "Pure prompt: zero internal access"
+      ],
+      "en": "Deployment is flexible. With local weights, it reads embeddings directly. On cloud APIs, it falls back to logprobs, with entropy difference under one percent. In the most locked-down mode, it degrades to pure prompt, zero internal access.",
+      "zh": "部署很灵活。有本地权重时直读嵌入；云端 API 时降级用 logprobs，熵差不到 1%；在封锁最严的模式下，退化为纯提示词，零内部访问。"
+    },
+    {
+      "kicker": "MODEL AGNOSTIC",
+      "title": "Works on strangers too",
+      "points": [
+        "gemma-2-2b +28.5% (unregistered)",
+        "Qwen3-1.7B +6.9%",
+        "Cloud API fallback: logprobs only"
+      ],
+      "en": "It is not picky about models. On gemma 2B, never seen in the scan table, it still gains 28.5 percent through the conservative fallback. And for closed-source APIs, it degrades gracefully to logprobs only, with entropy difference under one percent.",
+      "zh": "它对模型不挑剔。在从未见过的 gemma-2b 上，通过保守兜底依然提升 28.5%。对闭源 API，它能优雅降级为只用 logprobs，熵差不到 1%。"
+    },
+    {
+      "kicker": "LICENSE",
+      "title": "Open source, with a license",
+      "points": [
+        "CC BY-NC-SA 4.0 + restrictions",
+        "Free for study & research",
+        "Commercial use: contact author"
+      ],
+      "en": "License note: CC BY-NC-SA 4.0 with additional terms. Free for research and study. Commercial use requires the author's license.",
+      "zh": "授权说明：CC BY-NC-SA 4.0 加附加条款。研究和学习免费。商业使用需要作者授权。"
+    },
+    {
+      "kicker": "GITHUB",
+      "title": "The anchor is open",
+      "points": [
+        "github.com/091635Aa/SemanticEcho-AnchorEcho",
+        "github.com/091635Aa/SemanticEcho",
+        "Papers & data in the Hub"
+      ],
+      "en": "The Anchor Echo repository is open source, with the full benchmark scripts and data. Next episode: P4, KV Resonance, which makes the model literally look at the emotion.",
+      "zh": "锚点回响仓库已开源，包含完整基准脚本和数据。下一集：P4 KV 情感共振，让模型真正“看向”情感。"
+    }
+  ]
+}

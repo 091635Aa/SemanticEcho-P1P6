@@ -1,0 +1,185 @@
+{
+  "id": "ep02",
+  "title": "P2.5 Emotion Tidal Decoding",
+  "accent": "#4ECDC4",
+  "accent2": "#FF9F43",
+  "scenes": [
+    {
+      "kicker": "EPISODE 2 · EMOTION TIDAL DECODING",
+      "title": "Sampling that cannot collapse",
+      "sub": "Probability space · external sensing · multiplicative reweighting",
+      "points": [
+        "Works on probabilities, not weights",
+        "External VAD text sensing",
+        "Mathematically bounded"
+      ],
+      "en": "Episode two: P2.5, Emotion Tidal Decoding, or ETD. Where P1 works in representation space, ETD works in probability space. It needs no hooks, no local weights, and its design makes collapse mathematically impossible.",
+      "zh": "第二集：P2.5 情感潮汐解码，简称 ETD。P1 工作在表示空间，而 ETD 工作在概率空间。它不需要钩子、不需要本地权重，而且设计上数学上不可能坍缩。"
+    },
+    {
+      "kicker": "THE TIDE",
+      "title": "The conversation has a mood",
+      "points": [
+        "VAD scores each utterance",
+        "Emotion track across turns",
+        "The 'tide' = session trajectory"
+      ],
+      "en": "The name says it all: a tide. An external sentiment analyzer, called VAD, measures the emotional state of each utterance. Across the conversation, these scores form an emotion track, a rising and falling tide of mood.",
+      "zh": "名字就是全部：潮汐。一个外部情感分析器 VAD 给每句话的情感状态打分。在整个对话中，这些分数构成一条情感轨迹——情绪起伏的潮汐。"
+    },
+    {
+      "kicker": "THREE LAYERS",
+      "title": "Sense. Decide. Express.",
+      "points": [
+        "Perception: measure the tide",
+        "Decision: empathy target + strength α",
+        "Expression: reweight sampling"
+      ],
+      "en": "ETD has three layers. Perception measures the tide. Decision sets an empathy target and an adaptive strength alpha. Expression re-weights the sampling distribution toward that emotional target.",
+      "zh": "ETD 分三层。感知层测量潮汐；决策层设定共情目标和自适应强度 α；表达层把采样分布向情感目标重新加权。"
+    },
+    {
+      "kicker": "MECHANISM",
+      "title": "p' ∝ p^(1-α) · q_emo^α",
+      "points": [
+        "Multiplicative reweighting",
+        "α blends raw & emotional",
+        "Never divides by zero"
+      ],
+      "en": "The core formula is elegant. The new distribution equals the raw probability, scaled down, times the emotional distribution, scaled up, blended by alpha. Since it is multiplicative on probabilities, it can never push a probability below zero. Collapse is impossible by construction.",
+      "zh": "核心公式很优雅：新分布 = 原始概率的 (1-α) 次方 × 情感分布的 α 次方，用 α 混合。因为是对概率做乘性操作，概率永远不会被压到零以下。坍缩在构造上就不可能。"
+    },
+    {
+      "kicker": "AI VOICE",
+      "title": "Killing the 'AI accent'",
+      "points": [
+        "Three-channel suppression",
+        "Identity rejection guard",
+        "Hard sentence stop"
+      ],
+      "en": "ETD also fights the dreaded AI accent, the robotic canned phrases. It uses three-channel suppression, an identity rejection guard that stops the model from breaking character, and a hard sentence stop. Small models start sounding like people.",
+      "zh": "ETD 还专门对抗“AI腔”——那种机器感十足的套话。它用三通道抑制、身份拦截（防止模型突然出戏），以及句子硬停止。小模型也开始像人一样说话。"
+    },
+    {
+      "kicker": "ETD · SENSING",
+      "title": "VAD: the tide gauge",
+      "points": [
+        "Valence · arousal · dominance",
+        "Covers 1000+ emotion words",
+        "No internal access needed"
+      ],
+      "en": "Let us look at the sensing layer. VAD stands for valence, arousal and dominance, three axes that cover over a thousand emotion words. It reads the surface text only, so it works even on closed APIs with no internal access.",
+      "zh": "我们来看感知层。VAD 即效价、唤醒度、支配度三个轴，覆盖一千多个情感词。它只读表面文本，所以在没有任何内部访问权限的闭源 API 上也能用。"
+    },
+    {
+      "kicker": "ETD · BUDGET",
+      "title": "Emotion word budget",
+      "points": [
+        "Soft budget on emotion tokens",
+        "Keeps speech grounded",
+        "Prevents over-the-top drama"
+      ],
+      "en": "The expression layer also uses an emotion word budget. It gently limits how many emotional words the model can use, keeping the speech grounded. Without it, small models tend to overact, going full drama queen.",
+      "zh": "表达层还用了情感词预算。它温和地限制模型能使用的情感词数量，让表达保持克制。没有它，小模型容易过度表演，变成“戏精”。"
+    },
+    {
+      "kicker": "ETD · V6",
+      "title": "Identity & stop guards",
+      "points": [
+        "Identity rejection guard",
+        "Hard sentence stop",
+        "Stays in character"
+      ],
+      "en": "Two safety guards in version six. The identity rejection guard stops the model from suddenly breaking character and giving a generic AI answer. The hard sentence stop prevents runaway generation at the end of a sentence.",
+      "zh": "v6 版本有两个安全护栏。身份拦截防止模型突然出戏、给出模板化 AI 回答。句子硬停止防止在句尾失控地继续生成。"
+    },
+    {
+      "kicker": "ETD · V8",
+      "title": "Persona + self-pick",
+      "points": [
+        "Persona system prompt",
+        "Multiple candidates, self-select",
+        "0.5167 win rate with persona"
+      ],
+      "en": "Version eight adds a persona system prompt and a self-pick trick. The model generates multiple candidate responses, then selects the best. With the persona, the win rate reaches 0.5167, above the coin-flip baseline.",
+      "zh": "v8 版本加了人设系统提示和自选技巧。模型生成多个候选回答，再自己选最好的。加上人设后，盲评胜率达到 0.5167，超过抛硬币的基线。"
+    },
+    {
+      "kicker": "ETD · MODELS",
+      "title": "Transfers across sizes",
+      "points": [
+        "1.5B mix: +87.5%",
+        "3B tide: +33%",
+        "Qwen3 flat: -4%"
+      ],
+      "en": "How does it transfer? At 1.5 billion, the mixed scheme gains 87.5 percent. At 3 billion, the tide gains 33 percent. On Qwen3 it stays flat, minus four percent, within variance. It is strongest on smaller chatty models.",
+      "zh": "迁移性如何？1.5B 上混合方案提升 87.5%。3B 上潮汐提升 33%。在 Qwen3 上持平，约 -4%，在方差内。它在更小的对话模型上最强。"
+    },
+    {
+      "kicker": "ETD · BOUNDARY",
+      "title": "The honest list",
+      "points": [
+        "Lexicon misses internet slang",
+        "Mixed scheme limited to Qwen2 family",
+        "Not a general human-ness boost"
+      ],
+      "en": "Final honest list. The lexicon misses internet slang. The full mixed scheme is currently tuned for the Qwen2 family. And ETD is an empathy specialist, not a general human-ness upgrade for every task.",
+      "zh": "最后的诚实清单：词库对网络流行语识别弱；完整混合方案目前针对 Qwen2 系调优；ETD 是共情专家，不是所有任务的通用人味升级包。"
+    },
+    {
+      "kicker": "TIDE x ECHO",
+      "title": "Tidal Echo: P1 × P2.5",
+      "points": [
+        "Combine representation + probability",
+        "Blind judges +91%",
+        "v8 + persona: 0.5167 win rate"
+      ],
+      "en": "The magic happens when you combine. Tidal Echo is P1 times P2.5, representation echo plus probability tide. Blind judges rate it up to 91 percent more human. With the v8 version and a persona prompt, it reaches a 0.5167 win rate in pairwise battles.",
+      "zh": "神奇之处在于组合。潮汐回响 = P1 × P2.5，表示回响 + 概率潮汐。盲评裁判认为它更像人的概率提升最高 91%。v8 版本加上人设提示后，在成对盲评中胜率达到 0.5167。"
+    },
+    {
+      "kicker": "RESULTS",
+      "title": "Small models, human scores",
+      "points": [
+        "1.5B mix: +87.5%",
+        "EmoCharacter 0.6 → 0.8",
+        "3B tide: +33%"
+      ],
+      "en": "Across models, the gains hold. A 1.5 billion parameter model with the mixed scheme improves 87.5 percent. Emotion character consistency climbs from 0.6 to 0.8. Even a 3 billion model gains 33 percent. All without touching a single weight.",
+      "zh": "跨模型，增益稳定。1.5B 模型挂载混合方案提升 87.5%。情感角色一致性从 0.6 升到 0.8。3B 模型也提升 33%。全程不碰任何权重。"
+    },
+    {
+      "kicker": "BOUNDARY",
+      "title": "Honest limits",
+      "points": [
+        "Lexicon is sparse",
+        "Autonomy tasks drop -9.4%",
+        "Not a general 'human-ness' boost"
+      ],
+      "en": "Now the honest part. The emotion lexicon is sparse, so slang and internet culture are weak spots. And on tasks that measure autonomy, like HeartBench, ETD actually hurts, minus 9.4 percent. It is a specialist for empathy, not a general human-ness upgrade.",
+      "zh": "现在说诚实的部分。情感词库稀疏，对网络流行语识别弱。而在测量自主性的任务（如 HeartBench）上，ETD 反而掉分 9.4%。它是共情领域的专家，不是通用“人味”升级包。"
+    },
+    {
+      "kicker": "LICENSE",
+      "title": "Open source, with a license",
+      "points": [
+        "CC BY-NC-SA 4.0 + restrictions",
+        "Free for study & research",
+        "Commercial use: contact author"
+      ],
+      "en": "License note. Same as before: CC BY-NC-SA 4.0 with additional terms, free for study and research, commercial use requires contacting the author.",
+      "zh": "授权说明，和之前一致：CC BY-NC-SA 4.0 加附加条款。学习和研究免费，商业使用需联系作者。"
+    },
+    {
+      "kicker": "GITHUB",
+      "title": "The tide is open",
+      "points": [
+        "github.com/091635Aa/SemanticEcho-ETD-OpenSource",
+        "github.com/091635Aa/SemanticEcho",
+        "Full data in the Hub"
+      ],
+      "en": "Everything is open source, including the standalone ETD repository. Next episode: P3, Anchor Echo, a read-only architecture that makes TuringBench human-likeness jump two hundred percent.",
+      "zh": "全部开源，包括独立的 ETD 仓库。下一集：P3 锚点回响，一个只读架构，让 TuringBench 人似度暴涨 200%。"
+    }
+  ]
+}
