@@ -1,0 +1,119 @@
+{
+  "id": "ep04",
+  "title": "P4 KV Resonance",
+  "accent": "#FF5D8F",
+  "accent2": "#FFD93D",
+  "scenes": [
+    {
+      "kicker": "EPISODE 4 · KV RESONANCE",
+      "title": "Making the model look at emotion",
+      "sub": "Attention cache space · runtime KV scaling",
+      "points": [
+        "Locate emotional tokens in KV cache",
+        "Scale their keys, bounded",
+        "Near-zero memory cost"
+      ],
+      "en": "Episode four: P4, KV Resonance. P3 guides the output through logits. P4 goes deeper, into the attention cache itself. It makes the model literally look at the emotional parts of the conversation.",
+      "zh": "第四集：P4 KV 情感共振。P3 通过 logits 引导输出，P4 走得更深，进入注意力缓存内部。它让模型真正“看向”对话中带情感的部分。"
+    },
+    {
+      "kicker": "MECHANISM",
+      "title": "K[p] *= 1 + κ · clip(g, 0, 1)",
+      "points": [
+        "Score table locates emotion tokens",
+        "Scale the key vectors in cache",
+        "Softmax keeps it bounded"
+      ],
+      "en": "The mechanism: the dense score table from P3 becomes a navigation map. It locates emotional tokens inside the KV cache, and scales their key vectors by a bounded factor. Because attention runs through softmax, the modulation stays naturally bounded.",
+      "zh": "机制：P3 的稠密打分表变成一张导航图。它在 KV 缓存中定位情感 token，把它们的 key 向量乘以一个有界的系数。因为注意力经过 softmax 归一化，调制天然有界。"
+    },
+    {
+      "kicker": "RESONANCE",
+      "title": "Inner + outer emotion fused",
+      "points": [
+        "v_eff = (1-γ)·v_target + γ·v_dyn",
+        "External VAD goal + inner hidden state",
+        "Resonance, not injection"
+      ],
+      "en": "Here is the resonance. The emotional direction fuses an outer goal from the external VAD, and an inner dynamic state from the model's own hidden states, like P1's self-echo. The model resonates with both what it reads and what it feels.",
+      "zh": "这就是“共振”的由来。情感方向融合了外部的 VAD 目标，以及模型自身隐藏状态的内心动态（类似 P1 的自我回响）。模型既共鸣于它读到的，也共鸣于它感受到的。"
+    },
+    {
+      "kicker": "RESULTS",
+      "title": "The strongest combo",
+      "points": [
+        "P3+P4 dual channel: 0.2667 win rate",
+        "+23% over baseline, family best",
+        "Entropy 1.7, repetition 0.005"
+      ],
+      "en": "Alone, P4 is modest. But combined with P3, it is the family champion. The P3 plus P4 dual channel reaches a 0.2667 blind judge win rate, a 23 percent gain over baseline, the highest of the whole family. And it stays healthy: entropy 1.7, repetition only 0.005.",
+      "zh": "单独使用 P4 提升有限，但与 P3 组合后，它就是家族冠军。P3+P4 双通道盲评胜率达 0.2667，比基线提升 23%，全家族最高。而且保持健康：熵 1.7，重复率仅 0.005。"
+    },
+    {
+      "kicker": "COST",
+      "title": "Almost free",
+      "points": [
+        "VRAM increase ≈ 0",
+        "Runtime cache scaling",
+        "No weights touched"
+      ],
+      "en": "The cost is almost nothing. Memory overhead is near zero, because it only scales existing cache values at runtime. No weights are modified, no fine-tuning, nothing persisted.",
+      "zh": "代价几乎为零。显存开销趋近于零，因为它只是在运行时缩放已有的缓存值。不修改权重、不微调、不留任何持久化。"
+    },
+    {
+      "kicker": "P4 · SEED",
+      "title": "Seeds matter",
+      "points": [
+        "Win rate is seed-sensitive",
+        "Each mode uses its own seed",
+        "Future: multi-seed average"
+      ],
+      "en": "One honest note on numbers. The evaluation is seed sensitive. Each mode runs with its own random seed, so the absolute win rate swings a lot between seeds. The right way to read these numbers is multi-seed averaging, which is the next planned step.",
+      "zh": "关于数字有一个诚实提醒：评测对随机种子敏感。每种模式用独立种子运行，绝对胜率在不同种子间波动很大。正确的读法是多种子平均，这也是下一步计划。"
+    },
+    {
+      "kicker": "P4 · IMPLEMENTATION",
+      "title": "Runtime cache, zero writes",
+      "points": [
+        "Scale keys in-place",
+        "Track positions to avoid stacking",
+        "No persisted changes"
+      ],
+      "en": "The implementation detail. The transformer cache is scaled in place, and token positions are tracked so the same factor is never applied twice. Nothing is persisted. Every run starts clean.",
+      "zh": "实现细节：transformer 缓存在原地缩放，并跟踪 token 位置防止同一系数被叠加两次。不留任何持久化，每次运行都从干净状态开始。"
+    },
+    {
+      "kicker": "HONEST PART",
+      "title": "Limits",
+      "points": [
+        "Single channel trails baseline",
+        "Needs local cache access",
+        "Seed-sensitive evaluation"
+      ],
+      "en": "The honest part. Single-channel P4 without P3 trails the baseline, because the small model's AI accent is not yet suppressed. It needs local cache access, so cloud APIs require fallback. And evaluations are seed sensitive, so numbers should be read with care.",
+      "zh": "诚实部分。不加 P3 的 P4 单通道会输给基线，因为小模型的 AI 腔还没被抑制。它需要本地缓存访问，云端 API 要走降级。而且评测对随机种子敏感，数字要谨慎解读。"
+    },
+    {
+      "kicker": "LICENSE",
+      "title": "Open source, with a license",
+      "points": [
+        "CC BY-NC-SA 4.0 + restrictions",
+        "Free for study & research",
+        "Commercial use: contact author"
+      ],
+      "en": "License note: CC BY-NC-SA 4.0 with additional terms, free for study and research, commercial use requires the author's license.",
+      "zh": "授权说明：CC BY-NC-SA 4.0 加附加条款，研究和学习免费，商业使用需作者授权。"
+    },
+    {
+      "kicker": "GITHUB",
+      "title": "The resonance is open",
+      "points": [
+        "github.com/091635Aa/SemanticEcho-KVResonance",
+        "github.com/091635Aa/SemanticEcho",
+        "Final episode next: P5 Ultra Fusion"
+      ],
+      "en": "The KV Resonance repository is open source. And that sets up the finale. Next episode: P5, the Ultra Fusion Decoder, which fuses all four architectures into one pipeline.",
+      "zh": "KV 共振仓库已开源。这为终章做了铺垫。下一集：P5 超融合解码器，把四种架构融合进同一条管线。"
+    }
+  ]
+}

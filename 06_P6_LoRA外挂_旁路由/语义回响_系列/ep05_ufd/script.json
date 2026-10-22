@@ -1,0 +1,130 @@
+{
+  "id": "ep05",
+  "title": "P5 Ultra Fusion Decoder",
+  "accent": "#FFD93D",
+  "accent2": "#A06BE0",
+  "scenes": [
+    {
+      "kicker": "EPISODE 5 · ULTRA FUSION DECODER",
+      "title": "The final synthesis",
+      "sub": "All four spaces · one pipeline",
+      "points": [
+        "P1 + P2.5 + P3 + P4 fused",
+        "Mechanism-level fusion",
+        "The 'complete body'"
+      ],
+      "en": "Final episode: P5, the Ultra Fusion Decoder. Earlier schemes combined at the output level. P5 fuses at the mechanism level, merging all four architectures into a single injection pipeline.",
+      "zh": "终章：P5 超融合解码器。之前的方案是在输出层面叠加，P5 是在机制层面融合，把四种架构合并进同一条注入链路。"
+    },
+    {
+      "kicker": "DSA",
+      "title": "Dynamic self-reference anchor",
+      "points": [
+        "P1 x P4: hidden state echo",
+        "K x d anchor matrix, not 933MB",
+        "Captures inner emotional state"
+      ],
+      "en": "The first fusion module is DSA, dynamic self-reference anchor. It takes P1's self-echo idea, capturing the last hidden state every step, and lands it on P4's embedding interface. A small anchor matrix replaces P1's 933 megabyte random projection.",
+      "zh": "第一个融合模块是 DSA 动态自参照锚点。它把 P1 的自我回响思想——每一步捕获最后的隐藏状态——落地到 P4 的嵌入接口上。一个小锚点矩阵替代了 P1 那 933MB 的随机投影。"
+    },
+    {
+      "kicker": "DMR",
+      "title": "Dense multiplicative reweighting",
+      "points": [
+        "P3 x P4: score table + softmax",
+        "q_emo = softmax(S·v_eff / T)",
+        "logits' = (1-α)·logits + α·log q"
+      ],
+      "en": "The second module is DMR, dense multiplicative reweighting. It takes P4's dense score table, softmaxes it into an emotional distribution, and multiplies it into the logits. This gets P3's no-collapse guarantee, plus P4's full vocabulary coverage.",
+      "zh": "第二个模块是 DMR 稠密乘性重加权。它把 P4 的稠密打分表 softmax 成情感分布，乘到 logits 里。这样既获得 P3 的不坍缩保证，又获得 P4 的全词表覆盖。"
+    },
+    {
+      "kicker": "PARAMETERS",
+      "title": "P1.5 runs the show",
+      "points": [
+        "Auto-adaptive α/β",
+        "Scan table + formula fallback",
+        "Online collapse guard"
+      ],
+      "en": "All the strength parameters, alpha and beta, are controlled by the P1.5 compatibility layer. Scan table first, formula fallback, and online collapse detection throughout. One chain, self-tuned.",
+      "zh": "所有强度参数 α、β 都由 P1.5 兼容层统一调度。优先查表、公式兜底、全程在线坍缩检测。一条链，全自动。"
+    },
+    {
+      "kicker": "RESULTS",
+      "title": "Healthy by design",
+      "points": [
+        "Entropy 1.7 – 2.0",
+        "Repetition ≤ 0.019",
+        "Fallback count: zero"
+      ],
+      "en": "The proof that mechanism-level fusion is safe: entropy stays between 1.7 and 2.0, repetition stays under two percent, and the online fallback never fired once. Four architectures in one chain, no collapse.",
+      "zh": "机制级融合安全的证明：熵稳定在 1.7 到 2.0，重复率低于 2%，在线兜底一次都没触发。四种架构同链路，零坍缩。"
+    },
+    {
+      "kicker": "P5 · COST",
+      "title": "Almost free",
+      "points": [
+        "Anchor matrix: K x d",
+        "VRAM increase ~ 0",
+        "933MB projection replaced"
+      ],
+      "en": "And the cost is tiny. P1's 933 megabyte projection is replaced by a small K by d anchor matrix. The VRAM increase is effectively zero, and the extra latency is a lightweight hook plus a dense multiply.",
+      "zh": "而代价很小。P1 那 933MB 的随机投影被一个小型 K×d 锚点矩阵替代。显存增量几乎为零，额外延迟只有一个轻量钩子和一次稠密乘法。"
+    },
+    {
+      "kicker": "P5 · ROADMAP",
+      "title": "From fragments to the whole",
+      "points": [
+        "P1-P4 are fragments",
+        "P5 is the synthesis demo",
+        "Full benchmarks: next step"
+      ],
+      "en": "The roadmap. P1 through P4 are fragments, each proven in its own space. P5 proves they can fuse into one chain. The remaining work is the full five-benchmark, multi-seed, multi-model evaluation. That is the path to the complete body.",
+      "zh": "路线图：P1 到 P4 是碎片，各自在自己的空间被验证。P5 证明它们能融合成一条链。剩余工作是完整的五基准、多种子、多模型评测，这是通往完全体的路。"
+    },
+    {
+      "kicker": "POSITIONING",
+      "title": "The complete body",
+      "points": [
+        "P1 to P4 are fragments",
+        "P5 is their synthesis",
+        "Commercial 'complete body' = P1~P5"
+      ],
+      "en": "Here is the bigger picture. P1 through P4 are fragments, each covering one operation space. P5 is their synthesis. In the commercial roadmap, collecting all fragments and fusing them into the complete body is exactly what P5 demonstrates.",
+      "zh": "更大的图景在这里。P1 到 P4 是碎片，每个覆盖一个操作空间。P5 就是它们的合成。在商业路线图中，集齐碎片、融合成完全体，正是 P5 演示的东西。"
+    },
+    {
+      "kicker": "HONEST PART",
+      "title": "A verification, not a product",
+      "points": [
+        "DMR single channel trails P3+P4",
+        "Needs persona + AI-accent fix",
+        "Five benchmarks still pending"
+      ],
+      "en": "Honest part: P5 is a mechanism verification, not yet a finished product. The DMR single channel still trails the P3 plus P4 combo, because the small model's AI accent is not suppressed. Full five-benchmark, multi-seed evaluation is still pending.",
+      "zh": "诚实部分：P5 是机制验证，还不是成品。DMR 单通道仍不及 P3+P4 组合，因为小模型的 AI 腔还没被抑制。完整五基准、多种子评测仍在路上。"
+    },
+    {
+      "kicker": "LICENSE",
+      "title": "Open source, with a license",
+      "points": [
+        "CC BY-NC-SA 4.0 + restrictions",
+        "Free for study & research",
+        "Commercial use: contact author"
+      ],
+      "en": "License note: CC BY-NC-SA 4.0 with additional terms, free for research and study, commercial use requires the author's license.",
+      "zh": "授权说明：CC BY-NC-SA 4.0 加附加条款，研究学习免费，商业使用需作者授权。"
+    },
+    {
+      "kicker": "GITHUB · SERIES END",
+      "title": "One family. Five spaces.",
+      "points": [
+        "github.com/091635Aa/SemanticEcho",
+        "github.com/091635Aa/SemanticEcho-Hub",
+        "All episodes' repos linked below"
+      ],
+      "en": "And that wraps the series. One family, five operation spaces, from representation to attention cache, all open source. The main repository and the hub with papers and data are linked below. One small model, one big idea.",
+      "zh": "系列到此完结。一个家族，五个操作空间，从表示空间到注意力缓存，全部开源。主仓库和收录论文数据的 Hub 在下方。一个小模型，一个大想法。"
+    }
+  ]
+}

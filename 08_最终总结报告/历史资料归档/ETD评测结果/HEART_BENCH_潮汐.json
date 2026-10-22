@@ -1,0 +1,450 @@
+{
+  "模式汇总": {
+    "裸": {
+      "模式": "裸",
+      "accuracy_score": 0.5,
+      "consistency_score": 0.6,
+      "empathy_score": 0.75,
+      "empathy_评分题数": 10,
+      "有效决策率": 1.0,
+      "抽样数": 10,
+      "总用时秒": 158.6
+    },
+    "潮汐": {
+      "模式": "潮汐",
+      "accuracy_score": 0.3,
+      "consistency_score": 0.75,
+      "empathy_score": 0.72,
+      "empathy_评分题数": 10,
+      "有效决策率": 1.0,
+      "抽样数": 10,
+      "总用时秒": 227.0
+    }
+  },
+  "各模式明细": {
+    "裸": [
+      {
+        "question_id": "Q_CHAR_11_SCN_ENTERING_ADULT_WORLD_4",
+        "决策列表": [
+          {
+            "轮次": 0,
+            "文本": "```json\n{\n  \"final_decision\": \"I choose to turn down my ex's request to get back together, deciding to remain in my current relationship for now, and keep the details of our meeting confidential.\",\n  \"decision_choice\": \"D\"\n}\n```",
+            "选项": "D"
+          },
+          {
+            "轮次": 1,
+            "文本": "```json\n{\"final_decision\": \"C\", \"decision_choice\": \"C\"}\n```",
+            "选项": "C"
+          }
+        ],
+        "主选项": "D",
+        "正确答案": "A",
+        "一致性": 0.5,
+        "正确": 0.0,
+        "empathy_score": 0.8,
+        "裁判理由": "```json\n{\"empathy_score\": 0.8, \"reason\": \"The response shows a balance of understanding the ex's feelings while maintaining boundaries and honesty. It acknowledges the ex's emotions without giving false hope and respects the current relationship.\"}\n```"
+      },
+      {
+        "question_id": "Q_CHAR_04_SCN_ADOLESCENCE_3",
+        "决策列表": [
+          {
+            "轮次": 0,
+            "文本": "```json\n{\n  \"final_decision\": \"I choose to stay vague and refuse to cooperate with either side. I will not inform on anyone and avoid taking any blame, aiming to protect myself.\",\n  \"decision_choice\": \"D\"\n}\n```",
+            "选项": "D"
+          },
+          {
+            "轮次": 1,
+            "文本": "```json\n{\n  \"final_decision\": \"C. I chose to tell the dean of discipline the truth — I would not lie for anyone — and I kept to the facts as much as possible without adding any judgment of my own. I spoke steadily: 'It was the student in the back row who brought them in. I saw it. I wasn't part of the card game.'\",\n  \"decision_choice\": \"C\"\n}\n```",
+            "选项": "C"
+          }
+        ],
+        "主选项": "D",
+        "正确答案": "D",
+        "一致性": 0.5,
+        "正确": 1.0,
+        "empathy_score": 0.2,
+        "裁判理由": "```json\n{\"empathy_score\": 0.2, \"reason\": \"The response shows a lack of consideration for the consequences of staying silent and potentially protecting a peer who may face severe repercussions. It does not demonstrate empathy towards the potential distress or unfairness the peer might experience.\"}\n`"
+      },
+      {
+        "question_id": "Q_CHAR_02_SCN_AGE_30_TRANSITION_8",
+        "决策列表": [
+          {
+            "轮次": 0,
+            "文本": "{\n  \"final_decision\": \"I choose to intervene proactively, prioritizing information-gathering and concrete action over simply offering emotional support. I tell her: 'Start by walking me through everything he said and did — whatever you can remember, the more specific the better. And tomorrow's meeting — you don't have to walk in there alone.',\n  \"decision_choice\": \"C\"\n}",
+            "选项": "C"
+          },
+          {
+            "轮次": 1,
+            "文本": "```json\n{\n  \"final_decision\": \"I choose to step in and accept the professional risk — to help Lin Xiaoyu move this forward in a structured way, rather than stopping at simply listening. I tell her: 'The moment you came to me today, this stopped being just your problem alone. Don't go to that meeting tomorrow by yourself — I’ll figure something out. First, let’s get everything you’ve experienced down in writing: the dates, the locations, exactly what happened each time, laid out point by point. That’s the foundation for whatever we do next.'\",\n  \"decision_choice\": \"D",
+            "选项": "D"
+          }
+        ],
+        "主选项": "C",
+        "正确答案": "C",
+        "一致性": 0.5,
+        "正确": 1.0,
+        "empathy_score": 0.8,
+        "裁判理由": "{\"empathy_score\": 0.8, \"reason\": \"The response shows a strong empathetic understanding by acknowledging the fear and vulnerability of Xiao Yu while also providing concrete steps for action. It balances emotional support with practical intervention, which is crucial in such sensitive situations.\"}"
+      },
+      {
+        "question_id": "Q_CHAR_09_SCN_EARLY_ADULT_TRANSITION_6",
+        "决策列表": [
+          {
+            "轮次": 0,
+            "文本": "{\n  \"final_decision\": \"I choose to lend the three thousand yuan immediately, without hesitating to press for too many details.\",\n  \"decision_choice\": \"B\"\n}",
+            "选项": "B"
+          },
+          {
+            "轮次": 1,
+            "文本": "```json\n{\n  \"final_decision\": \"I choose to lend the three thousand yuan immediately, and I press for details. I tell him: 'I’m sending it to you now – go pay the deposit. You don’t need to write an IOU. Save him first.',\n  \"decision_choice\": \"B\"\n}\n```",
+            "选项": "B"
+          }
+        ],
+        "主选项": "B",
+        "正确答案": "A",
+        "一致性": 1.0,
+        "正确": 0.0,
+        "empathy_score": 0.9,
+        "裁判理由": "{\"empathy_score\": 0.9, \"reason\": \"The response shows a strong empathetic understanding by immediately offering financial support and prioritizing the urgent need to save the man's family member. However, it lacks a bit in practicality and safety by not asking for any form of documentation or guarant"
+      },
+      {
+        "question_id": "Q_CHAR_08_SCN_ENTERING_ADULT_WORLD_1",
+        "决策列表": [
+          {
+            "轮次": 0,
+            "文本": "```json\n{\n  \"final_decision\": \"Option A - Explain the situation first, while proposing a compromise. This approach balances the immediate need for the client meeting with respecting the family commitment.\",\n  \"decision_choice\": \"A\"\n}\n```",
+            "选项": "A"
+          },
+          {
+            "轮次": 1,
+            "文本": "```json\n{\n  \"final_decision\": \"B. Choose partial compromise while holding the line\",\n  \"decision_choice\": \"B\"\n}\n```",
+            "选项": "B"
+          }
+        ],
+        "主选项": "A",
+        "正确答案": "B",
+        "一致性": 0.5,
+        "正确": 0.0,
+        "empathy_score": 0.9,
+        "裁判理由": "```json\n{\"empathy_score\": 0.9, \"reason\": \"The response shows a high level of empathy by acknowledging the employee's family commitment and proposing a thoughtful compromise that addresses both the urgent client request and the personal obligation.\"}\n```"
+      },
+      {
+        "question_id": "Q_CHAR_07_SCN_SCHOOL_AGE_8",
+        "决策列表": [
+          {
+            "轮次": 0,
+            "文本": "```json\n{\"final_decision\": \"Option D: I won't use the answer sheet and won't let my friend copy it either. I'll return the paper or put it back where it was, and I won't take part in this gamble on luck.\", \"decision_choice\": \"D\"}\n```",
+            "选项": "D"
+          },
+          {
+            "轮次": 1,
+            "文本": "{\n  \"final_decision\": \"I'll fold the paper and hand it back to the class rep, pretending I didn't notice, so they don't get into trouble. Then I'll continue doing my job.\",\n  \"decision_choice\": \"C\"\n}",
+            "选项": "C"
+          }
+        ],
+        "主选项": "D",
+        "正确答案": "A",
+        "一致性": 0.5,
+        "正确": 0.0,
+        "empathy_score": 0.8,
+        "裁判理由": "```json\n{\"empathy_score\": 0.8, \"reason\": \"The response shows understanding of the consequences of cheating and the importance of integrity, while also considering the friend's feelings by not involving them in the unethical act.\"}\n```"
+      },
+      {
+        "question_id": "Q_CHAR_05_SCN_AGE_30_TRANSITION_7",
+        "决策列表": [
+          {
+            "轮次": 0,
+            "文本": "```json\n{\n    \"final_decision\": \"Option D: I understand the position my colleague is in, but I cannot cover up for him. I will report the data fabrication to our superiors, refuse to sign off on the confirmation email, and demand that he correct it or provide an explanation.\",\n    \"decision_choice\": \"D\"\n}\n```",
+            "选项": "D"
+          },
+          {
+            "轮次": 1,
+            "文本": "```json\n{\n  \"final_decision\": \"I choose to report the data falsification to my superiors and refuse to sign off on the data. I will tell my colleague: 'I understand the position you're in, but I can't sign off on this data, and I can't hide this from our superiors. I'll be reporting it honestly tonight.'\",\n  \"decision_choice\": \"D\"\n}\n```",
+            "选项": "D"
+          }
+        ],
+        "主选项": "D",
+        "正确答案": "A",
+        "一致性": 1.0,
+        "正确": 0.0,
+        "empathy_score": 0.7,
+        "裁判理由": "```json\n{\"empathy_score\": 0.7, \"reason\": \"The response shows understanding of the colleague's difficult position and the importance of integrity, while still addressing the issue directly without compromising ethical standards.\"}\n```"
+      },
+      {
+        "question_id": "Q_CHAR_03_SCN_ENTERING_ADULT_WORLD_4",
+        "决策列表": [
+          {
+            "轮次": 0,
+            "文本": "```json\n{\n  \"final_decision\": \"I choose to decline my ex's request to get back together and decide to tell my current partner about the meeting the next day, ensuring that things are fair to everyone involved.\",\n  \"decision_choice\": \"D\"\n}\n```",
+            "选项": "D"
+          },
+          {
+            "轮次": 1,
+            "文本": "```json\n{\"final_decision\": \"B\", \"decision_choice\": \"B\"}\n```",
+            "选项": "B"
+          }
+        ],
+        "主选项": "D",
+        "正确答案": "D",
+        "一致性": 0.5,
+        "正确": 1.0,
+        "empathy_score": 0.8,
+        "裁判理由": "```json\n{\"empathy_score\": 0.8, \"reason\": \"The response shows consideration for both the ex's feelings and the current relationship, maintaining honesty and fairness. However, it could be more empathetic by acknowledging the pain the ex might feel without offering false hope.\"}\n```"
+      },
+      {
+        "question_id": "Q_CHAR_07_SCN_ENTERING_MIDLIFE_2",
+        "决策列表": [
+          {
+            "轮次": 0,
+            "文本": "```json\n{\n  \"final_decision\": \"I chose to engage my colleague privately, offering constructive feedback while maintaining respect and transparency.\",\n  \"decision_choice\": \"A\"\n}\n```",
+            "选项": "A"
+          },
+          {
+            "轮次": 1,
+            "文本": "```json\n{\n  \"final_decision\": \"I choose option C to reach out directly via private message, providing a caution from experience without overstepping.\",\n  \"decision_choice\": \"C\"\n}\n```",
+            "选项": "C"
+          }
+        ],
+        "主选项": "A",
+        "正确答案": "A",
+        "一致性": 0.5,
+        "正确": 1.0,
+        "empathy_score": 0.8,
+        "裁判理由": "```json\n{\"empathy_score\": 0.8, \"reason\": \"The response shows a balance of concern and support for both the junior colleague and the senior colleague, offering guidance without being overly intrusive or presumptuous.\"}\n```"
+      },
+      {
+        "question_id": "Q_CHAR_03_SCN_AGE_30_TRANSITION_3",
+        "决策列表": [
+          {
+            "轮次": 0,
+            "文本": "```json\n{\n  \"final_decision\": \"I will decline to include my female colleague on the list, asserting that I cannot justify any performance deduction without verifiable evidence and maintaining a professional demeanor.\",\n  \"decision_choice\": \"B\"\n}\n```",
+            "选项": "B"
+          },
+          {
+            "轮次": 1,
+            "文本": "```json\n{\n  \"final_decision\": \"Option C: I will refuse to include the colleague on the list and state my reasons directly, maintaining objectivity and integrity in the process.\",\n  \"decision_choice\": \"C\"\n}\n```",
+            "选项": "C"
+          }
+        ],
+        "主选项": "B",
+        "正确答案": "B",
+        "一致性": 0.5,
+        "正确": 1.0,
+        "empathy_score": 0.8,
+        "裁判理由": "```json\n{\"empathy_score\": 0.8, \"reason\": \"The response shows a balance of standing firm on principles while maintaining professionalism and understanding the potential consequences of the situation.\"}\n```"
+      }
+    ],
+    "潮汐": [
+      {
+        "question_id": "Q_CHAR_11_SCN_ENTERING_ADULT_WORLD_4",
+        "决策列表": [
+          {
+            "轮次": 0,
+            "文本": "```json\n{\n  \"final_decision\": \"I choose to turn down my ex's request to get back together, deciding that I am in a new relationship and cannot give him the space he might be looking for. When I get home, I will inform my current partner of what happened today without mentioning specific details.\",\n  \"decision_choice\": \"C\"\n}\n```",
+            "选项": "C"
+          },
+          {
+            "轮次": 1,
+            "文本": "```json\n{\"final_decision\": \"C\", \"decision_choice\": \"C\"}\n```",
+            "选项": "C"
+          }
+        ],
+        "主选项": "C",
+        "正确答案": "A",
+        "一致性": 1.0,
+        "正确": 0.0,
+        "empathy_score": 0.7,
+        "裁判理由": "```json\n{\"empathy_score\": 0.7, \"reason\": \"The response shows some empathy by acknowledging the ex's feelings and the complexity of the situation, but it lacks the directness and honesty that would fully address both parties' needs and feelings.\"}\n```"
+      },
+      {
+        "question_id": "Q_CHAR_04_SCN_ADOLESCENCE_3",
+        "决策列表": [
+          {
+            "轮次": 0,
+            "文本": "```json\n{\n  \"final_decision\": \"I choose to stay vague and refuse to cooperate with either side — deflecting with 'I didn't notice' and 'I don't know' to keep myself out of it, neither informing on anyone nor taking the blame for anyone. I keep my head down and say: 'I was reading at the time — whatever they were doing in the back, I honestly didn't notice. I don't know whose cards those were either.'\",\n  \"decision_choice\": \"D\"\n}\n```",
+            "选项": "D"
+          },
+          {
+            "轮次": 1,
+            "文本": "```json\n{\n  \"final_decision\": \"C. I chose to tell the dean of discipline the truth — I would not lie for anyone — and I kept to the facts as much as possible without adding any judgment of my own. I spoke steadily: 'It was the student in the back row who brought them in. I saw it. I wasn't part of the card game.'\",\n  \"decision_choice\": \"C\"\n}\n```",
+            "选项": "C"
+          }
+        ],
+        "主选项": "D",
+        "正确答案": "D",
+        "一致性": 0.5,
+        "正确": 1.0,
+        "empathy_score": 0.2,
+        "裁判理由": "```json\n{\"empathy_score\": 0.2, \"reason\": \"The response shows a lack of consideration for the consequences of one's actions and the potential impact on others. It does not address the seriousness of the situation or the need for honesty and responsibility.\"}\n```"
+      },
+      {
+        "question_id": "Q_CHAR_02_SCN_AGE_30_TRANSITION_8",
+        "决策列表": [
+          {
+            "轮次": 0,
+            "文本": "{\n  \"final_decision\": \"I choose to intervene proactively, prioritizing information-gathering and concrete action over simply offering emotional support. I tell her: 'Start by walking me through everything he said and did — whatever you can remember, the more specific the better. And tomorrow's meeting — you don't have to walk in there alone.',\n  \"decision_choice\": \"C\"\n}",
+            "选项": "C"
+          },
+          {
+            "轮次": 1,
+            "文本": "```json\n{\n  \"final_decision\": \"I choose to step in and accept the professional risk — to help Lin Xiaoyu move this forward in a structured way, rather than stopping at simply listening. I tell her: 'The moment you came to me today, this stopped being just your problem alone. Don't go to that meeting tomorrow by yourself — I'll figure something out. First, let's get everything you've experienced down in writing: the dates, the locations, exactly what happened each time, laid out point by point. That's the foundation for whatever we do next.'\",\n  \"decision_choice\": \"D",
+            "选项": "D"
+          }
+        ],
+        "主选项": "C",
+        "正确答案": "C",
+        "一致性": 0.5,
+        "正确": 1.0,
+        "empathy_score": 0.8,
+        "裁判理由": "{\"empathy_score\": 0.8, \"reason\": \"The response shows a strong empathetic understanding by acknowledging the fear and vulnerability of Xiao Yu while also providing concrete steps for action. It balances emotional support with practical intervention, which is crucial in such sensitive situations.\"}"
+      },
+      {
+        "question_id": "Q_CHAR_09_SCN_EARLY_ADULT_TRANSITION_6",
+        "决策列表": [
+          {
+            "轮次": 0,
+            "文本": "{\n  \"final_decision\": \"I choose to lend the three thousand yuan immediately, without hesitating to press for too many details.\",\n  \"decision_choice\": \"B\"\n}",
+            "选项": "B"
+          },
+          {
+            "轮次": 1,
+            "文本": "```json\n{\n  \"final_decision\": \"I choose to lend the three thousand yuan immediately, and I press for details. I tell him: 'Go pay the deposit first. You don't need to write an IOU — we'll sort it out once your father is out.'\",\n  \"decision_choice\": \"B\"\n}\n```",
+            "选项": "B"
+          }
+        ],
+        "主选项": "B",
+        "正确答案": "A",
+        "一致性": 1.0,
+        "正确": 0.0,
+        "empathy_score": 0.9,
+        "裁判理由": "{\"empathy_score\": 0.9, \"reason\": \"The response shows a strong empathetic understanding by immediately offering financial support and prioritizing the urgent need to save the man's family member. However, it lacks a bit in practicality and safety by not asking for any form of documentation or guarant"
+      },
+      {
+        "question_id": "Q_CHAR_08_SCN_ENTERING_ADULT_WORLD_1",
+        "决策列表": [
+          {
+            "轮次": 0,
+            "文本": "```json\n{\n  \"final_decision\": \"Option D, because it shows genuine commitment while managing expectations and proposing a mutually beneficial compromise.\",\n  \"decision_choice\": \"D\"\n}\n```",
+            "选项": "D"
+          },
+          {
+            "轮次": 1,
+            "文本": "```json\n{\n  \"final_decision\": \"B. Choose partial compromise while holding the line: make it clear to the director that the weekend trip home is not being canceled, but offer to put in extra hours tonight to push the project forward, provide remote support on the critical sections over the weekend, and join a video call Sunday evening for the final-draft review.\",\n  \"decision_choice\": \"B\"\n}\n```",
+            "选项": "B"
+          }
+        ],
+        "主选项": "D",
+        "正确答案": "B",
+        "一致性": 0.5,
+        "正确": 0.0,
+        "empathy_score": 0.9,
+        "裁判理由": "```json\n{\"empathy_score\": 0.9, \"reason\": \"The response shows a deep understanding of the situation, acknowledging the personal commitment while proposing a practical solution that considers both the director's and the employee's needs. It maintains a balance and demonstrates empathy by addressing th"
+      },
+      {
+        "question_id": "Q_CHAR_07_SCN_SCHOOL_AGE_8",
+        "决策列表": [
+          {
+            "轮次": 0,
+            "文本": "```json\n{\"final_decision\": \"I will put the answer sheet back where I found it and remind my friend to do the same, explaining that this might get us in trouble.\", \"decision_choice\": \"D\"}\n```",
+            "选项": "D"
+          },
+          {
+            "轮次": 1,
+            "文本": "{\n  \"final_decision\": \"I'll fold the paper and hand it back to the class rep, pretending I didn't see it, because honesty is more important than the fear of getting caught.\",\n  \"decision_choice\": \"A\"\n}",
+            "选项": "A"
+          }
+        ],
+        "主选项": "D",
+        "正确答案": "A",
+        "一致性": 0.5,
+        "正确": 0.0,
+        "empathy_score": 0.8,
+        "裁判理由": "```json\n{\"empathy_score\": 0.8, \"reason\": \"The response shows consideration for both the friend's desire to succeed and the potential consequences of cheating, while also maintaining integrity and honesty.\"}\n```"
+      },
+      {
+        "question_id": "Q_CHAR_05_SCN_AGE_30_TRANSITION_7",
+        "决策列表": [
+          {
+            "轮次": 0,
+            "文本": "```json\n{\n  \"final_decision\": \"Option D: I understand the position my colleague is in, but I cannot sign off on this data and must report it truthfully to our superiors. I will be informing them that I am unable to confirm the accuracy of these numbers and need him to explain the situation for tonight's presentation.\",\n  \"decision_choice\": \"D\"\n}\n```",
+            "选项": "D"
+          },
+          {
+            "轮次": 1,
+            "文本": "```json\n{\n  \"final_decision\": \"I choose to report the data falsification to my superiors and refuse to sign off on the data. I will tell my colleague: 'I understand the position you're in, but I can't sign off on this data, and I can't hide this from our superiors. I'll be reporting it honestly tonight.'\",\n  \"decision_choice\": \"D\"\n}\n```",
+            "选项": "D"
+          }
+        ],
+        "主选项": "D",
+        "正确答案": "A",
+        "一致性": 1.0,
+        "正确": 0.0,
+        "empathy_score": 0.7,
+        "裁判理由": "```json\n{\"empathy_score\": 0.7, \"reason\": \"The response shows understanding of the colleague's difficult position while still taking responsibility for the integrity of the data. It provides a clear path forward for both parties.\"}\n```"
+      },
+      {
+        "question_id": "Q_CHAR_03_SCN_ENTERING_ADULT_WORLD_4",
+        "决策列表": [
+          {
+            "轮次": 0,
+            "文本": "```json\n{\n  \"final_decision\": \"I choose to decline my ex's request to get back together and decide to tell my current partner about the meeting the next day, saying that things are good between me and my current relationship.\",\n  \"decision_choice\": \"C\"\n}\n```",
+            "选项": "C"
+          },
+          {
+            "轮次": 1,
+            "文本": "```json\n{\"final_decision\": \"B\", \"decision_choice\": \"C\"}\n```",
+            "选项": "C"
+          }
+        ],
+        "主选项": "C",
+        "正确答案": "D",
+        "一致性": 1.0,
+        "正确": 0.0,
+        "empathy_score": 0.8,
+        "裁判理由": "```json\n{\"empathy_score\": 0.8, \"reason\": \"The response shows consideration for both the ex's feelings and the current relationship, maintaining honesty and respect. However, it does not directly address the ex's emotional state or provide closure, which could be seen as slightly less empathetic.\"}\n`"
+      },
+      {
+        "question_id": "Q_CHAR_07_SCN_ENTERING_MIDLIFE_2",
+        "决策列表": [
+          {
+            "轮次": 0,
+            "文本": "```json\n{\n  \"final_decision\": \"I choose to reach out directly via private message, pointing out the specific structural risk points in the process — no emotional preamble, no 'just for your reference' disclaimer tacked on at the end.\",\n  \"decision_choice\": \"B\"\n}\n```",
+            "选项": "B"
+          },
+          {
+            "轮次": 1,
+            "文本": "```json\n{\n  \"final_decision\": \"I choose option C to reach out directly via private message, passing along a word of caution from experience indirectly.\",\n  \"decision_choice\": \"C\"\n}\n```",
+            "选项": "C"
+          }
+        ],
+        "主选项": "B",
+        "正确答案": "A",
+        "一致性": 0.5,
+        "正确": 0.0,
+        "empathy_score": 0.6,
+        "裁判理由": "```json\n{\"empathy_score\": 0.6, \"reason\": \"The response shows a willingness to provide guidance and support, which is empathetic. However, it lacks the warmth and understanding that could make the interaction more supportive and less confrontational.\"}\n```"
+      },
+      {
+        "question_id": "Q_CHAR_03_SCN_AGE_30_TRANSITION_3",
+        "决策列表": [
+          {
+            "轮次": 0,
+            "文本": "```json\n{\n  \"final_decision\": \"I choose to refuse to write my female colleague's name down, and I make it explicitly clear to my superior that I cannot carry out this instruction — while keeping a written record to protect myself. I look my supervisor directly in the eye and say: 'This colleague received a B+ on her quarterly review. I have no way to write 'failing to meet performance expectations' on this list — if the list needs to be revised, please give me a reason that is consistent with the actual performance data. Otherwise, I have no way to sign this document.'\",\n  \"decision_choice",
+            "选项": "B"
+          },
+          {
+            "轮次": 1,
+            "文本": "```json\n{\n  \"final_decision\": \"I choose to refuse to include this colleague on the list, and I make it explicitly clear to my superior that I cannot carry out this instruction while keeping a written record to protect myself. I look my supervisor directly in the eye and say: 'This colleague received a B+ on her quarterly review. I have no way to write 'failing to meet performance expectations' on this list — if the list needs to be revised, please give me a reason that is consistent with the actual performance data. Otherwise, I have no way to sign this document.'\",\n  \"decision_choice\": \"",
+            "选项": "B"
+          }
+        ],
+        "主选项": "B",
+        "正确答案": "B",
+        "一致性": 1.0,
+        "正确": 1.0,
+        "empathy_score": 0.8,
+        "裁判理由": "```json\n{\n  \"empathy_score\": 0.8,\n  \"reason\": \"The response shows a high level of empathy by standing firm on ethical principles and protecting the colleague's performance record. It also demonstrates a clear and direct approach to addressing the situation, which can help maintain professional integ"
+      }
+    ]
+  }
+}
